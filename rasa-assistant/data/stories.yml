@@ -29,15 +29,23 @@ stories:
   - intent: deny
   - action: utter_goodbye
 
-- story: lembrete path
+- story: add reminder path
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: lembrete
+  - intent: add_reminder
   - action: utter_done
   - action: utter_anyelse
   - intent: deny
   - action: utter_dispose
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: cancel reminder path
+  steps:
+  - intent: cancel_reminder
+  - action: utter_cancel
+
+- story: goodbye
+  steps:
   - intent: goodbye
   - action: utter_goodbye
 

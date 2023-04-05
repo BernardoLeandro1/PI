@@ -21,7 +21,7 @@ nlu:
   examples: |
     - Sim
     - Claro
-    - Parece me bem
+    - Parece-me bem
     - Correto
     - Okay
     - Ok
@@ -36,16 +36,26 @@ nlu:
     - Nem por isso
 
 
-- intent: lembrete
+- intent: add_reminder
   examples: |
-    - Quero que me lembres de fazer yoga todos os dias às 17 horas!
-    - Lembra-me de tomar um ben-u-ron às 21 horas!
-    - Daqui a 15 minutos avisa-me de ver como está a comida!
-    - 
-    
+    - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17 horas](hour)!
+    - Lembra-me de [tomar um ben-u-ron](event) às [21 horas](hour)!
+    - [Daqui a 15 minutos](hour) avisa-me de [ver como está a comida](event)!
+    - Quando forem [16 horas](hour) lembra-me de [ligar à médica](event).
+    - Preciso que me avises quando forem [19 e 30](hour).
+    - Às [20 horas](hour) vai dar um filme que quero ver, lembra-me.
+    - Podes avisar-me para ligar ao meu filho amanhã às [15 horas](hour)? 
+    - Podes marcar uma consulta para as [15 horas](hour)?
+
+- intent: cancel_reminder
+  examples: |
+    - Por favor, desmarca a ioga de amanhã.
+    - Podes cancelar a consulta de quinta-feira, se faz favor?
+    - Não vou poder ir lanchar amanhã com o meu neto, podes desmarcar?
+    - Podes cancelar todos os lembretes?
 
 # - intent: mood_great
-#   examples: |
+#   examples: |s
 #     - perfect
 #     - great
 #     - amazing

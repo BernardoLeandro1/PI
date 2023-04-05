@@ -5,17 +5,41 @@ intents:
   - goodbye
   - affirm
   - deny
-  - lembrete
+  - add_reminder
+    #use_entities: true
+  - cancel_reminder
   - mood_great
   - mood_unhappy
   - bot_challenge
+
+entities:
+  - hour
+  - occurrence
+  - event
+
+slots:
+  event:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: custom
+      action: utter_done
+  hour:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: custom
+      action: utter_done
 
 responses:
   utter_greet:
   - text: "Olá, como posso ajudar?"
 
   utter_done:
-  - text: "Okay! Está marcado!"
+  - text: "Okay! Está marcado {event} às {hour}!"
+
+  utter_cancel:
+  - text: "Okay! Está cancelado!"
 
   utter_anyelse:
   - text: "Posso ajudar em mais alguma coisa?"
