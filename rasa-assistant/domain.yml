@@ -22,14 +22,23 @@ slots:
     type: text
     influence_conversation: true
     mappings:
-    - type: custom
-      action: utter_done
+    - type: from_entity
+      entity: event
+
   hour:
     type: text
     influence_conversation: true
     mappings:
-    - type: custom
-      action: utter_done
+    - type: from_entity
+      entity: hour
+  
+
+  occurrence:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: occurrence
 
 responses:
   utter_greet:
@@ -62,6 +71,10 @@ responses:
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+
+
+actions:
+- create_event_action
 
 session_config:
   session_expiration_time: 60

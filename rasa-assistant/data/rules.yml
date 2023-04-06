@@ -11,3 +11,8 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: Add_reminder to calendar
+  steps:
+  - intent: add_reminder
+  - action: create_event_action

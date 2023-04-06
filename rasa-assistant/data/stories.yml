@@ -31,13 +31,15 @@ stories:
 
 - story: add reminder path
   steps:
+  - intent: greet
+  - action: utter_greet
   - intent: add_reminder
-  - action: utter_done
-  - action: utter_anyelse
-  - intent: deny
-  - action: utter_dispose
-  - intent: goodbye
-  - action: utter_goodbye
+  - action: create_event_action
+  # - action: utter_anyelse
+  # - intent: deny
+  # - action: utter_dispose
+  # - intent: goodbye
+  # - action: utter_goodbye
 
 - story: cancel reminder path
   steps:

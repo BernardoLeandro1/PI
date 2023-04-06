@@ -44,7 +44,7 @@ from typing import Dict, Text, Any, List, Union
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 class CreateEventAction(Action):
     def name(self) -> Text:
@@ -73,33 +73,42 @@ class CreateEventAction(Action):
         service = build('calendar', 'v3', credentials=creds)
 
         # Get the event details from the user
-        event_title = tracker.get_slot("event_title")
-        event_location = tracker.get_slot("event_location")
-        event_description = tracker.get_slot("event_description")
-        event_date = datetime.strptime(tracker.get_slot("event_date"), "%Y-%m-%d").date()
-        event_start_time = datetime.strptime(tracker.get_slot("event_start_time"), "%H:%M").time()
-        event_end_time = datetime.strptime(tracker.get_slot("event_end_time"), "%H:%M").time()
+        event_title = tracker.get_slot("event")
+        #event_location = tracker.get_slot("event_location")
+        #event_description = tracker.get_slot("event_description")
+        #event_date = datetime.strptime(tracker.get_slot("event_date"), "%Y-%m-%d").date()
+        event_date = date.today()
+        event_start_time = datetime.strptime(tracker.get_slot("hour"), "%H:%M").time()
+        #event_end_time = datetime.strptime(tracker.get_slot("event_end_time"), "%H:%M").time()
 
         # Create the start and end datetime objects for the event
         event_start_datetime = datetime.combine(event_date, event_start_time).isoformat()
-        event_end_datetime = datetime.combine(event_date, event_end_time).isoformat()
+        #event_end_datetime = datetime.combine(event_date, event_end_time).isoformat()
 
         # Create the event object
+        # event = {
+        #   'summary': event_title,
+        #   'location': event_location,
+        #   'description': event_description,
+        #   'start': {
+        #     'dateTime': event_start_datetime,
+        #     'timeZone': tracker.get_slot("timezone"),
+        #   },
+        #   'end': {
+        #     'dateTime': event_end_datetime,
+        #     'timeZone': tracker.get_slot("timezone"),
+        #   },
+        #   'reminders': {
+        #     'useDefault': True,
+        #   },
+        # }
+
         event = {
-          'summary': event_title,
-          'location': event_location,
-          'description': event_description,
-          'start': {
-            'dateTime': event_start_datetime,
-            'timeZone': tracker.get_slot("timezone"),
-          },
-          'end': {
-            'dateTime': event_end_datetime,
-            'timeZone': tracker.get_slot("timezone"),
-          },
-          'reminders': {
-            'useDefault': True,
-          },
+            'summary': event_title,
+            'start': {
+             'dateTime': event_start_datetime,
+             'timeZone': tracker.get_slot("timezone"),
+           }
         }
 
         try:

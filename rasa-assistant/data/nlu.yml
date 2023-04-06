@@ -38,7 +38,7 @@ nlu:
 
 - intent: add_reminder
   examples: |
-    - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17 horas](hour)!
+    - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17:00](hour)!
     - Lembra-me de [tomar um ben-u-ron](event) às [21 horas](hour)!
     - [Daqui a 15 minutos](hour) avisa-me de [ver como está a comida](event)!
     - Quando forem [16 horas](hour) lembra-me de [ligar à médica](event).
