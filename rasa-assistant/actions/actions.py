@@ -25,9 +25,6 @@
 #         dispatcher.utter_message(text="Hello World!")
 #
 #         return []
-
-
-
 from __future__ import print_function
 
 import datetime
@@ -46,6 +43,24 @@ from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 from datetime import date, datetime, timedelta
 
+class ActionGreetUser(Action):
+    def name(self) -> Text:
+        return "action_greet_user"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        name = tracker.get_slot("name")
+
+        if name:
+            message = f"Hello {name}, how can I assist you today (python)?"
+        else:
+            message = "Hello, how can I assist you today? (python)?"
+
+        dispatcher.utter_message(text=message)
+
+        return []
+    
 class CreateEventAction(Action):
     def name(self) -> Text:
         return "action_create_event"
@@ -54,16 +69,16 @@ class CreateEventAction(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        try: 
-            import argparse
-            flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-        except ImportError:
-            flags=None
+        # try: 
+        #      import argparse
+        #      flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+        # except ImportError:
+        #      flags=None
         SCOPES = 'https://www.googleapis.com/auth/calendar'
-        store= file.Storage('storage.json')
+        store= file.Storage('/home/bernardo/Desktop/PI/rasa-assistant/actions/storage.json')
         creds = store.get()
         if not creds or creds.invalid:
-            flow=client.flow_from_clientsecrets('credentials.json', SCOPES)
+            flow=client.flow_from_clientsecrets('/home/bernardo/Desktop/PI/rasa-assistant/actions/credentials.json', SCOPES)
             creds=tools.run_flow(flow, store, flags) \
                 if flags else tools.run(flow, store)
         # Get the user's Google credentials
@@ -79,11 +94,11 @@ class CreateEventAction(Action):
         #event_date = datetime.strptime(tracker.get_slot("event_date"), "%Y-%m-%d").date()
         event_date = date.today()
         event_start_time = datetime.strptime(tracker.get_slot("hour"), "%H:%M").time()
-        #event_end_time = datetime.strptime(tracker.get_slot("event_end_time"), "%H:%M").time()
+        event_end_time = datetime.strptime("17:00", "%H:%M").time()
 
         # Create the start and end datetime objects for the event
         event_start_datetime = datetime.combine(event_date, event_start_time).isoformat()
-        #event_end_datetime = datetime.combine(event_date, event_end_time).isoformat()
+        event_end_datetime = datetime.combine(event_date, event_end_time).isoformat()
 
         # Create the event object
         # event = {
@@ -107,7 +122,11 @@ class CreateEventAction(Action):
             'summary': event_title,
             'start': {
              'dateTime': event_start_datetime,
-             'timeZone': tracker.get_slot("timezone"),
+             'timeZone': 'Portugal',
+           },
+           'end': {
+             'dateTime': event_end_datetime,
+             'timeZone': 'Portugal',
            }
         }
 
@@ -118,5 +137,4 @@ class CreateEventAction(Action):
         except HttpError as error:
             dispatcher.utter_message("Error creating event: {}".format(str(error)))
 
-        return [SlotSet("event_title", None), SlotSet("event_location", None), SlotSet("event_description", None),
-                SlotSet("event_date", None), SlotSet("event_start_time", None), SlotSet("event_end_time", None)]
+        return []

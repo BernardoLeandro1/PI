@@ -29,12 +29,12 @@ stories:
   - intent: deny
   - action: utter_goodbye
 
-- story: add reminder path
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: add_reminder
-  - action: create_event_action
+# - story: add reminder path
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: add_reminder
+#   - action: create_event_action
   # - action: utter_anyelse
   # - intent: deny
   # - action: utter_dispose

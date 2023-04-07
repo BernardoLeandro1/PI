@@ -15,4 +15,4 @@ rules:
 - rule: Add_reminder to calendar
   steps:
   - intent: add_reminder
-  - action: create_event_action
+  - action: action_create_event

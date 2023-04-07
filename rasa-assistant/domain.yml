@@ -74,7 +74,7 @@ responses:
 
 
 actions:
-- create_event_action
+- action_create_event
 
 session_config:
   session_expiration_time: 60
