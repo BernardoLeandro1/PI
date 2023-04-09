@@ -16,6 +16,10 @@ entities:
   - hour
   - occurrence
   - event
+  - duration
+  - person
+  - day_month
+  - day_of_week
 
 slots:
   event:
@@ -31,6 +35,34 @@ slots:
     mappings:
     - type: from_entity
       entity: hour
+
+  day_of_week:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: day_of_week
+  
+  day_month:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: day_month
+
+  person:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: person
+
+  duration:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: duration
   
 
   occurrence:

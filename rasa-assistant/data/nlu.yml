@@ -38,14 +38,25 @@ nlu:
 
 - intent: add_reminder
   examples: |
-    - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17:00](hour)!
+    - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17:00](hour) durante [30 minutos](duration)!
     - Lembra-me de [tomar um ben-u-ron](event) às [21 horas](hour)!
+    - Lembra-me de [caminhar](event) às [21 horas](hour)!
     - [Daqui a 15 minutos](hour) avisa-me de [ver como está a comida](event)!
     - Quando forem [16 horas](hour) lembra-me de [ligar à médica](event).
     - Preciso que me avises quando forem [19 e 30](hour).
     - Às [20 horas](hour) vai dar um filme que quero ver, lembra-me.
     - Podes avisar-me para ligar ao meu filho amanhã às [15 horas](hour)? 
-    - Podes marcar uma consulta para as [15 horas](hour)?
+    - Lembra-me de [fazer uma sobremesa](event) às [10:30](hour)!
+    - Lembra-me de [fazer o comer](event) às [11:30](hour)!
+    - [Todas as terças](occurrence), lembra me de [fazer cardio](event) por [1 hora](duration), às [16:00](hour)!
+
+
+- intent: add_event
+  examples: |
+    - Tenho uma [consulta](event) às [15 horas](hour) na [segunda-feira](day_of_week). 
+    - Põe na agenda um [jantar](event) com o meu [filho](person), às [20:00](hour), no [sabado](day_of_week).
+    - Marca na agenda um [passeio](event) com a [Rute](person), na [quinta](day_of_week) [à tarde](hour). 
+    - Vou ser [operada](event) no dia [27 de abril](day_month), marca na agenda, por favor. 
 
 - intent: cancel_reminder
   examples: |

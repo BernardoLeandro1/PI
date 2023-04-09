@@ -27,7 +27,7 @@
 #         return []
 from __future__ import print_function
 
-import datetime
+#import datetime
 import os.path
 
 from google.auth.transport.requests import Request
@@ -94,11 +94,26 @@ class CreateEventAction(Action):
         #event_date = datetime.strptime(tracker.get_slot("event_date"), "%Y-%m-%d").date()
         event_date = date.today()
         event_start_time = datetime.strptime(tracker.get_slot("hour"), "%H:%M").time()
-        event_end_time = datetime.strptime("17:00", "%H:%M").time()
+        event_start_datetime = datetime.combine(event_date, event_start_time).isoformat()
+        if (tracker.get_slot("duration") == None):
+            event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
+            event_end_datetime = event_end_datetime.replace(" ", "T")
+        else:
+            x = str(tracker.get_slot("duration")).split()
+            if x[1].__contains__("hora"):
+                a = int(x[0])
+                event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(hours=a))
+                event_end_datetime = event_end_datetime.replace(" ", "T")
+            elif x[1].__contains__("minutos"):
+                a = int(x[0])
+                event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=a))
+                event_end_datetime = event_end_datetime.replace(" ", "T")
+    
+        
 
         # Create the start and end datetime objects for the event
-        event_start_datetime = datetime.combine(event_date, event_start_time).isoformat()
-        event_end_datetime = datetime.combine(event_date, event_end_time).isoformat()
+        
+        #event_end_datetime = datetime.combine(event_date, event_end_time).isoformat()
 
         # Create the event object
         # event = {
@@ -117,7 +132,8 @@ class CreateEventAction(Action):
         #     'useDefault': True,
         #   },
         # }
-
+        print(event_start_datetime)
+        print(event_end_datetime)
         event = {
             'summary': event_title,
             'start': {
@@ -133,8 +149,9 @@ class CreateEventAction(Action):
         try:
             # Insert the event into the user's calendar
             event = service.events().insert(calendarId='primary', body=event).execute()
-            dispatcher.utter_message("Event created: {}".format(event.get('htmlLink')))
+            dispatcher.utter_message("Evento criado: {} às {}".format(tracker.get_slot("event"), tracker.get_slot("hour")))
         except HttpError as error:
-            dispatcher.utter_message("Error creating event: {}".format(str(error)))
+            dispatcher.utter_message("Erro ao criar o evento: {}".format(str(error)))
 
-        return []
+        return [SlotSet("event", None), SlotSet("duration", None), SlotSet("hour", None),
+                SlotSet("occurrence", None), SlotSet("person", None), SlotSet("day_month", None), SlotSet("day_of_week", None)]

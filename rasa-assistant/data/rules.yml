@@ -12,7 +12,14 @@ rules:
   - intent: bot_challenge
   - action: utter_iamabot
 
-- rule: Add_reminder to calendar
+
+- rule: Say hello back
   steps:
-  - intent: add_reminder
-  - action: action_create_event
+  - intent: greet
+  - action: utter_greet
+
+# - rule: Add_reminder to calendar
+#   steps:
+#   - intent: add_reminder
+#   - action: action_create_event
+#   - action: utter_anyelse
