@@ -92,9 +92,57 @@ class CreateEventAction(Action):
         #event_location = tracker.get_slot("event_location")
         #event_description = tracker.get_slot("event_description")
         #event_date = datetime.strptime(tracker.get_slot("event_date"), "%Y-%m-%d").date()
-        event_date = date.today()
+        d = str(tracker.get_slot("day")).split()
+        print(tracker.get_slot("month"))
+        if (tracker.get_slot("day") == None):
+            event_date = date.today()
+            print(event_date)
+        elif (tracker.get_slot("month") == None and tracker.get_slot("day") != None):
+            print(tracker.get_slot("day"))
+            print(d)
+            if (int(d[1]) > datetime.now().day):
+                month = str(datetime.now().month)
+                day = str(d[1])
+                year = str(datetime.now().year)
+                event_date = year + "-" + month + "-" + day
+            else:
+                month = str(datetime.now().month+1)
+                day = str(d[1])
+                year = str(datetime.now().year)
+                event_date = year + "-" + month + "-" + day            
+        elif (tracker.get_slot("month") != None and tracker.get_slot("day") != None):
+            assistmonth = str(tracker.get_slot("month")).lower()
+            match assistmonth:
+                case "janeiro": 
+                    month = "1"
+                case "fevereiro":
+                    month = "2"
+                case "março":
+                    month = "3"
+                case "abril":
+                    month = "4"
+                case "maio":
+                    month = "5"
+                case "junho":
+                    month = "6"
+                case "julho":
+                    month = "7"
+                case "agosto":
+                    month = "8"
+                case "setembro":
+                    month = "9"
+                case "outubro":
+                    month = "10"
+                case "novembro":
+                    month = "11"
+                case "dezembro":
+                    month = "12"
+            day = str(d[1])
+            year = str(datetime.now().year)
+            event_date = year + "-" + month + "-" + day
+        
         event_start_time = datetime.strptime(tracker.get_slot("hour"), "%H:%M").time()
-        event_start_datetime = datetime.combine(event_date, event_start_time).isoformat()
+        event_start_datetime = datetime.combine(datetime.strptime(event_date, '%Y-%m-%d'), event_start_time).isoformat()
         if (tracker.get_slot("duration") == None):
             event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
             event_end_datetime = event_end_datetime.replace(" ", "T")
@@ -154,4 +202,4 @@ class CreateEventAction(Action):
             dispatcher.utter_message("Erro ao criar o evento: {}".format(str(error)))
 
         return [SlotSet("event", None), SlotSet("duration", None), SlotSet("hour", None),
-                SlotSet("occurrence", None), SlotSet("person", None), SlotSet("day_month", None), SlotSet("day_of_week", None)]
+                SlotSet("occurrence", None), SlotSet("person", None), SlotSet("month", None), SlotSet("day_of_week", None), SlotSet("day", None)]
