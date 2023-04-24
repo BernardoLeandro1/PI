@@ -1,7 +1,9 @@
 # PI
 Repositório para a unidade curricular Projeto em Informática
 
-
+Como correr:
+1- rasa run -m models --endpoints endpoints.yml --port 5002 --credentials credentials.yml
+2 - novo terminal : python3 ./main.py
 
 
 
