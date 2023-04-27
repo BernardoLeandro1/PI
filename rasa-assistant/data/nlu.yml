@@ -39,8 +39,12 @@ nlu:
 - intent: add_reminder
   examples: |
     - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17:00](hour) durante [30 minutos](duration)!
-    - Lembra-me de [tomar um ben-u-ron](event) às [21 horas](hour)!
-    - Lembra-me de [caminhar](event) às [21 horas](hour)!
+    - Lembra-me de [tomar um ben-u-ron](event) às [vinte horas e vinte e sete minutos](hour)!
+    - Lembra-me de [caminhar](event) às [vinte horas e vinte e sete](hour)!
+    - Lembra-me de [caminhar](event) às [vinte e três e vinte e sete](hour)!
+    - Lembra-me de [caminhar](event) às [vinte e três e vinte](hour)!
+    - Lembra-me de [caminhar](event) às [vinte e vinte e sete](hour)!
+    - Lembra-me de [caminhar](event) às [vinte e uma horas](hour)!
     - [Daqui a 15 minutos](hour) avisa-me de [ver como está a comida](event)!
     - Quando forem [16 horas](hour) lembra-me de [ligar à médica](event).
     - Preciso que me avises quando forem [19 e 30](hour).
@@ -52,7 +56,7 @@ nlu:
     - Na [segunda](day_of_week), lembra-me de [fazer cardio](event) às [09:00](hour)!
     - No [sábado](day_of_week), lembra-me de [fazer uma sobremesa](event) às [15:00](hour)!
     - No [domingo](day_of_week), lembra-me de [ir às compras](event) às [18:00](hour)!
-    - Amanhã, lembra-me de ir as supermercado, às 16:00!
+    - [Amanhã](day_of_week), lembra-me de [ir ao supermercado](event), às [16:00](hour)!
     - [Todas as terças](occurrence), lembra me de [fazer cardio](event) por [1 hora](duration), às [16:00](hour)!
     - Lembra-me que tenho uma [consulta de oftalmologia](event) no [dia 9](day) de [junho](month), às [14:00](hour)!
     - Lembra-me que tenho uma [consulta de optometria](event) no [dia 20](day), às [10:00](hour)
@@ -76,6 +80,12 @@ nlu:
     - Lembra me de [fazer cycling](event) por [30 minutos](duration), às [16:00](hour)!
     - Avisa-me para [fazer uma caminhada](event) durante [30 minutos](duration), às [14:00](hour)
     - Avisa-me para [pré-aquecer o forno](event) por [10 minutos](duration), às [11:30](hour)
+#dezassete e trinta
+#dezassete horas e trinta minutos
+#dezassete horas
+#dezassete horas e trinta
+#cinco da tarde
+
 
 - intent: add_event
   examples: |

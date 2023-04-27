@@ -30,6 +30,7 @@ from __future__ import print_function
 import os.path
 import re
 
+from word2numberi18n import w2n
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -73,11 +74,11 @@ class ValidateCheckEventDataForm(FormValidationAction):
         domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate `hour` value."""
-        print(tracker.get_slot("event"))
-        regex = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
-        p = re.compile(regex)
-        m = re.search(p, slot_value)
-        if m == None:
+        print(tracker.get_slot("hour"))
+        # regex = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+        # p = re.compile(regex)
+        # m = re.search(p, slot_value)
+        if slot_value == None:
             dispatcher.utter_message(text=f"Não percebi a que horas queria realizar a atividade, pode repetir?.")
             return {"hour": None}
         elif tracker.get_slot("event") == None:
@@ -121,6 +122,78 @@ class CreateEventAction(Action):
         else:
             d =d[0]
 
+
+        instance = w2n.W2N(lang_param="pt")
+        horas= 0
+        minutos = 0
+        a=str(tracker.get_slot("hour"))
+        if a.__contains__("hora"):
+            b = a.split("hora")
+            horas = b[0]
+            print(horas)
+            if horas.__contains__("uma"):
+                horas = "um"
+            elif horas.__contains__("duas"):
+                horas = "dois"
+            elif horas.__contains__("vinte e uma"):
+                horas = "vinte e um"
+                print(horas)
+            elif horas.__contains__("vinte e duas"):
+                horas = "vinte e dois"
+            if b[1].__contains__("minutos"):
+                b[1].removesuffix("minutos")
+                minutos = b[1][b[1].find("e")+1 : len(b[1])]
+            else:
+                if len(b[1]) > 2:
+                    minutos = b[1][b[1].find("e")+1 : len(b[1])]
+
+        else:
+            b = a.split(" ")
+            if len(b)==3:
+                horas = b[0]
+                if horas.__contains__("uma"):
+                    horas = "um"
+                elif horas.__contains__("duas"):
+                    horas = "dois"
+                minutos = b[2]
+            if len(b) == 5:
+                horas = b[0] + " " + b[1] + " "  + b[2]
+                if horas.__contains__("vinte e uma"):
+                    horas = "vinte e um"
+                elif horas.__contains__("vinte e duas"):
+                    horas = "vinte e dois"
+                minutos = b[4]
+                if instance.word_to_num(horas) > 24:
+                    horas = b[0]
+                    if horas.__contains__("uma"):
+                        horas = "um"
+                    elif horas.__contains__("duas"):
+                        horas = "dois"
+            
+                    minutos = b[2] + " " + b[3] + " "  + b[4]
+            if len(b) == 7:
+                horas = b[0] + " " + b[1] + " "  + b[2] 
+                if horas.__contains__("uma"):
+                    horas = "um"
+                elif horas.__contains__("duas"):
+                    horas = "dois"
+                elif horas.__contains__("vinte e uma"):
+                    horas = "vinte e um"
+                    print(horas)
+                elif horas.__contains__("vinte e duas"):
+                    horas = "vinte e dois"
+                minutos = b[4] + " " + b[5] + " "  + b[6] 
+        
+        if horas == "dezassete":
+            horario =  "17:" + str(instance.word_to_num(minutos))
+        elif minutos == "dezassete":
+            horario =  str(instance.word_to_num(horas)) + ":17"
+        else:
+            horario = str(instance.word_to_num(horas)) + ":" + str(instance.word_to_num(minutos))
+
+        print(horario)
+        event_start_time = datetime.strptime(horario, "%H:%M").time()
+
         hn = str(datetime.today().hour)
         mn = str(datetime.today().minute)
         now = hn+":"+mn
@@ -153,7 +226,8 @@ class CreateEventAction(Action):
                             days_ahead += 7
                         event_date = str(d + timedelta(days=days_ahead))
                 else:
-                    if datetime.strptime(tracker.get_slot("hour"), "%H:%M").time() > datetime.strptime(now, "%H:%M").time() :
+                    print(event_start_time)
+                    if datetime.strptime(str(horario), "%H:%M").time() > datetime.strptime(now, "%H:%M").time() :
                         event_date = str(date.today())
                     else:
                         day = str(datetime.today().day+1)
@@ -202,7 +276,11 @@ class CreateEventAction(Action):
                 year = str(datetime.now().year)
                 event_date = year + "-" + month + "-" + day
             
-            event_start_time = datetime.strptime(tracker.get_slot("hour"), "%H:%M").time()
+
+            
+
+            
+
             event_start_datetime = datetime.combine(datetime.strptime(event_date, '%Y-%m-%d'), event_start_time).isoformat()
             if (tracker.get_slot("duration") == None):
                 event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
