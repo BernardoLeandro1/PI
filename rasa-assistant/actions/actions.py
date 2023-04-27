@@ -27,8 +27,8 @@
 #         return []
 from __future__ import print_function
 
-#import datetime
 import os.path
+import re
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -38,10 +38,54 @@ from googleapiclient.errors import HttpError
 from httplib2 import Http
 from oauth2client import file, client, tools
 from typing import Dict, Text, Any, List, Union
-from rasa_sdk import Action, Tracker
+from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 from datetime import date, datetime, timedelta
+from actions import agenda
+from rasa_sdk.events import SessionStarted, ActionExecuted
+from rasa_sdk.types import DomainDict
+
+class ValidateCheckEventDataForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_check_event_data_form"
+    
+    def validate_event(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `event` value."""
+        print(tracker.get_slot("event"))
+        if slot_value == None:
+            dispatcher.utter_message(text=f"Não percebi a atividade que queria que marcasse, pode repetir?.")
+            return {"event": None}
+        else:
+            return {"event": slot_value}
+
+    def validate_hour(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `hour` value."""
+        print(tracker.get_slot("event"))
+        regex = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+        p = re.compile(regex)
+        m = re.search(p, slot_value)
+        if m == None:
+            dispatcher.utter_message(text=f"Não percebi a que horas queria realizar a atividade, pode repetir?.")
+            return {"hour": None}
+        elif tracker.get_slot("event") == None:
+            dispatcher.utter_message(text=f"Não percebi a atividade que queria que marcasse, pode repetir?.")
+            return {"event": None} 
+        else:
+            dispatcher.utter_message("Quer que marque {}, às {}?".format(tracker.get_slot("event"), tracker.get_slot("hour")))
+            return {"event": tracker.get_slot("event"), "hour": slot_value}
 
 class ActionGreetUser(Action):
     def name(self) -> Text:
@@ -69,137 +113,124 @@ class CreateEventAction(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        # try: 
-        #      import argparse
-        #      flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-        # except ImportError:
-        #      flags=None
-        SCOPES = 'https://www.googleapis.com/auth/calendar'
-        store= file.Storage('/home/bernardo/Desktop/PI/rasa-assistant/actions/storage.json')
-        creds = store.get()
-        if not creds or creds.invalid:
-            flow=client.flow_from_clientsecrets('/home/bernardo/Desktop/PI/rasa-assistant/actions/credentials.json', SCOPES)
-            creds=tools.run_flow(flow, store, flags) \
-                if flags else tools.run(flow, store)
-        # Get the user's Google credentials
-        #creds = Credentials.from_authorized_user_info(tracker.get_slot("google_auth"))
 
-        # Authenticate and build the Google Calendar service
-        service = build('calendar', 'v3', credentials=creds)
-
-        # Get the event details from the user
-        event_title = tracker.get_slot("event")
-        #event_location = tracker.get_slot("event_location")
-        #event_description = tracker.get_slot("event_description")
-        #event_date = datetime.strptime(tracker.get_slot("event_date"), "%Y-%m-%d").date()
+        calendar = agenda.GoogleCalendar("actions/credentials.json")
         d = str(tracker.get_slot("day")).split()
-        print(tracker.get_slot("month"))
-        if (tracker.get_slot("day") == None):
-            event_date = date.today()
-            print(event_date)
-        elif (tracker.get_slot("month") == None and tracker.get_slot("day") != None):
-            print(tracker.get_slot("day"))
-            print(d)
-            if (int(d[1]) > datetime.now().day):
-                month = str(datetime.now().month)
+        if(len(d)>1):
+            d = d[1]
+        else:
+            d =d[0]
+
+        hn = str(datetime.today().hour)
+        mn = str(datetime.today().minute)
+        now = hn+":"+mn
+        if(tracker.get_slot("hour") != None):
+            if (tracker.get_slot("day") == None):
+                if (tracker.get_slot("day_of_week")!= None):
+                    if (str(tracker.get_slot("day_of_week")).lower!= "amanhã"):
+                        event_date = str(datetime.today().date() + timedelta(days=1))
+                    else:
+                        assistday = str(tracker.get_slot("day_of_week")).lower()
+                        match assistday:
+                            case "segunda": 
+                                weekday = 0
+                            case "terça":
+                                weekday = 1
+                            case "quarta":
+                                weekday = 2
+                            case "quinta":
+                                weekday = 3
+                            case "sexta":
+                                weekday = 4
+                            case "sábado":
+                                weekday = 5
+                            case "domingo":
+                                weekday = 6
+                        d = datetime.today().date()
+                        print(d)
+                        days_ahead = weekday - d.weekday()
+                        if days_ahead <= 0: # Target day already happened this week
+                            days_ahead += 7
+                        event_date = str(d + timedelta(days=days_ahead))
+                else:
+                    if datetime.strptime(tracker.get_slot("hour"), "%H:%M").time() > datetime.strptime(now, "%H:%M").time() :
+                        event_date = str(date.today())
+                    else:
+                        day = str(datetime.today().day+1)
+                        month = str(datetime.now().month)
+                        year = str(datetime.now().year)
+                        event_date = year + "-" + month + "-" + day
+            elif (tracker.get_slot("month") == None and tracker.get_slot("day") != None):
+                if (int(d) > datetime.now().day):
+                    month = str(datetime.now().month)
+                    day = str(d)
+                    year = str(datetime.now().year)
+                    event_date = year + "-" + month + "-" + day
+                else:
+                    month = str(datetime.now().month+1)
+                    day = str(d)
+                    year = str(datetime.now().year)
+                    event_date = year + "-" + month + "-" + day            
+            elif (tracker.get_slot("month") != None and tracker.get_slot("day") != None):
+                assistmonth = str(tracker.get_slot("month")).lower()
+                match assistmonth:
+                    case "janeiro": 
+                        month = "1"
+                    case "fevereiro":
+                        month = "2"
+                    case "março":
+                        month = "3"
+                    case "abril":
+                        month = "4"
+                    case "maio":
+                        month = "5"
+                    case "junho":
+                        month = "6"
+                    case "julho":
+                        month = "7"
+                    case "agosto":
+                        month = "8"
+                    case "setembro":
+                        month = "9"
+                    case "outubro":
+                        month = "10"
+                    case "novembro":
+                        month = "11"
+                    case "dezembro":
+                        month = "12"
                 day = str(d[1])
                 year = str(datetime.now().year)
                 event_date = year + "-" + month + "-" + day
+            
+            event_start_time = datetime.strptime(tracker.get_slot("hour"), "%H:%M").time()
+            event_start_datetime = datetime.combine(datetime.strptime(event_date, '%Y-%m-%d'), event_start_time).isoformat()
+            if (tracker.get_slot("duration") == None):
+                event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
+                event_end_datetime = event_end_datetime.replace(" ", "T")
             else:
-                month = str(datetime.now().month+1)
-                day = str(d[1])
-                year = str(datetime.now().year)
-                event_date = year + "-" + month + "-" + day            
-        elif (tracker.get_slot("month") != None and tracker.get_slot("day") != None):
-            assistmonth = str(tracker.get_slot("month")).lower()
-            match assistmonth:
-                case "janeiro": 
-                    month = "1"
-                case "fevereiro":
-                    month = "2"
-                case "março":
-                    month = "3"
-                case "abril":
-                    month = "4"
-                case "maio":
-                    month = "5"
-                case "junho":
-                    month = "6"
-                case "julho":
-                    month = "7"
-                case "agosto":
-                    month = "8"
-                case "setembro":
-                    month = "9"
-                case "outubro":
-                    month = "10"
-                case "novembro":
-                    month = "11"
-                case "dezembro":
-                    month = "12"
-            day = str(d[1])
-            year = str(datetime.now().year)
-            event_date = year + "-" + month + "-" + day
-        
-        event_start_time = datetime.strptime(tracker.get_slot("hour"), "%H:%M").time()
-        event_start_datetime = datetime.combine(datetime.strptime(event_date, '%Y-%m-%d'), event_start_time).isoformat()
-        if (tracker.get_slot("duration") == None):
-            event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
-            event_end_datetime = event_end_datetime.replace(" ", "T")
-        else:
-            x = str(tracker.get_slot("duration")).split()
-            if x[1].__contains__("hora"):
-                a = int(x[0])
-                event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(hours=a))
-                event_end_datetime = event_end_datetime.replace(" ", "T")
-            elif x[1].__contains__("minutos"):
-                a = int(x[0])
-                event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=a))
-                event_end_datetime = event_end_datetime.replace(" ", "T")
-    
+                x = str(tracker.get_slot("duration")).split()
+                if x[1].__contains__("hora"):
+                    a = int(x[0])
+                    event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(hours=a))
+                    event_end_datetime = event_end_datetime.replace(" ", "T")
+                elif x[1].__contains__("minutos"):
+                    a = int(x[0])
+                    event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=a))
+                    event_end_datetime = event_end_datetime.replace(" ", "T")
         
 
-        # Create the start and end datetime objects for the event
-        
-        #event_end_datetime = datetime.combine(event_date, event_end_time).isoformat()
+            try:
+                event = calendar.add_event(event_start_datetime, event_end_datetime, tracker.get_slot("event"), tracker.get_slot("location"), tracker.get_slot("person"))
+                # transforming data and day into variables
+                aux = str(event["start"]).split(":")[1]
+                aux2 = aux.split("T")
+                aux3 = aux2[0].split("'")[1]
+                data = aux3.split("-")
+                dia = data[2] + "-" + data[1] + "-" + data[0]
+                hora = aux2[1] + ":" + str(event["start"]).split(":")[2] + ":" + str(event["start"]).split(":")[3].split("+")[0]
+                dispatcher.utter_message("Evento criado: {} às {} do dia {}".format(event["summary"], hora, dia))
+            except HttpError as error:
+                dispatcher.utter_message("Erro ao criar o evento: {}".format(str(error)))
 
-        # Create the event object
-        # event = {
-        #   'summary': event_title,
-        #   'location': event_location,
-        #   'description': event_description,
-        #   'start': {
-        #     'dateTime': event_start_datetime,
-        #     'timeZone': tracker.get_slot("timezone"),
-        #   },
-        #   'end': {
-        #     'dateTime': event_end_datetime,
-        #     'timeZone': tracker.get_slot("timezone"),
-        #   },
-        #   'reminders': {
-        #     'useDefault': True,
-        #   },
-        # }
-        print(event_start_datetime)
-        print(event_end_datetime)
-        event = {
-            'summary': event_title,
-            'start': {
-             'dateTime': event_start_datetime,
-             'timeZone': 'Portugal',
-           },
-           'end': {
-             'dateTime': event_end_datetime,
-             'timeZone': 'Portugal',
-           }
-        }
-
-        try:
-            # Insert the event into the user's calendar
-            event = service.events().insert(calendarId='primary', body=event).execute()
-            dispatcher.utter_message("Evento criado: {} às {}".format(tracker.get_slot("event"), tracker.get_slot("hour")))
-        except HttpError as error:
-            dispatcher.utter_message("Erro ao criar o evento: {}".format(str(error)))
-
-        return [SlotSet("event", None), SlotSet("duration", None), SlotSet("hour", None),
-                SlotSet("occurrence", None), SlotSet("person", None), SlotSet("month", None), SlotSet("day_of_week", None), SlotSet("day", None)]
+            return [SlotSet("event", None), SlotSet("duration", None), SlotSet("hour", None),
+                    SlotSet("occurrence", None), SlotSet("person", None), SlotSet("month", None), SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("person", None)]
