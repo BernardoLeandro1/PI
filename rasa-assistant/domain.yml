@@ -11,6 +11,7 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - check_event_data_form
 
 entities:
   - hour
@@ -21,6 +22,8 @@ entities:
   - day
   - month
   - day_of_week
+  - location
+
 
 slots:
   event:
@@ -36,7 +39,7 @@ slots:
     mappings:
     - type: from_entity
       entity: hour
-
+    
   day_of_week:
     type: text
     influence_conversation: true
@@ -65,6 +68,13 @@ slots:
     - type: from_entity
       entity: person
 
+  location:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: location
+
   duration:
     type: text
     influence_conversation: true
@@ -79,6 +89,12 @@ slots:
     mappings:
     - type: from_entity
       entity: occurrence
+
+forms:
+  check_event_data_form:
+    required_slots:
+      - event
+      - hour
 
 responses:
   utter_greet:
@@ -98,7 +114,6 @@ responses:
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
 
   utter_did_that_help:
   - text: "Did that help you?"
@@ -115,6 +130,7 @@ responses:
 
 actions:
 - action_create_event
+- validate_check_event_data_form
 
 session_config:
   session_expiration_time: 60

@@ -18,6 +18,23 @@ rules:
   - intent: greet
   - action: utter_greet
 
+- rule: Activate form
+  steps:
+  - intent: add_reminder
+  - action: check_event_data_form
+  - active_loop: check_event_data_form
+
+- rule: Submit form
+  condition:
+  - active_loop: check_event_data_form
+  steps:
+  - action: check_event_data_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - intent: affirm
+  - action: action_create_event
+
 # - rule: Add_reminder to calendar
 #   steps:
 #   - intent: add_reminder

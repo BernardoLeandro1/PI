@@ -34,12 +34,26 @@ stories:
   - intent: greet
   - action: utter_greet
   - intent: add_reminder
+  - action: check_event_data_form
+  - active_loop: check_event_data_form
+  - slot_was_set:
+    - requested_slot: hour
+  - slot_was_set:
+    - hour:
+  - slot_was_set:
+    - requested_slot: event
+  - slot_was_set:
+    - event: 
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - intent: affirm
   - action: action_create_event
-  - action: utter_anyelse
-  - intent: deny
-  - action: utter_dispose
-  - intent: goodbye
-  - action: utter_goodbye
+  # - action: utter_anyelse
+  # - intent: deny
+  # - action: utter_dispose
+  # - intent: goodbye
+  # - action: utter_goodbye
 
 - story: cancel reminder path
   steps:

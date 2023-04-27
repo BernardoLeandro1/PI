@@ -48,17 +48,34 @@ nlu:
     - Podes avisar-me para ligar ao meu filho amanhã às [15 horas](hour)? 
     - Lembra-me de [fazer uma sobremesa](event) às [10:30](hour)!
     - Lembra-me de [fazer o comer](event) às [11:30](hour)!
+    - Na [terça](day_of_week), lembra-me de [ir às compras](event) às [18:00](hour)!
+    - Na [segunda](day_of_week), lembra-me de [fazer cardio](event) às [09:00](hour)!
+    - No [sábado](day_of_week), lembra-me de [fazer uma sobremesa](event) às [15:00](hour)!
+    - No [domingo](day_of_week), lembra-me de [ir às compras](event) às [18:00](hour)!
+    - Amanhã, lembra-me de ir as supermercado, às 16:00!
     - [Todas as terças](occurrence), lembra me de [fazer cardio](event) por [1 hora](duration), às [16:00](hour)!
-    - Lembra-me que tenho uma [consulta](event) no [dia 9](day) de [junho](month), às [14:00](hour)!
-    - Lembra-me que tenho uma [consulta](event) no [dia 20](day), às [10:00](hour)
-    - Lembra-me que tenho uma [operação](event) no [dia 27](day) de [outubro](month), às [11:00](hour)!
+    - Lembra-me que tenho uma [consulta de oftalmologia](event) no [dia 9](day) de [junho](month), às [14:00](hour)!
+    - Lembra-me que tenho uma [consulta de optometria](event) no [dia 20](day), às [10:00](hour)
+    - Lembra-me que tenho uma [operação ao coração](event) no [dia 27](day) de [outubro](month), às [11:00](hour)!
     - Lembra-me que tenho uma [visita](event) no [dia 13](day) de [novembro](month), às [14:00](hour)!
     - Lembra-me que tenho uma [visita](event) no [dia 13](day) de [janeiro](month), às [14:00](hour)!
     - Lembra-me que tenho uma [visita](event) no [dia 13](day) de [fevereiro](month), às [14:00](hour)!
     - Lembra-me de [fazer yoga](event) no [dia 26](day) de [maio](month), às [17:00](hour)!
     - Lembra-me de [fazer uma sobremesa](event) no [dia 26](day) de [março](month), às [17:00](hour)!
-    - Avisa me que tenho um [almoço](event) com o [meu filho](person) no [dia 13](day) de [agosto](month), às [12:30](hour)!
-
+    - Avisa me que tenho um [almoço](event) com o meu [filho](person) no [dia 13](day) de [agosto](month), às [12:30](hour)!
+    - Lembra-me que marquei um [café](event) com a [Lígia](person) às [17:00](hour).
+    - Diz-me para ir ao [parque](location), [passear o cão](event), às [16:00](hour)!
+    - Podes me avisar que no [dia 26](day) tenho um [jantar](event) com o meu [filho](person) às [20:00](hour) na [Marisqueira da Vagueira](location), por favor?
+    - Podes me avisar que no [dia 20](day) tenho um [jantar](event) com o [Alberto](person) às [20:00](hour) na [Kikito](location), por favor?
+    - Podes me avisar que no [dia 21](day) tenho um [jantar](event) com o meu [filho](person) às [20:00](hour) no [Barracão](location), por favor?
+    - Podes me avisar que no [dia 12](day) tenho um [jantar](event) com o meu [filho](person) às [20:00](hour) no [Grémio](location), por favor?
+    - Podes me avisar que no [dia 30](day) tenho um [jantar](event) com a [Lígia](person) às [20:00](hour) na [MARE](location), por favor?
+    - Podes me avisar que no [dia 3](day) tenho um [café](event) com a [Ana](person) às [16:00](hour) na [Vago Delicias](location), por favor?
+    - Podes me avisar que no [dia 15](day) tenho um [jantar](event) com o [Mário](person) às [20:00](hour) no [Ramona](location), por favor?
+    - Lembra me de [fazer cardio](event) por [2 horas](duration), às [16:00](hour)!
+    - Lembra me de [fazer cycling](event) por [30 minutos](duration), às [16:00](hour)!
+    - Avisa-me para [fazer uma caminhada](event) durante [30 minutos](duration), às [14:00](hour)
+    - Avisa-me para [pré-aquecer o forno](event) por [10 minutos](duration), às [11:30](hour)
 
 - intent: add_event
   examples: |
