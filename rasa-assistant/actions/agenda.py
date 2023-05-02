@@ -28,22 +28,41 @@ class GoogleCalendar:
             with open('token.json', 'w') as token:
                 token.write(creds.to_json())
         self.service = build('calendar', 'v3', credentials=creds)
-        
-    def add_event(self, start_time , end_time, summary, location, person):
-        event = {
-            'summary': summary,
-            'location': location,
-            'start': {
-                'dateTime': start_time,
-                'timeZone': 'Portugal',
-            },
-            'end': {
-                'dateTime': end_time,
-                'timeZone': 'Portugal',
-            },
-            'attendees': person
+    
 
-        }
+    def add_event(self, start_time , end_time, summary, location, person, occur, until):
+        if (occur != None and until != None):
+            recur = 'RRULE:FREQ=' + occur + ';UNTIL=' + until
+            event = {
+                'summary': summary,
+                'location': location,
+                'start': {
+                    'dateTime': start_time,
+                    'timeZone': 'Portugal',
+                },
+                'end': {
+                    'dateTime': end_time,
+                    'timeZone': 'Portugal',
+                },
+                'attendees': person,
+                'recurrence': [ recur, ]
+
+            }
+            print('RRULE:FREQ=' + occur + ';UNTIL=' + until)
+        else: 
+            event = {
+                'summary': summary,
+                'location': location,
+                'start': {
+                    'dateTime': start_time,
+                    'timeZone': 'Portugal',
+                },
+                'end': {
+                    'dateTime': end_time,
+                    'timeZone': 'Portugal',
+                },
+                'attendees': person,
+            }
         # attendees tem de conter email, depois iremos buscar esse email aos contactos quando houver contactos
         # [
         #         {'email': 'diogomfsilva98@gmail.com'},

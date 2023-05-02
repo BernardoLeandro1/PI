@@ -121,12 +121,43 @@ class CreateEventAction(Action):
             d = d[1]
         else:
             d =d[0]
-
-
+        occur = None
+        if (str(tracker.get_slot("occurrence")).lower().__contains__("dias") or str(tracker.get_slot("occurrence")).lower().__contains__("diariamente")):
+            occur = "DAILY"
+        elif(str(tracker.get_slot("occurrence")).lower().__contains__("meses") or str(tracker.get_slot("occurrence")).lower().__contains__("mensalmente")):
+            occur = "MONTHLY"
+        elif(str(tracker.get_slot("occurrence")).lower().__contains__("anualmente")):
+            occur= "ANNUALY"
+        else:
+            occur = "WEEKLY"
+            if str(tracker.get_slot("occurrence")).lower().__contains__("segunda"):
+                SlotSet("day_of_week", "segunda")
+            if str(tracker.get_slot("occurrence")).lower().__contains__("terça"):
+                SlotSet("day_of_week", "terça")
+            if str(tracker.get_slot("occurrence")).lower().__contains__("quarta"):
+                SlotSet("day_of_week", "quarta")
+            if str(tracker.get_slot("occurrence")).lower().__contains__("quinta"):
+                SlotSet("day_of_week", "quinta")
+            if str(tracker.get_slot("occurrence")).lower().__contains__("sexta"):
+                SlotSet("day_of_week", "sexta")
+            if str(tracker.get_slot("occurrence")).lower().__contains__("sabado"):
+                SlotSet("day_of_week", "sabado")
+            if str(tracker.get_slot("occurrence")).lower().__contains__("domingo"):
+                SlotSet("day_of_week", "domingo")
         instance = w2n.W2N(lang_param="pt")
         horas= 0
         minutos = 0
         a=str(tracker.get_slot("hour"))
+        # Uncoment if voice recognition can't process numbers and gives them extended
+        if a.__contains__("tarde") or a.__contains__("noite"):
+            b = a.split(" ")
+            print(a)
+            horario = b[0].split(":")
+            print(horario)
+            horario[0] = int(horario[0]) + 12
+            a = str(horario[0]) + ":" + str(horario[1])
+        """
+        
         if a.__contains__("hora"):
             b = a.split("hora")
             horas = b[0]
@@ -190,17 +221,18 @@ class CreateEventAction(Action):
             horario =  str(instance.word_to_num(horas)) + ":17"
         else:
             horario = str(instance.word_to_num(horas)) + ":" + str(instance.word_to_num(minutos))
-
+        
         print(horario)
         event_start_time = datetime.strptime(horario, "%H:%M").time()
-
+        """
+        event_start_time = datetime.strptime(a, "%H:%M").time()
         hn = str(datetime.today().hour)
         mn = str(datetime.today().minute)
         now = hn+":"+mn
         if(tracker.get_slot("hour") != None):
             if (tracker.get_slot("day") == None):
                 if (tracker.get_slot("day_of_week")!= None):
-                    if (str(tracker.get_slot("day_of_week")).lower!= "amanhã"):
+                    if (str(tracker.get_slot("day_of_week")).lower == "amanhã"):
                         event_date = str(datetime.today().date() + timedelta(days=1))
                     else:
                         assistday = str(tracker.get_slot("day_of_week")).lower()
@@ -215,11 +247,13 @@ class CreateEventAction(Action):
                                 weekday = 3
                             case "sexta":
                                 weekday = 4
-                            case "sábado":
+                            case "sabado":
                                 weekday = 5
                             case "domingo":
                                 weekday = 6
                         d = datetime.today().date()
+                        print("AAAAAAAAAAAAAAAAaa")
+                        print(tracker.get_slot("day_of_week"))
                         print(d)
                         days_ahead = weekday - d.weekday()
                         if days_ahead <= 0: # Target day already happened this week
@@ -280,8 +314,10 @@ class CreateEventAction(Action):
             
 
             
-
+            until = None
             event_start_datetime = datetime.combine(datetime.strptime(event_date, '%Y-%m-%d'), event_start_time).isoformat()
+            new_hour = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=30))
+            new_hour = new_hour.replace(" ", "T")
             if (tracker.get_slot("duration") == None):
                 event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
                 event_end_datetime = event_end_datetime.replace(" ", "T")
@@ -295,10 +331,44 @@ class CreateEventAction(Action):
                     a = int(x[0])
                     event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=a))
                     event_end_datetime = event_end_datetime.replace(" ", "T")
-        
+                elif x[1].__contains__("dia"):
+                    f = instance.word_to_num(x[0])
 
+                    until = str(datetime.strptime(new_hour, '%Y-%m-%dT%H:%M:%S') + timedelta(days=f))
+                    until = until.replace(" ", "T")
+                    until = until.replace(":", "")
+                    until = until.replace("-", "")
+                    until = until.__add__("Z")
+                    event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
+                    event_end_datetime = event_end_datetime.replace(" ", "T")
+                elif x[1].__contains__("semana"):
+                    if (x[0].__contains__("uma")):
+                        x[0] = "um"
+                    elif (x[0].__contains__("duas")):
+                        x[0] = "dois"
+                    f = instance.word_to_num(x[0])
+                    until = str(datetime.strptime(new_hour, '%Y-%m-%dT%H:%M:%S') + timedelta(weeks=f))
+                    until = until.replace(" ", "T")
+                    until = until.replace(":", "")
+                    until = until.replace("-", "")
+                    until = until.__add__("Z")
+                    event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
+                    event_end_datetime = event_end_datetime.replace(" ", "T")
+                elif x[1].__contains__("mes") or x[1].__contains__("mês"):
+                    f = instance.word_to_num(x[0])
+                    until = str(datetime.strptime(new_hour, '%Y-%m-%dT%H:%M:%S') + timedelta(month=f))
+                    until = until.replace(" ", "T")
+                    until = until.replace(":", "")
+                    until = until.replace("-", "")
+                    until = until.__add__("Z")
+                    event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
+                    event_end_datetime = event_end_datetime.replace(" ", "T")
+                    
+            print(tracker.get_slot("duration"))
+            print(occur)
+            print(until)
             try:
-                event = calendar.add_event(event_start_datetime, event_end_datetime, tracker.get_slot("event"), tracker.get_slot("location"), tracker.get_slot("person"))
+                event = calendar.add_event(event_start_datetime, event_end_datetime, tracker.get_slot("event"), tracker.get_slot("location"), tracker.get_slot("person"), occur, until)
                 # transforming data and day into variables
                 aux = str(event["start"]).split(":")[1]
                 aux2 = aux.split("T")
