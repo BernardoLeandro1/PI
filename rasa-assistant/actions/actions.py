@@ -114,6 +114,8 @@ class CreateEventAction(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
+     
+        print(domain)       
 
         calendar = agenda.GoogleCalendar("actions/credentials.json")
         d = str(tracker.get_slot("day")).split()
@@ -127,6 +129,7 @@ class CreateEventAction(Action):
         horas= 0
         minutos = 0
         a=str(tracker.get_slot("hour"))
+        """
         if a.__contains__("hora"):
             b = a.split("hora")
             horas = b[0]
@@ -190,9 +193,9 @@ class CreateEventAction(Action):
             horario =  str(instance.word_to_num(horas)) + ":17"
         else:
             horario = str(instance.word_to_num(horas)) + ":" + str(instance.word_to_num(minutos))
-
-        print(horario)
-        event_start_time = datetime.strptime(horario, "%H:%M").time()
+        """
+        print(a)
+        event_start_time = datetime.strptime(a, "%H:%M").time()
 
         hn = str(datetime.today().hour)
         mn = str(datetime.today().minute)
@@ -227,7 +230,7 @@ class CreateEventAction(Action):
                         event_date = str(d + timedelta(days=days_ahead))
                 else:
                     print(event_start_time)
-                    if datetime.strptime(str(horario), "%H:%M").time() > datetime.strptime(now, "%H:%M").time() :
+                    if datetime.strptime(str(a), "%H:%M").time() > datetime.strptime(now, "%H:%M").time() :
                         event_date = str(date.today())
                     else:
                         day = str(datetime.today().day+1)

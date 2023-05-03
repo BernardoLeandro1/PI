@@ -1,6 +1,6 @@
 import requests
 import sys
-from VoiceModule import InputVoiceModule, OutputVoiceModule
+from VoiceModule import VoskInputVoiceModule, OutputVoiceModule, GoogleInputVoiceModule
 import tkinter as tk
 import threading
 
@@ -28,7 +28,8 @@ class Assistant:
             "Adeus!",
         ]
         
-        self.listener = InputVoiceModule()
+        #self.listener = VoskInputVoiceModule()
+        self.listener = GoogleInputVoiceModule()
         self.speaker = OutputVoiceModule()     
         
         # GUI
@@ -74,7 +75,7 @@ class Assistant:
     def interact(self, message):
         try:
             r = requests.post('http://localhost:5002/webhooks/rest/webhook', json={"message": message})
-            for i in  r.json () :
+            for i in  r.json() :
                 response = i['text']
             return response
         except:
