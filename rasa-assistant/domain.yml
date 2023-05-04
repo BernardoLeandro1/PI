@@ -8,10 +8,10 @@ intents:
   - add_reminder
     #use_entities: true
   - cancel_reminder
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
   - check_event_data_form
+  - query_weather
+  - confirm_weather
+
 
 entities:
   - hour
@@ -23,6 +23,8 @@ entities:
   - month
   - day_of_week
   - location
+  - weather
+
 
 
 slots:
@@ -89,7 +91,14 @@ slots:
     mappings:
     - type: from_entity
       entity: occurrence
-
+  
+  weather:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: weather
+  
 forms:
   check_event_data_form:
     required_slots:
@@ -112,25 +121,16 @@ responses:
   utter_dispose:
   - text: "Lembre-se, estou sempre à sua disposição!"
 
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
-
   utter_goodbye:
   - text: "Adeus!"
 
-  utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
 
 
 actions:
 - action_create_event
 - validate_check_event_data_form
+- action_get_weather
+- action_confirm_weather
 
 session_config:
   session_expiration_time: 60

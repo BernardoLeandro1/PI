@@ -107,6 +107,7 @@ class ActionGreetUser(Action):
         return []
     
 class CreateEventAction(Action):
+
     def name(self) -> Text:
         return "action_create_event"
 
@@ -115,7 +116,7 @@ class CreateEventAction(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
      
-        print(domain)       
+        #print(domain)       
 
         calendar = agenda.GoogleCalendar("actions/credentials.json")
         d = str(tracker.get_slot("day")).split()
@@ -384,3 +385,25 @@ class CreateEventAction(Action):
 
             return [SlotSet("event", None), SlotSet("duration", None), SlotSet("hour", None),
                     SlotSet("occurrence", None), SlotSet("person", None), SlotSet("month", None), SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("person", None)]
+
+class QueryWeatherAction(Action):
+
+    def name(self) -> Text:
+        return "action_get_weather"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        print(domain)      
+
+class ConfirmWeatherAction(Action):
+
+    def name(self) -> Text:
+        return "action_confirm_weather"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        print(domain) 

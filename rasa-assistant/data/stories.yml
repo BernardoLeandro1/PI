@@ -1,34 +1,6 @@
 version: "3.1"
 
 stories:
-
-- story: happy path
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
-
-- story: sad path 1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
-
-- story: sad path 2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
-
 - story: add reminder path
   steps:
   - intent: greet
@@ -65,3 +37,16 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
+- story: ask weather
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: query_weather
+  - action: action_get_weather
+
+- story: confirm weather
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: confirm_weather
+  - action: action_confirm_weather
