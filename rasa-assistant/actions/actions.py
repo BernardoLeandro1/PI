@@ -308,7 +308,8 @@ class CreateEventAction(Action):
                         month = "11"
                     case "dezembro":
                         month = "12"
-                day = str(d[1])
+                day = str(d)
+                print(d)
                 year = str(datetime.now().year)
                 event_date = year + "-" + month + "-" + day
             
@@ -498,8 +499,7 @@ class CheckEventAction(Action):
             events = calendar.find_event(start_date = event_date, start_time = startTime, end_date = event_end_date, end_time = endTime)
             if len(events)<1:
                 dispatcher.utter_message("Não tem nada marcado")
-                return [SlotSet("day_of_week", None)]
-            dispatcher.utter_message("Sim")
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None)]
             print()
             for event in events:
                 horas = str(event['start']['dateTime']).split("T")

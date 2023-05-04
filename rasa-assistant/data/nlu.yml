@@ -81,6 +81,7 @@ nlu:
     - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer cardio](event) às [dezoito e trinta](hour)!
     - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer o almoço](event) às [11:30](hour)!
     - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer cardio](event) às [18:30](hour)!
+    - Quero marcar uma [reunião](event) para as [3:30 da tarde](hour) no [dia 20](day) de [maio](month)
 - intent: find_events
   examples: |
     - Tenho alguma coisa marcada para [amanhã](day_of_week)?
@@ -108,7 +109,6 @@ nlu:
     - Tenho algo marcado para [sexta](day_of_week), [entre as 10:00 e as 20:00](hour)?
     - Que eventos tenho no dia [8 de maio](day), [depois das 16:00](hour)?
     - Que eventos tenho no dia [8 de maio](day), [entre as 11:00 e as 12:00](hour)?
-    - Que eventos tenho no dia [8 de maio](day), [depois das 16:00](hour)?
     - Que eventos tenho no dia [8 de maio](day), [antes das 16:00](hour)?
     - Que eventos tenho no dia [8 de maio](day), [entre as 16:00 e as 18:00](hour)?
 - intent: cancel_reminder

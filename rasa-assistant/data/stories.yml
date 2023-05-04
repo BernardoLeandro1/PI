@@ -138,3 +138,70 @@ stories:
     - day: null
   - slot_was_set:
     - hour: null
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_events
+    entities:
+    - day_of_week: sabado
+  - slot_was_set:
+    - day_of_week: sabado
+  - action: action_check_event
+  - slot_was_set:
+    - day_of_week: null
+  - slot_was_set:
+    - day: null
+  - slot_was_set:
+    - hour: null
+  - intent: find_events
+    entities:
+    - day: 8 de maio
+  - slot_was_set:
+    - day: 8 de maio
+  - action: action_check_event
+  - slot_was_set:
+    - day_of_week: null
+  - slot_was_set:
+    - day: null
+  - slot_was_set:
+    - hour: null
+
+# - story: interactive_story_1
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: add_reminder
+#     entities:
+#     - event: reunião
+#     - hour: 3:30 da tarde
+#     - day: dia 20
+#     - day: maio
+#   - slot_was_set:
+#     - event: reunião
+#   - slot_was_set:
+#     - hour: 3:30 da tarde
+#   - slot_was_set:
+#     - day: maio
+#   - intent: add_reminder
+#     entities:
+#     - event: reunião
+#     - hour: 3:30 da tarde
+#     - day: dia 20
+#     - month: maio
+#   - action: check_event_data_form
+#   - active_loop: check_event_data_form
+#   - slot_was_set:
+#     - event: reunião
+#   - slot_was_set:
+#     - hour: 3:30 da tarde
+#   - slot_was_set:
+#     - day: dia 20
+#   - slot_was_set:
+#     - month: maio
+#   - slot_was_set:
+#     - requested_slot: null
+#   - active_loop: null
+#   - intent: affirm
+#   - action: action_create_event

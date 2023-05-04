@@ -12,14 +12,14 @@ intents:
 - mood_great
 - mood_unhappy
 entities:
-- day
-- hour
-- occurrence
 - event
+- day
+- month
+- hour
+- day_of_week
+- occurrence
 - duration
 - person
-- month
-- day_of_week
 - location
 slots:
   event:
@@ -103,9 +103,9 @@ responses:
   utter_iamabot:
   - text: I am a bot, powered by Rasa.
 actions:
-- action_check_event
 - utter_greet
 - action_create_event
+- action_check_event
 - validate_check_event_data_form
 session_config:
   session_expiration_time: 60
