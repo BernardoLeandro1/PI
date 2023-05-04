@@ -54,7 +54,7 @@ class GoogleInputVoiceModule():
             #print("Listen: " + input)
             if confidence > 0.8:
                 #print( input + " --- " + str(confidence))
-                return input
+                return input.lower()
             else: 
                 #print("NÃO OUVI MUITO BEM: "+ input + " ---" + str(confidence))
                 return None
@@ -123,8 +123,9 @@ class MicrophoneStream(object):
 
             else:
                 num_chars_printed = 0
+                print(transcript + overwrite_chars)
                 return str(transcript + overwrite_chars), confidence
-
+            
 class OutputVoiceModule:   
     def __init__(self) -> None:
        
