@@ -1,30 +1,26 @@
-version: "3.1"
-
+version: '3.1'
 intents:
-  - greet
-  - goodbye
-  - affirm
-  - deny
-  - add_reminder
-    #use_entities: true
-  - cancel_reminder
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
-  - check_event_data_form
-
+- add_reminder
+- affirm
+- bot_challenge
+- cancel_reminder
+- check_event_data_form
+- deny
+- find_events
+- goodbye
+- greet
+- mood_great
+- mood_unhappy
 entities:
-  - hour
-  - occurrence
-  - event
-  - duration
-  - person
-  - day
-  - month
-  - day_of_week
-  - location
-
-
+- day
+- hour
+- occurrence
+- event
+- duration
+- person
+- month
+- day_of_week
+- location
 slots:
   event:
     type: text
@@ -32,106 +28,85 @@ slots:
     mappings:
     - type: from_entity
       entity: event
-
   hour:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: hour
-    
   day_of_week:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: day_of_week
-  
   day:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: day
-
   month:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: month
-
   person:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: person
-
   location:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: location
-
   duration:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: duration
-  
-
   occurrence:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: occurrence
-
 forms:
   check_event_data_form:
     required_slots:
-      - event
-      - hour
-
+    - event
+    - hour
 responses:
   utter_greet:
-  - text: "Olá, como posso ajudar?"
-
+  - text: Olá, como posso ajudar?
   utter_done:
-  - text: "Okay! Está marcado {event} às {hour}!"
-
+  - text: Okay! Está marcado {event} às {hour}!
   utter_cancel:
-  - text: "Okay! Está cancelado!"
-
+  - text: Okay! Está cancelado!
   utter_anyelse:
-  - text: "Posso ajudar em mais alguma coisa?"
-
+  - text: Posso ajudar em mais alguma coisa?
   utter_dispose:
-  - text: "Lembre-se, estou sempre à sua disposição!"
-
+  - text: Lembre-se, estou sempre à sua disposição!
   utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-
+  - text: 'Here is something to cheer you up:'
   utter_did_that_help:
-  - text: "Did that help you?"
-
+  - text: Did that help you?
   utter_happy:
-  - text: "Great, carry on!"
-
+  - text: Great, carry on!
   utter_goodbye:
-  - text: "Adeus!"
-
+  - text: Adeus!
   utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
-
-
+  - text: I am a bot, powered by Rasa.
 actions:
+- action_check_event
+- utter_greet
 - action_create_event
 - validate_check_event_data_form
-
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

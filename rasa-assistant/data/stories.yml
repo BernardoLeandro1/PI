@@ -60,8 +60,81 @@ stories:
   - intent: cancel_reminder
   - action: utter_cancel
 
+- story: check if events path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_events
+  - action: action_check_event
+
 - story: goodbye
   steps:
   - intent: goodbye
   - action: utter_goodbye
 
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: find_events
+    entities:
+    - day: 8 de maio
+    - hour: depois das
+    - hour: 16:00
+  - slot_was_set:
+    - hour: 16:00
+  - slot_was_set:
+    - day: 8 de maio
+  - intent: find_events
+    entities:
+    - day: 8 de maio
+    - hour: depois das 16:00
+  - action: action_check_event
+  - slot_was_set:
+    - day_of_week: null
+  - slot_was_set:
+    - day: null
+  - slot_was_set:
+    - hour: null
+  - intent: find_events
+    entities:
+    - day: 8 de maio
+    - hour: antes das
+    - hour: 16:00
+  - slot_was_set:
+    - hour: 16:00
+  - slot_was_set:
+    - day: 8 de maio
+  - intent: find_events
+    entities:
+    - day: 8 de maio
+    - hour: antes das 16:00
+  - action: action_check_event
+  - slot_was_set:
+    - day_of_week: null
+  - slot_was_set:
+    - day: null
+  - slot_was_set:
+    - hour: null
+  - intent: find_events
+    entities:
+    - day: 8 de maio
+    - hour: entre as
+    - hour: 16:00 e as
+    - hour: 18:00
+  - slot_was_set:
+    - hour: 18:00
+  - slot_was_set:
+    - day: 8 de maio
+  - intent: find_events
+    entities:
+    - day: 8 de maio
+    - hour: entre as 16:00 e as 18:00
+  - action: action_check_event
+  - slot_was_set:
+    - day_of_week: null
+  - slot_was_set:
+    - day: null
+  - slot_was_set:
+    - hour: null
