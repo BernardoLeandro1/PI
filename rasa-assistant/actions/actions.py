@@ -43,7 +43,8 @@ from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 from datetime import date, datetime, timedelta
-from actions import agenda
+from actions import agenda, weather
+import GLOBAL
 from rasa_sdk.events import SessionStarted, ActionExecuted
 from rasa_sdk.types import DomainDict
 
@@ -394,8 +395,80 @@ class QueryWeatherAction(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        print(domain)      
+
+            weatherProvider = weather.WeatherProvider()
+            todayDate = datetime.today().date()
+
+            location = str(tracker.get_slot("location"))
+            
+            if location == "None": 
+                location = GLOBAL.CURRENT_LOCATION
+            
+            if (tracker.get_slot("duration")!= None and tracker.get_slot("duration") == "fim de semana"):
+                days_ahead = 6 - todayDate.weekday()
+                if days_ahead > 5:
+                     # TODO Melhorar esta frase 
+                    dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+                
+                # TODO chamar função de fim de semana
+
+            if (tracker.get_slot("day_of_week")!= None):
+                    
+                    if (str(tracker.get_slot("day_of_week")).lower() == "hoje"):
+                        event_date = str(datetime.today().date())
+                    elif (str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
+                        event_date = str(datetime.today().date() + timedelta(days=1))
+                    else:
+                        assistday = str(tracker.get_slot("day_of_week")).lower()
+                        match assistday:
+                            case "segunda": 
+                                weekday = 0
+                            case "terça":
+                                weekday = 1
+                            case "quarta":
+                                weekday = 2
+                            case "quinta":
+                                weekday = 3
+                            case "sexta":
+                                weekday = 4
+                            case "sabado":
+                                weekday = 5
+                            case "domingo":
+                                weekday = 6
+                        
+                        #print("AAAAAAAAAAAAAAAAaa")
+                        #print(tracker.get_slot("day_of_week"))
+                        #print(d)
+                        days_ahead = weekday - todayDate.weekday()
+                        if days_ahead <= 0: # Target day already happened this week
+                            days_ahead += 7
+                        
+                        if days_ahead > 5:
+                            # TODO Melhorar esta frase 
+                            dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
+                            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+
+                        event_date = str(todayDate + timedelta(days=days_ahead))
+                    # TODO chamar função
+
+                    dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+            else:
+                if (tracker.get_slot("day")!= None):
+                    day = str(tracker.get_slot("day")).split()
+                    if(len(day)>1):
+                        day = day[1]
+                    else:
+                        day =day[0]
+                days_ahead = day - todayDate.day
+                if days_ahead <= 0:
+                    # TODO Melhorar esta frase 
+                    dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+                event_date = str(todayDate + timedelta(days=days_ahead))
+                # TODO chamar função
+                dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+
 
 class ConfirmWeatherAction(Action):
 
@@ -406,4 +479,41 @@ class ConfirmWeatherAction(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        print(domain) 
+        weatherProvider = weather.WeatherProvider()
+        todayDate = datetime.today().date()
+        
+        weather =  str(tracker.get_slot("location"))
+        if not weather:
+            # TODO Melhorar esta frase + Ver se estamos a tratar corretamente este erro
+            dispatcher.utter_message("Desculpe mas não consegui entender o que pretendia. Pode repetir?")
+            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None)]
+        
+        location = str(tracker.get_slot("location"))
+        if not location: 
+            location = GLOBAL.CURRENT_LOCATION
+        
+                
+        if (tracker.get_slot("day_of_week")!= None):
+                if (str(tracker.get_slot("day_of_week")).lower == "hoje"):
+                    event_date = str(datetime.today().date())
+                elif (str(tracker.get_slot("day_of_week")).lower == "amanhã"):
+                    event_date = str(datetime.today().date() + timedelta(days=1))
+                else:
+                    assistday = str(tracker.get_slot("day_of_week")).lower()
+                    match assistday:
+                        case "segunda": 
+                            weekday = 0
+                        case "terça":
+                            weekday = 1
+                        case "quarta":
+                            weekday = 2
+                        case "quinta":
+                            weekday = 3
+                        case "sexta":
+                            weekday = 4
+                        case "sabado":
+                            weekday = 5
+                        case "domingo":
+                            weekday = 6
+                    
+                    #print("AAAAAAAAAAAAAAAAaa")

@@ -1,3 +1,4 @@
+from collections import Counter
 import datetime
 import requests
 class WeatherProvider:
@@ -5,10 +6,11 @@ class WeatherProvider:
         self.credential = "ed0608b1055e5035974de17e8422daab"
         self.lang = "pt"
         self.units = "metric"
-        self.currentURL = "https://api.openweathermap.org/data/2.5/weather"
-        self.forecastURL = "https://api.openweathermap.org/data/2.5/forecast"
 
     def get_weather_forecast(self, city):
+        print("^^^^^^^^^^^^^^^^^^^^")
+        print(city)
+        print("^^^^^^^^^^^^^^^^^^^^")
         url = f'https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={self.credential}&lang=pt_br&units=metric'
         response = requests.get(url)
         response.raise_for_status()
@@ -25,24 +27,31 @@ class WeatherProvider:
 
         return daily_forecast
     
-    def get_forecast_for_day(forecast, day_of_week, time=None):
-        # Map Portuguese day names to weekday numbers
-        match day_of_week:
-            case "segunda": 
-                weekday_num = 0
-            case "terça":
-                weekday_num = 1
-            case "quarta":
-                weekday_num = 2
-            case "quinta":
-                weekday_num = 3
-            case "sexta":
-                weekday_num = 4
-            case "sabado":
-                weekday_num = 5
-            case "domingo":
-                weekday_num = 6
+    def get_forecast_for_day(self, date, city,time=None):
+        print("^^^^^^^^^^^^^^^^^^^^")
+        print(city)
+        print("^^^^^^^^^^^^^^^^^^^^")
+        forecast = self.get_weather_forecast(city)
+        for f in forecast:
+            if str(f["date"]) == date:
+                forecastDate = f["weather"]
+                break
         
+        description = []
+        maxs = []
+        mins = []
+        for entry in forecastDate:
+            maxs.append(entry["main"]["temp_max"])
+            mins.append(entry["main"]["temp_min"])
+            description.append(entry["weather"][0]["description"])
+
+        maxTemp = max(maxs)
+        minTemp = min(mins)
+        mostCommonDescription = Counter(description).most_common()[0][0]
+
+        #TODO melhorar frase de resposta 
+        returnPhrase = "No dia "+ str(date)+" vai estar " + mostCommonDescription + "em " + city + ". Teremos máximas de " + str(maxTemp) + " graus e minimas de "+ str(minTemp) + " graus."
+        """
         # Loop through forecast entries and find the closest match
         closest_forecast = None
         closest_delta = datetime.timedelta.max
@@ -71,8 +80,8 @@ class WeatherProvider:
                     if delta < closest_delta:
                         closest_delta = delta
                         closest_forecast = entry
-
-        return closest_forecast
+        """
+        return returnPhrase
     def get_forecast_for_current_day(forecast, time=None):
         if time is not None:
             # Convert time argument to datetime object

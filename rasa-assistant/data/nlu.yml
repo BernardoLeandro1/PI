@@ -109,7 +109,7 @@ nlu:
     - Como vai estar a meteorologia [amanhã](day_of_week)?
     - Como vai estar o tempo na [terça-feira](day_of_week) no [Porto](location)? 
     - Podes-me dizer como vai estar o tempo no [dia 15](day)? 
-     - Podes-me dizer como vai estar o tempo no [sábado](day_of_week)? 
+    - Podes-me dizer como vai estar o tempo no [sábado](day_of_week)? 
     - Qual é a previsão do tempo para o [fim de semana](duration)?
     - Como é que está o tempo na [quarta](day_of_week)?
     - Qual é a temperatura no [domingo](day_of_week)?
@@ -119,13 +119,16 @@ nlu:
   examples: |
     - Vai estar [frio](weather) [amanhã](day_of_week)? 
     - Vai [chover](weather) na [próxima semana](duration)?
-    - Vai estar [sol](weather) na [sexta](day_of_week)? 
+    - Vai estar [sol](weather) na [sexta](day_of_week)?
+    - Vai estar [vento](weather) no [Porto](location) na [sexta](day_of_week)? 
     - Está [sol](weather)?
     - Está [frio](weather) [hoje](day_of_week)?
     - Está [vento](weather)?
+    - Está [frio](weather) em [Aveiro](location)?
     - Vai estar [sol](weather) no [dia 12](day)?
     - Vai fazer [sol](weather) no [dia 13](day)?
     - Sabes se vai [chover](weather) [hoje](day_of_week)?
-    - Sabes se vai [estar vento](weather) [amanhã](day_of_week)?
+    - Sabes se vai estar [vento](weather) [amanhã](day_of_week)?
+    - Sabes se vai estar [sol](weather) em [Lisboa](location)? 
 
 

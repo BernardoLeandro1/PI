@@ -1,1 +1,2 @@
 DEBUG = True
+CURRENT_LOCATION = "Aveiro"
