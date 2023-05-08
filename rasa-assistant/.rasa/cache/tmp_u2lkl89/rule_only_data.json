@@ -1,6 +1,0 @@
-{
-  "rule_only_slots": [],
-  "rule_only_loops": [
-    "check_event_data_form"
-  ]
-}

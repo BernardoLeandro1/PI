@@ -86,11 +86,11 @@ slots:
     mappings:
     - type: from_entity
       entity: weather
-  forms:
-    check_event_data_form:
-      required_slots:
-      - event
-      - hour
+forms:
+  check_event_data_form:
+    required_slots:
+    - event
+    - hour
 responses:
   utter_greet:
   - text: Olá, como posso ajudar? Pode perguntar caso não saiba as funcionalidades disponíveis.
@@ -102,9 +102,6 @@ responses:
   - text: Posso ajudar em mais alguma coisa?
   utter_dispose:
   - text: "Lembre-se, estou sempre à sua disposição!"
-  utter_goodbye:
-  - text: "Adeus!"
-  - text: Lembre-se, estou sempre à sua disposição!
   utter_cheer_up:
   - text: 'Here is something to cheer you up:'
   utter_did_that_help:
@@ -114,7 +111,7 @@ responses:
   utter_goodbye:
   - text: Adeus!
   utter_info:
-  - text: "Eu sou um assistente, destinado a ajudar idosos a manter a sua independência, no entanto ainda estou em desenvolvimento, como tal as funcionalidades são limitadas.\n A única funcionalidade disponível é relacionada com a agenda.\n Caso prenteda adicionar um evento à sua agenda, diga por exemplo 'Lembra-me de caminhar às vinte e uma horas!'.\n Pode questionar eventos dísponíveis 'Tenho alguma coisa marcada para 22 de maio?'.\n E cancelar eventos, por exemplo 'Por favor, desmarca a ioga de amanhã.'.\n Lembre-se, estou sempre à sua disposição!"
+  - text: "Eu sou um assistente que consegue gerir a sua agenda e informar-la acerca da meteorologia."
   
 actions:
 - utter_greet
