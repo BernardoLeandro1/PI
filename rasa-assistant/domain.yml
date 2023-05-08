@@ -11,6 +11,7 @@ intents:
   - query_weather
   - confirm_weather
   - find_events
+  - ask_functions
 
 entities:
   - hour
@@ -92,7 +93,7 @@ slots:
       - hour
 responses:
   utter_greet:
-  - text: Olá, como posso ajudar?
+  - text: Olá, como posso ajudar? Pode perguntar caso não saiba as funcionalidades disponíveis.
   utter_done:
   - text: Okay! Está marcado {event} às {hour}!
   utter_cancel:
@@ -112,6 +113,8 @@ responses:
   - text: Great, carry on!
   utter_goodbye:
   - text: Adeus!
+  utter_info:
+  - text: "Eu sou um assistente, destinado a ajudar idosos a manter a sua independência, no entanto ainda estou em desenvolvimento, como tal as funcionalidades são limitadas.\n A única funcionalidade disponível é relacionada com a agenda.\n Caso prenteda adicionar um evento à sua agenda, diga por exemplo 'Lembra-me de caminhar às vinte e uma horas!'.\n Pode questionar eventos dísponíveis 'Tenho alguma coisa marcada para 22 de maio?'.\n E cancelar eventos, por exemplo 'Por favor, desmarca a ioga de amanhã.'.\n Lembre-se, estou sempre à sua disposição!"
   
 actions:
 - utter_greet
