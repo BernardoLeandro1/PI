@@ -44,7 +44,6 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-<<<<<<< HEAD
 - story: ask weather
   steps:
   - intent: greet
@@ -58,102 +57,101 @@ stories:
   - action: utter_greet
   - intent: confirm_weather
   - action: action_confirm_weather
-=======
 
-- story: interactive_story_1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: find_events
-    entities:
-    - day: 8 de maio
-    - hour: depois das
-    - hour: 16:00
-  - slot_was_set:
-    - hour: 16:00
-  - slot_was_set:
-    - day: 8 de maio
-  - intent: find_events
-    entities:
-    - day: 8 de maio
-    - hour: depois das 16:00
-  - action: action_check_event
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - hour: null
-  - intent: find_events
-    entities:
-    - day: 8 de maio
-    - hour: antes das
-    - hour: 16:00
-  - slot_was_set:
-    - hour: 16:00
-  - slot_was_set:
-    - day: 8 de maio
-  - intent: find_events
-    entities:
-    - day: 8 de maio
-    - hour: antes das 16:00
-  - action: action_check_event
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - hour: null
-  - intent: find_events
-    entities:
-    - day: 8 de maio
-    - hour: entre as
-    - hour: 16:00 e as
-    - hour: 18:00
-  - slot_was_set:
-    - hour: 18:00
-  - slot_was_set:
-    - day: 8 de maio
-  - intent: find_events
-    entities:
-    - day: 8 de maio
-    - hour: entre as 16:00 e as 18:00
-  - action: action_check_event
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - hour: null
+# - story: interactive_story_1
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: find_events
+#     entities:
+#     - day: 8 de maio
+#     - hour: depois das
+#     - hour: 16:00
+#   - slot_was_set:
+#     - hour: 16:00
+#   - slot_was_set:
+#     - day: 8 de maio
+#   - intent: find_events
+#     entities:
+#     - day: 8 de maio
+#     - hour: depois das 16:00
+#   - action: action_check_event
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - hour: null
+#   - intent: find_events
+#     entities:
+#     - day: 8 de maio
+#     - hour: antes das
+#     - hour: 16:00
+#   - slot_was_set:
+#     - hour: 16:00
+#   - slot_was_set:
+#     - day: 8 de maio
+#   - intent: find_events
+#     entities:
+#     - day: 8 de maio
+#     - hour: antes das 16:00
+#   - action: action_check_event
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - hour: null
+#   - intent: find_events
+#     entities:
+#     - day: 8 de maio
+#     - hour: entre as
+#     - hour: 16:00 e as
+#     - hour: 18:00
+#   - slot_was_set:
+#     - hour: 18:00
+#   - slot_was_set:
+#     - day: 8 de maio
+#   - intent: find_events
+#     entities:
+#     - day: 8 de maio
+#     - hour: entre as 16:00 e as 18:00
+#   - action: action_check_event
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - hour: null
 
-- story: interactive_story_1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: find_events
-    entities:
-    - day_of_week: sabado
-  - slot_was_set:
-    - day_of_week: sabado
-  - action: action_check_event
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - hour: null
-  - intent: find_events
-    entities:
-    - day: 8 de maio
-  - slot_was_set:
-    - day: 8 de maio
-  - action: action_check_event
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - hour: null
+# - story: interactive_story_1
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: find_events
+#     entities:
+#     - day_of_week: sabado
+#   - slot_was_set:
+#     - day_of_week: sabado
+#   - action: action_check_event
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - hour: null
+#   - intent: find_events
+#     entities:
+#     - day: 8 de maio
+#   - slot_was_set:
+#     - day: 8 de maio
+#   - action: action_check_event
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - hour: null
 
 # - story: interactive_story_1
 #   steps:
@@ -192,4 +190,3 @@ stories:
 #   - active_loop: null
 #   - intent: affirm
 #   - action: action_create_event
->>>>>>> main

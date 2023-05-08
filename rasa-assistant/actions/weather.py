@@ -8,9 +8,7 @@ class WeatherProvider:
         self.units = "metric"
 
     def get_weather_forecast(self, city):
-        print("^^^^^^^^^^^^^^^^^^^^")
-        print(city)
-        print("^^^^^^^^^^^^^^^^^^^^")
+
         url = f'https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={self.credential}&lang=pt_br&units=metric'
         response = requests.get(url)
         response.raise_for_status()
@@ -28,9 +26,6 @@ class WeatherProvider:
         return daily_forecast
     
     def get_forecast_for_day(self, date, city,time=None):
-        print("^^^^^^^^^^^^^^^^^^^^")
-        print(city)
-        print("^^^^^^^^^^^^^^^^^^^^")
         forecast = self.get_weather_forecast(city)
         for f in forecast:
             if str(f["date"]) == date:

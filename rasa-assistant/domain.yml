@@ -85,11 +85,11 @@ slots:
     mappings:
     - type: from_entity
       entity: weather
-  forms:
-    check_event_data_form:
-      required_slots:
-      - event
-      - hour
+forms:
+  check_event_data_form:
+    required_slots:
+    - event
+    - hour
 responses:
   utter_greet:
   - text: Olá, como posso ajudar?
@@ -104,14 +104,7 @@ responses:
   utter_goodbye:
   - text: "Adeus!"
   - text: Lembre-se, estou sempre à sua disposição!
-  utter_cheer_up:
-  - text: 'Here is something to cheer you up:'
-  utter_did_that_help:
-  - text: Did that help you?
-  utter_happy:
-  - text: Great, carry on!
-  utter_goodbye:
-  - text: Adeus!
+
   
 actions:
 - utter_greet
