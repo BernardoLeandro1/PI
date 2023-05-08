@@ -1,5 +1,4 @@
 version: "3.1"
-
 nlu:
 - intent: greet
   examples: |
@@ -8,7 +7,7 @@ nlu:
     - Boa tarde, Assistente
     - Boa noite, Assistente
     - Olá Assistente
-
+    - Olá assistente
 - intent: goodbye
   examples: |
     - Xau, Assistente
@@ -16,7 +15,6 @@ nlu:
     - Até logo, Assistente
     - Boa noite, Assistente
     - Até amanhã, Assistente
-
 - intent: affirm
   examples: |
     - Sim
@@ -25,7 +23,6 @@ nlu:
     - Correto
     - Okay
     - Ok
-
 - intent: deny
   examples: |
     - Não
@@ -34,8 +31,6 @@ nlu:
     - Acho que não
     - Não gosto assim
     - Nem por isso
-
-
 - intent: add_reminder
   examples: |
     - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17:00](hour) durante [30 minutos](duration)!
@@ -49,7 +44,7 @@ nlu:
     - Quando forem [16 horas](hour) lembra-me de [ligar à médica](event).
     - Preciso que me avises quando forem [19 e 30](hour).
     - Às [20 horas](hour) vai dar um filme que quero ver, lembra-me.
-    - Podes avisar-me para ligar ao meu filho amanhã às [15 horas](hour)? 
+    - Podes avisar-me para ligar ao meu filho amanhã às [15 horas](hour)?
     - Lembra-me de [fazer uma sobremesa](event) às [10:30](hour)!
     - Lembra-me de [fazer o comer](event) às [11:30](hour)!
     - Quero marcar uma [reunião](event) para as [3:30 da tarde](hour)
@@ -84,15 +79,38 @@ nlu:
     - Avisa-me para [pré-aquecer o forno](event) por [10 minutos](duration), às [11:30](hour)
     - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer o almoço](event) às [onze e trinta](hour)!
     - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer cardio](event) às [dezoito e trinta](hour)!
-
-
+    - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer o almoço](event) às [11:30](hour)!
+    - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer cardio](event) às [18:30](hour)!
+    - Quero marcar uma [reunião](event) para as [3:30 da tarde](hour) no [dia 20](day) de [maio](month)
 - intent: find_events
   examples: |
     - Tenho alguma coisa marcada para [amanhã](day_of_week)?
-    - O que é que tenho marcado para a [próxima semana](week)?
-    - Que eventos tenho entre o dia [29 de maio e o dia 3 de junho](day)?
+    - O que é que tenho marcado para a [próxima semana](duration)?
+    - O que é que tenho marcado para a [esta semana](duration)?
+    - Que eventos tenho no dia [29 de maio](day)?
+    - Que eventos tenho no dia [13 de junho](day)?
+    - Que eventos tenho no dia [14 de fevereiro](day)?
+    - Que eventos tenho no dia [17 de agosto](day)?
     - Tenho algo marcado para [quinta](day_of_week)?
-
+    - Tenho algo marcado para [terça](day_of_week)?
+    - Tenho algo marcado para [sabado](day_of_week)?
+    - Tenho algo marcado para [quarta](day_of_week)?
+    - Tenho algo marcado para [sexta](day_of_week)?
+    - O que é que tenho marcado para [esta semana](duration)?
+    - Que eventos tenho no dia [8 de maio](day)?
+    - Que eventos tenho no dia [8 de maio](day), [depois das 08:00](hour)?
+    - Que eventos tenho no dia [8 de maio](day), [antes das 12:00](hour)?
+    - Que eventos tenho no dia [8 de maio](day), [entre as 08:00 e as 12:00](hour)?
+    - Que eventos tenho no dia [10 de maio](day), [depois das 16:00](hour)?
+    - Que eventos tenho no dia [12 de maio](day), [antes das 18:00](hour)?
+    - Que eventos tenho no dia [13 de maio](day), [entre as 16:00 e as 18:00](hour)?
+    - Tenho algo marcado para [sexta](day_of_week), [depois das 10:00](hour)?
+    - Tenho algo marcado para [sexta](day_of_week), [antes das 20:00](hour)?
+    - Tenho algo marcado para [sexta](day_of_week), [entre as 10:00 e as 20:00](hour)?
+    - Que eventos tenho no dia [8 de maio](day), [depois das 16:00](hour)?
+    - Que eventos tenho no dia [8 de maio](day), [entre as 11:00 e as 12:00](hour)?
+    - Que eventos tenho no dia [8 de maio](day), [antes das 16:00](hour)?
+    - Que eventos tenho no dia [8 de maio](day), [entre as 16:00 e as 18:00](hour)?
 - intent: cancel_reminder
   examples: |
     - Por favor, desmarca a ioga de amanhã.

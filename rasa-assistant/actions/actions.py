@@ -310,7 +310,8 @@ class CreateEventAction(Action):
                         month = "11"
                     case "dezembro":
                         month = "12"
-                day = str(d[1])
+                day = str(d)
+                print(d)
                 year = str(datetime.now().year)
                 event_date = year + "-" + month + "-" + day
             
@@ -517,3 +518,148 @@ class ConfirmWeatherAction(Action):
                             weekday = 6
                     
                     #print("AAAAAAAAAAAAAAAAaa")
+        
+
+class CheckEventAction(Action):
+    def name(self) -> Text:
+        return "action_check_event"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+
+        calendar = agenda.GoogleCalendar("actions/credentials.json")
+        print(tracker.get_slot("day_of_week"))
+        event_end_date = None
+        if(tracker.get_slot("day_of_week"))!= None:
+            if str(tracker.get_slot("day_of_week")).lower().__contains__("amanhã"):
+                event_date = str(datetime.today().date() + timedelta(days=1))
+                print(event_date)
+            else:
+                assistday = str(tracker.get_slot("day_of_week")).lower()
+                match assistday:
+                    case "segunda": 
+                        weekday = 0
+                    case "terça":
+                        weekday = 1
+                    case "quarta":
+                        weekday = 2
+                    case "quinta":
+                        weekday = 3
+                    case "sexta":
+                        weekday = 4
+                    case "sabado":
+                        weekday = 5
+                    case "domingo":
+                        weekday = 6
+                d = datetime.today().date()
+                days_ahead = weekday - d.weekday()
+                if days_ahead <= 0: # Target day already happened this week
+                    days_ahead += 7
+                event_date = str(d + timedelta(days=days_ahead))
+        else:
+            event_date = str(datetime.today().date())
+        
+        if(tracker.get_slot("day")!=None):
+            day = str(tracker.get_slot("day"))
+            print(day)
+            aa = day.split(" ")
+            print(aa)
+            dia = aa[0]
+            mes = aa[2]
+            print(mes)
+            match mes:
+                case "janeiro": 
+                    mes = "1"
+                case "fevereiro":
+                    mes = "2"
+                case "março":
+                    mes = "3"
+                case "abril":
+                    mes = "4"
+                case "maio":
+                    mes = "5"
+                case "junho":
+                    mes = "6"
+                case "julho":
+                    mes = "7"
+                case "agosto":
+                    mes = "8"
+                case "setembro":
+                    mes = "9"
+                case "outubro":
+                    mes = "10"
+                case "novembro":
+                    mes = "11"
+                case "dezembro":
+                    mes = "12"
+            ano = str(datetime.now().year)
+            event_date = ano + "-" + mes + "-" + dia
+            event_date = str(datetime.strptime(event_date, '%Y-%m-%d')).split(" ")[0]
+
+        if(tracker.get_slot("duration")!=None):
+            a = str(tracker.get_slot("duration"))
+            if a.__contains__("próxima"):
+                d = datetime.today().date()
+                days_ahead = 6 - d.weekday()
+                if days_ahead <= 0: # Target day already happened this week
+                    days_ahead += 7
+                event_date = str(d + timedelta(days=days_ahead))
+                event_end_date = str(d + timedelta(days=days_ahead+7))
+            elif a.__contains__("esta"):
+                event_date = str(datetime.today().date())
+                d = datetime.today().date()
+                days_ahead = 5 - d.weekday()
+                if days_ahead <= 0: # Target day already happened this week
+                    days_ahead += 7
+                event_end_date = str(d + timedelta(days=days_ahead))
+
+        startTime = "00:00:00"
+        endTime = "23:59:59"
+        print(tracker.get_slot("hour"))
+        if (tracker.get_slot("hour"))!=None:
+            a = str(tracker.get_slot("hour"))
+            if a.__contains__("depois"):
+                startTime = a.split(" ")[2] + ":00"
+            elif(a.__contains__("antes")):
+                endTime = a.split(" ")[2] + ":00"
+            elif(a.__contains__("entre")):
+                startTime = a.split(" ")[2] + ":00"
+                endTime = a.split(" ")[5] + ":00"
+        print(startTime)
+        try:
+            events = calendar.find_event(start_date = event_date, start_time = startTime, end_date = event_end_date, end_time = endTime)
+            if len(events)<1:
+                dispatcher.utter_message("Não tem nada marcado")
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None)]
+            print()
+            for event in events:
+                horas = str(event['start']['dateTime']).split("T")
+                dia = horas[0]
+                horas = horas[1].split("+")
+                
+                match datetime.strptime(dia, '%Y-%m-%d').date().strftime('%A'):
+                    case "Monday": 
+                        weekday = "segunda"
+                    case "Tuesday":
+                        weekday = "terça"
+                    case "Wednesday":
+                        weekday = "quarta"
+                    case "Thursday":
+                        weekday = "quinta"
+                    case "Friday":
+                        weekday = "sexta"
+                    case "Saturday":
+                        weekday = "sabado"
+                    case "Sunday":
+                        weekday = "domingo"
+                if(tracker.get_slot("day")!= None):
+                    dispatcher.utter_message("Tem {} às {} de {}".format(event['summary'], horas[0], tracker.get_slot("day")))
+                else:
+                    dispatcher.utter_message("Tem {} às {} de {}".format(event['summary'], horas[0], weekday))
+            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None)]
+
+        except HttpError as error:
+            dispatcher.utter_message("Erro ao procurar eventos!")
+    

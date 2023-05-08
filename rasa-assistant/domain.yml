@@ -1,5 +1,4 @@
-version: "3.1"
-
+version: '3.1'
 intents:
   - greet
   - goodbye
@@ -11,7 +10,7 @@ intents:
   - check_event_data_form
   - query_weather
   - confirm_weather
-
+  - find_events
 
 entities:
   - hour
@@ -25,8 +24,6 @@ entities:
   - location
   - weather
 
-
-
 slots:
   event:
     type: text
@@ -34,100 +31,92 @@ slots:
     mappings:
     - type: from_entity
       entity: event
-
   hour:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: hour
-    
   day_of_week:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: day_of_week
-  
   day:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: day
-
   month:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: month
-
   person:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: person
-
   location:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: location
-
   duration:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: duration
-  
-
   occurrence:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: occurrence
-  
   weather:
     type: text
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: weather
-  
-forms:
-  check_event_data_form:
-    required_slots:
+  forms:
+    check_event_data_form:
+      required_slots:
       - event
       - hour
-
 responses:
   utter_greet:
-  - text: "Olá, como posso ajudar?"
-
+  - text: Olá, como posso ajudar?
   utter_done:
-  - text: "Okay! Está marcado {event} às {hour}!"
-
+  - text: Okay! Está marcado {event} às {hour}!
   utter_cancel:
-  - text: "Okay! Está cancelado!"
-
+  - text: Okay! Está cancelado!
   utter_anyelse:
-  - text: "Posso ajudar em mais alguma coisa?"
-
+  - text: Posso ajudar em mais alguma coisa?
   utter_dispose:
   - text: "Lembre-se, estou sempre à sua disposição!"
-
   utter_goodbye:
   - text: "Adeus!"
-
-
-
+  - text: Lembre-se, estou sempre à sua disposição!
+  utter_cheer_up:
+  - text: 'Here is something to cheer you up:'
+  utter_did_that_help:
+  - text: Did that help you?
+  utter_happy:
+  - text: Great, carry on!
+  utter_goodbye:
+  - text: Adeus!
+  
 actions:
+- utter_greet
 - action_create_event
+- action_check_event
 - validate_check_event_data_form
 - action_get_weather
 - action_confirm_weather
