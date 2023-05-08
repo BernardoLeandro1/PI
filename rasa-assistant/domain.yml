@@ -11,6 +11,7 @@ intents:
   - query_weather
   - confirm_weather
   - find_events
+  - ask_functions
 
 entities:
   - hour
@@ -92,7 +93,7 @@ forms:
     - hour
 responses:
   utter_greet:
-  - text: Olá, como posso ajudar?
+  - text: Olá, como posso ajudar? Pode perguntar caso não saiba as funcionalidades disponíveis.
   utter_done:
   - text: Okay! Está marcado {event} às {hour}!
   utter_cancel:
@@ -104,7 +105,10 @@ responses:
   utter_goodbye:
   - text: "Adeus!"
   - text: Lembre-se, estou sempre à sua disposição!
-
+  utter_goodbye:
+  - text: Adeus!
+  utter_info:
+  - text: "Eu sou um assistente que consegue gerir a sua agenda e informar-la acerca da meteorologia."
   
 actions:
 - utter_greet

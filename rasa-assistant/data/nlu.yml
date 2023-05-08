@@ -149,4 +149,8 @@ nlu:
     - Sabes se vai estar [vento](weather) [amanhã](day_of_week)?
     - Sabes se vai estar [sol](weather) em [Lisboa](location)? 
 
-
+- intent: ask_functions
+  examples: |
+    - Que funcionalidades estão disponiveis?
+    - Que coisas é que sabes fazer?
+    - Informa-me das funcionalidades disponiveis.

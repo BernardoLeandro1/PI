@@ -44,6 +44,14 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
+- story: ask info
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_functions
+  - action: utter_info
+
+
 - story: ask weather
   steps:
   - intent: greet
