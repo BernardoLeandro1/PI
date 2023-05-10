@@ -12,7 +12,7 @@ Como correr:
 Template para Apresentação:
 https://slidesgo.com/theme/tech-company-branding-guidelines#position-6&related-1&rs=detail-related
 
-
+export GOOGLE_APPLICATION_CREDENTIALS="./speechToTextKey.json"
 
 
 

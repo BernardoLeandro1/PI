@@ -23,6 +23,7 @@ nlu:
     - Correto
     - Okay
     - Ok
+    - sim
 - intent: deny
   examples: |
     - Não
@@ -82,6 +83,7 @@ nlu:
     - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer o almoço](event) às [11:30](hour)!
     - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer cardio](event) às [18:30](hour)!
     - Quero marcar uma [reunião](event) para as [3:30 da tarde](hour) no [dia 20](day) de [maio](month)
+    - Marca uma [reunião](event) para [amanhã](day_of_week) às [16:30](hour)
 - intent: find_events
   examples: |
     - Tenho alguma coisa marcada para [amanhã](day_of_week)?
@@ -117,28 +119,26 @@ nlu:
     - Podes cancelar a consulta de quinta-feira, se faz favor?
     - Não vou poder ir lanchar amanhã com o meu neto, podes desmarcar?
     - Podes cancelar todos os lembretes?
-
 - intent: query_weather
   examples: |
-    - Podes-me dizer como está o tempo? 
-    - Podes-me dizer como está o tempo em [Lisboa](location)? 
+    - Podes-me dizer como está o tempo?
+    - Podes-me dizer como está o tempo em [Lisboa](location)?
     - Podes-me dizer como vai estar o tempo [amanhã](day_of_week) em [Lisboa](location)?
     - Podes-me dizer como vai estar o tempo na [quinta](day_of_week) em [Viana do Castelo](location)?
     - Como vai estar a meteorologia [amanhã](day_of_week)?
-    - Como vai estar o tempo na [terça-feira](day_of_week) no [Porto](location)? 
-    - Podes-me dizer como vai estar o tempo no [dia 15](day)? 
-    - Podes-me dizer como vai estar o tempo no [sábado](day_of_week)? 
+    - Como vai estar o tempo na [terça-feira](day_of_week) no [Porto](location)?
+    - Podes-me dizer como vai estar o tempo no [dia 15](day)?
+    - Podes-me dizer como vai estar o tempo no [sábado](day_of_week)?
     - Qual é a previsão do tempo para o [fim de semana](duration)?
     - Como é que está o tempo na [quarta](day_of_week)?
     - Qual é a temperatura no [domingo](day_of_week)?
-    - Como é que está o tempo lá fora [hoje](day_of_week)? 
-  
+    - Como é que está o tempo lá fora [hoje](day_of_week)?
 - intent: confirm_weather
   examples: |
-    - Vai estar [frio](weather) [amanhã](day_of_week)? 
+    - Vai estar [frio](weather) [amanhã](day_of_week)?
     - Vai [chover](weather) na [próxima semana](duration)?
     - Vai estar [sol](weather) na [sexta](day_of_week)?
-    - Vai estar [vento](weather) no [Porto](location) na [sexta](day_of_week)? 
+    - Vai estar [vento](weather) no [Porto](location) na [sexta](day_of_week)?
     - Está [sol](weather)?
     - Está [frio](weather) [hoje](day_of_week)?
     - Está [vento](weather)?
@@ -147,8 +147,7 @@ nlu:
     - Vai fazer [sol](weather) no [dia 13](day)?
     - Sabes se vai [chover](weather) [hoje](day_of_week)?
     - Sabes se vai estar [vento](weather) [amanhã](day_of_week)?
-    - Sabes se vai estar [sol](weather) em [Lisboa](location)? 
-
+    - Sabes se vai estar [sol](weather) em [Lisboa](location)?
 - intent: ask_functions
   examples: |
     - Que funcionalidades estão disponiveis?

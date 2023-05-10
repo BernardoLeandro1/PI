@@ -29,7 +29,7 @@ from __future__ import print_function
 
 import os.path
 import re
-
+from word2numberi18n import w2n
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -235,29 +235,25 @@ class CreateEventAction(Action):
         if(tracker.get_slot("hour") != None):
             if (tracker.get_slot("day") == None):
                 if (tracker.get_slot("day_of_week")!= None):
-                    if (str(tracker.get_slot("day_of_week")).lower == "amanhã"):
+                    if(str(tracker.get_slot("day_of_week")).__contains__("amanhã") or str(tracker.get_slot("day_of_week")).__contains__("Amanhã")):
                         event_date = str(datetime.today().date() + timedelta(days=1))
                     else:
                         assistday = str(tracker.get_slot("day_of_week")).lower()
-                        match assistday:
-                            case "segunda": 
-                                weekday = 0
-                            case "terça":
-                                weekday = 1
-                            case "quarta":
-                                weekday = 2
-                            case "quinta":
-                                weekday = 3
-                            case "sexta":
-                                weekday = 4
-                            case "sabado":
-                                weekday = 5
-                            case "domingo":
-                                weekday = 6
+                        if assistday.__contains__("segunda"): 
+                            weekday = 0
+                        elif assistday.__contains__("terça"):
+                            weekday = 1
+                        elif assistday.__contains__("quarta"):
+                            weekday = 2
+                        elif assistday.__contains__("quinta"):
+                            weekday = 3
+                        elif assistday.__contains__("sexta"):
+                            weekday = 4
+                        elif assistday.__contains__("sabado"):
+                            weekday = 5
+                        elif assistday.__contains__("domingo"):
+                             weekday = 6
                         d = datetime.today().date()
-                        print("AAAAAAAAAAAAAAAAaa")
-                        print(tracker.get_slot("day_of_week"))
-                        print(d)
                         days_ahead = weekday - d.weekday()
                         if days_ahead <= 0: # Target day already happened this week
                             days_ahead += 7
@@ -313,7 +309,6 @@ class CreateEventAction(Action):
                 print(d)
                 year = str(datetime.now().year)
                 event_date = year + "-" + month + "-" + day
-            
 
             
 

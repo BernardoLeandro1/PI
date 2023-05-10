@@ -32,8 +32,10 @@ class VoskInputVoiceModule:
             confidence = input_json['alternatives'][0]['confidence']
             if text != "<unk>" and len(text) > 1 :
                 #debug
+                """
                 if GLOBAL.DEBUG:
                     print("Listen: " + text + " --- " + str(confidence))
+                """
                 return text
         return None
     

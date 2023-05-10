@@ -1,30 +1,27 @@
 version: '3.1'
 intents:
-  - greet
-  - goodbye
-  - affirm
-  - deny
-  - add_reminder
-    #use_entities: true
-  - cancel_reminder
-  - check_event_data_form
-  - query_weather
-  - confirm_weather
-  - find_events
-  - ask_functions
-
+- add_reminder
+- affirm
+- ask_functions
+- cancel_reminder
+- check_event_data_form
+- confirm_weather
+- deny
+- find_events
+- goodbye
+- greet
+- query_weather
 entities:
-  - hour
-  - occurrence
-  - event
-  - duration
-  - person
-  - day
-  - month
-  - day_of_week
-  - location
-  - weather
-
+- hour
+- event
+- day_of_week
+- occurrence
+- duration
+- person
+- day
+- month
+- location
+- weather
 slots:
   event:
     type: text
@@ -101,23 +98,19 @@ responses:
   utter_anyelse:
   - text: Posso ajudar em mais alguma coisa?
   utter_dispose:
-  - text: "Lembre-se, estou sempre à sua disposição!"
-  utter_goodbye:
-  - text: "Adeus!"
   - text: Lembre-se, estou sempre à sua disposição!
   utter_goodbye:
   - text: Adeus!
+  - text: Lembre-se, estou sempre à sua disposição!
   utter_info:
-  - text: "Eu sou um assistente que consegue gerir a sua agenda e informar-la acerca da meteorologia."
-  
+  - text: Eu sou um assistente que consegue gerir a sua agenda e informar-la acerca da meteorologia.
 actions:
-- utter_greet
 - action_create_event
+- utter_greet
 - action_check_event
 - validate_check_event_data_form
 - action_get_weather
 - action_confirm_weather
-
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

@@ -198,3 +198,52 @@ stories:
 #   - active_loop: null
 #   - intent: affirm
 #   - action: action_create_event
+
+# - story: interactive_story_1
+#   steps:
+#   - intent: add_reminder
+#     entities:
+#     - event: reunião
+#     - hour: 16:30
+#   - slot_was_set:
+#     - event: reunião
+#   - slot_was_set:
+#     - hour: 16:30
+#   - intent: add_reminder
+#     entities:
+#     - event: reunião
+#     - day_of_week: amanhã
+#     - hour: 16:30
+#   - action: check_event_data_form
+#   - active_loop: check_event_data_form
+#   - slot_was_set:
+#     - event: reunião
+#   - slot_was_set:
+#     - hour: 16:30
+#   - slot_was_set:
+#     - day_of_week: amanhã
+#   - slot_was_set:
+#     - requested_slot: null
+#   - active_loop: null
+#   - intent: affirm
+#   - action: action_create_event
+#   - slot_was_set:
+#     - event: null
+#   - slot_was_set:
+#     - duration: null
+#   - slot_was_set:
+#     - hour: null
+#   - slot_was_set:
+#     - occurrence: null
+#   - slot_was_set:
+#     - person: null
+#   - slot_was_set:
+#     - month: null
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - location: null
+#   - slot_was_set:
+#     - person: null

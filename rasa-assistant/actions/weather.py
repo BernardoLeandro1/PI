@@ -44,8 +44,8 @@ class WeatherProvider:
         minTemp = min(mins)
         mostCommonDescription = Counter(description).most_common()[0][0]
 
-        #TODO melhorar frase de resposta 
-        returnPhrase = "No dia "+ str(date)+" vai estar " + mostCommonDescription + "em " + city + ". Teremos máximas de " + str(maxTemp) + " graus e minimas de "+ str(minTemp) + " graus."
+        #TODO melhorar frase de resposta + round tempo
+        returnPhrase = "No dia "+ str(date)+" vai estar " + mostCommonDescription + " em " + city + ". Teremos máximas de " + str(maxTemp) + " graus e minimas de "+ str(minTemp) + " graus."
         """
         # Loop through forecast entries and find the closest match
         closest_forecast = None
