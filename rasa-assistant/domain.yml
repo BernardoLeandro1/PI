@@ -103,7 +103,9 @@ responses:
   - text: Adeus!
   - text: Lembre-se, estou sempre à sua disposição!
   utter_info:
-  - text: Eu sou um assistente que consegue gerir a sua agenda e informar-la acerca da meteorologia.
+  - text: Eu sou um assistente que consegue gerir a sua agenda e informá-la acerca da meteorologia.
+  utter_default:
+  - text: Desculpe, não percebi. Pode repetir?
 actions:
 - action_create_event
 - utter_greet
@@ -111,6 +113,7 @@ actions:
 - validate_check_event_data_form
 - action_get_weather
 - action_confirm_weather
+- action_default_fallback
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

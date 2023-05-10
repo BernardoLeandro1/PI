@@ -29,7 +29,7 @@ from __future__ import print_function
 
 import os.path
 import re
-from word2numberi18n import w2n
+#from word2numberi18n import w2n
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -46,7 +46,9 @@ from actions import agenda, weather
 import GLOBAL
 from rasa_sdk.events import SessionStarted, ActionExecuted
 from rasa_sdk.types import DomainDict
+from rasa_sdk.events import SlotSet, UserUtteranceReverted
 
+    
 class ValidateCheckEventDataForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_check_event_data_form"
@@ -96,6 +98,12 @@ class ActionGreetUser(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         name = tracker.get_slot("name")
+       
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))
+        
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
 
         if name:
             message = f"Hello {name}, how can I assist you today (python)?"
@@ -114,7 +122,11 @@ class CreateEventAction(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
+       
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
      
         #print(domain)       
 
@@ -391,6 +403,11 @@ class QueryWeatherAction(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+            print("Confiança: ", tracker.latest_message["intent"].get("confidence"))
+            if tracker.latest_message["intent"].get("confidence") < 0.8:
+                dispatcher.utter_message(response="utter_default")
+                return [UserUtteranceReverted()]
+
             weatherProvider = weather.WeatherProvider()
             todayDate = datetime.today().date()
 
@@ -474,6 +491,11 @@ class ConfirmWeatherAction(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))        
+
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
         weatherProvider = weather.WeatherProvider()
         todayDate = datetime.today().date()
         
@@ -510,9 +532,9 @@ class ConfirmWeatherAction(Action):
                             weekday = 5
                         case "domingo":
                             weekday = 6
-                    
-                    #print("AAAAAAAAAAAAAAAAaa")
-        
+                
+                #print("AAAAAAAAAAAAAAAAaa")
+    
 
 class CheckEventAction(Action):
     def name(self) -> Text:
@@ -522,7 +544,10 @@ class CheckEventAction(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
         calendar = agenda.GoogleCalendar("actions/credentials.json")
         print(tracker.get_slot("day_of_week"))
         event_end_date = None
