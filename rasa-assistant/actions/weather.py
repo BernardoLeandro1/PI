@@ -4,8 +4,6 @@ import requests
 class WeatherProvider:
     def __init__(self):
         self.credential = "ed0608b1055e5035974de17e8422daab"
-        self.lang = "pt"
-        self.units = "metric"
 
     def get_weather_forecast(self, city):
 
@@ -19,8 +17,10 @@ class WeatherProvider:
         for forecast in data['list']:
             date_str = forecast['dt_txt'].split()[0]
             date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+            hour_str = forecast['dt_txt'].split()[1]
+            hour = datetime.datetime.strptime(hour_str, '%H:%M:%S').hour
             if date not in [f['date'] for f in daily_forecast]:
-                daily_forecast.append({'date': date, 'weather': []})
+                daily_forecast.append({'date': date,'hour': hour ,'weather': []})
             daily_forecast[-1]['weather'].append(forecast)
 
         return daily_forecast
@@ -44,8 +44,8 @@ class WeatherProvider:
         minTemp = min(mins)
         mostCommonDescription = Counter(description).most_common()[0][0]
 
-        #TODO melhorar frase de resposta + round tempo
-        returnPhrase = "No dia "+ str(date)+" vai estar " + mostCommonDescription + " em " + city + ". Teremos máximas de " + str(maxTemp) + " graus e minimas de "+ str(minTemp) + " graus."
+        #TODO melhorar frase de resposta 
+        returnPhrase = "No dia "+ str(date.day)+" vai estar " + mostCommonDescription + " em " + city + ". Teremos máximas de " + str(round(maxTemp)) + " graus e minimas de "+ str(round(minTemp)) + " graus."
         """
         # Loop through forecast entries and find the closest match
         closest_forecast = None
@@ -76,6 +76,84 @@ class WeatherProvider:
                         closest_delta = delta
                         closest_forecast = entry
         """
+        return returnPhrase
+    
+    def get_forecast_for_weekend(self, saturdaydate, sundaydate, city,time=None):
+        forecast = self.get_weather_forecast(city)
+        flagSunday = False
+        flagSaturday = False
+        for f in forecast:
+            if str(f["date"]) == saturdaydate:
+                saturday_forecastDate = f["weather"]
+                flagSaturday = True           
+            elif str(f["date"]) == sundaydate:
+                sunday_forecastDate = f["weather"]
+                flagSunday = True
+
+            if flagSaturday and flagSunday:
+                    break
+
+        descriptionSaturday = []
+        maxsSaturday = []
+        minsSaturday = []
+        for entry in saturday_forecastDate:
+            maxsSaturday.append(entry["main"]["temp_max"])
+            minsSaturday.append(entry["main"]["temp_min"])
+            descriptionSaturday.append(entry["weather"][0]["description"])
+
+        maxTemp_saturday = max(maxsSaturday)
+        minTemp_saturday = min(minsSaturday)
+        mostCommonDescription_saturday = Counter(descriptionSaturday).most_common()[0][0]
+
+        descriptionSunday = []
+        maxsSunday = []
+        minsSunday = []
+        for entry in sunday_forecastDate:
+            maxsSunday.append(entry["main"]["temp_max"])
+            minsSunday.append(entry["main"]["temp_min"])
+            descriptionSunday.append(entry["weather"][0]["description"])
+
+        maxTemp_sunday = max(maxsSunday)
+        minTemp_sunday = min(minsSunday)
+        mostCommonDescription_sunday = Counter(descriptionSunday).most_common()[0][0]
+        
+        
+        #TODO melhorar frase de resposta 
+        returnPhrase = "No próximo sábado vai estar " + mostCommonDescription_saturday + " em " + city + ", com máximas de " + str(round(maxTemp_saturday)) + " graus e minimas de "+ str(round(minTemp_saturday)) + " graus. No domingo estará " + mostCommonDescription_sunday + " com máximas de " + str(round(maxTemp_sunday)) + " graus e minimas de "+ str(round(minTemp_sunday)) + " graus."
+        return returnPhrase
+    
+    def confirm_forecast_for_day(self, weather, date, city,time=None):
+        forecast = self.get_weather_forecast(city)
+        print(weather)
+        for f in forecast:
+            if str(f["date"]) == date:
+                forecastDate = f
+                break
+        match weather:
+            case "sol":
+                expectedWeather = "Clear"
+            case "chuva":
+                expectedWeather = "Rain"
+            case "chover": 
+                expectedWeather = "Rain"
+            case "neve":
+                expectedWeather = "Snow"
+    
+        hoursWithExpectedWeather = []
+        for entry in forecastDate:
+            if entry["weather"]["weather"][0]["main"] == expectedWeather:
+                hoursWithExpectedWeather.append(entry["hour"])
+        if len(hoursWithExpectedWeather) == 0:
+            returnPhrase = "Não, no dia " + str(date.day) + " não vai estar " + weather + "."
+        else:
+            returnPhrase = "Sim, no dia " + str(date.day) + " vai estar " + weather + " às " + hoursWithExpectedWeather[0] + " horas"
+            for i in range(1,len(hoursWithExpectedWeather)) :
+                if i == len(hoursWithExpectedWeather) - 1:
+                    returnPhrase += "e às " +  hoursWithExpectedWeather[i] + " horas"
+                else:
+                    returnPhrase += ", às " +  hoursWithExpectedWeather[i]+ " horas"
+            returnPhrase += "."
+        print(returnPhrase)
         return returnPhrase
     def get_forecast_for_current_day(forecast, time=None):
         if time is not None:
