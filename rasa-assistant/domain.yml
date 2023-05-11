@@ -12,16 +12,16 @@ intents:
 - greet
 - query_weather
 entities:
+- day_of_week
+- weather
+- location
+- day
 - hour
 - event
-- day_of_week
 - occurrence
 - duration
 - person
-- day
 - month
-- location
-- weather
 slots:
   event:
     type: text
@@ -105,12 +105,12 @@ responses:
   utter_info:
   - text: Eu sou um assistente que consegue gerir a sua agenda e informar-la acerca da meteorologia.
 actions:
-- action_create_event
+- action_get_weather
 - utter_greet
+- action_confirm_weather
+- action_create_event
 - action_check_event
 - validate_check_event_data_form
-- action_get_weather
-- action_confirm_weather
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

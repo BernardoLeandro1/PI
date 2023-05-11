@@ -17,12 +17,10 @@ class WeatherProvider:
         for forecast in data['list']:
             date_str = forecast['dt_txt'].split()[0]
             date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
-            hour_str = forecast['dt_txt'].split()[1]
-            hour = datetime.datetime.strptime(hour_str, '%H:%M:%S').hour
+    
             if date not in [f['date'] for f in daily_forecast]:
-                daily_forecast.append({'date': date,'hour': hour ,'weather': []})
+                daily_forecast.append({'date': date,'weather': []})
             daily_forecast[-1]['weather'].append(forecast)
-
         return daily_forecast
     
     def get_forecast_for_day(self, date, city,time=None):
@@ -45,7 +43,7 @@ class WeatherProvider:
         mostCommonDescription = Counter(description).most_common()[0][0]
 
         #TODO melhorar frase de resposta 
-        returnPhrase = "No dia "+ str(date.day)+" vai estar " + mostCommonDescription + " em " + city + ". Teremos máximas de " + str(round(maxTemp)) + " graus e minimas de "+ str(round(minTemp)) + " graus."
+        returnPhrase = "No dia "+ str(datetime.datetime.strptime(date, '%Y-%m-%d').day)+" vai estar " + mostCommonDescription + " em " + city + ". Teremos máximas de " + str(round(maxTemp)) + " graus e minimas de "+ str(round(minTemp)) + " graus."
         """
         # Loop through forecast entries and find the closest match
         closest_forecast = None
@@ -124,36 +122,37 @@ class WeatherProvider:
     
     def confirm_forecast_for_day(self, weather, date, city,time=None):
         forecast = self.get_weather_forecast(city)
-        print(weather)
         for f in forecast:
             if str(f["date"]) == date:
-                forecastDate = f
+                forecastDate = f["weather"]
                 break
+        print(weather)
         match weather:
             case "sol":
                 expectedWeather = "Clear"
             case "chuva":
                 expectedWeather = "Rain"
-            case "chover": 
+            case "chover":
+                weather = "chuva" 
                 expectedWeather = "Rain"
             case "neve":
                 expectedWeather = "Snow"
     
         hoursWithExpectedWeather = []
         for entry in forecastDate:
-            if entry["weather"]["weather"][0]["main"] == expectedWeather:
-                hoursWithExpectedWeather.append(entry["hour"])
+            if entry["weather"][0]["main"] == expectedWeather:
+                hoursWithExpectedWeather.append((datetime.datetime.strptime(entry["dt_txt"],'%Y-%m-%d %H:%M:%S')).hour)
+
         if len(hoursWithExpectedWeather) == 0:
-            returnPhrase = "Não, no dia " + str(date.day) + " não vai estar " + weather + "."
+            returnPhrase = "Não, no dia " + str(datetime.datetime.strptime(date,'%Y-%m-%d').day) + " não vai estar " + weather + "."
         else:
-            returnPhrase = "Sim, no dia " + str(date.day) + " vai estar " + weather + " às " + hoursWithExpectedWeather[0] + " horas"
+            returnPhrase = "Sim, no dia " + str(datetime.datetime.strptime(date,'%Y-%m-%d').day) + " vai estar " + weather + " às " + str(hoursWithExpectedWeather[0]) + " horas"
             for i in range(1,len(hoursWithExpectedWeather)) :
                 if i == len(hoursWithExpectedWeather) - 1:
-                    returnPhrase += "e às " +  hoursWithExpectedWeather[i] + " horas"
+                    returnPhrase += " e às " +  str(hoursWithExpectedWeather[i]) + " horas"
                 else:
-                    returnPhrase += ", às " +  hoursWithExpectedWeather[i]+ " horas"
+                    returnPhrase += ", às " +  str(hoursWithExpectedWeather[i])+ " horas"
             returnPhrase += "."
-        print(returnPhrase)
         return returnPhrase
     def get_forecast_for_current_day(forecast, time=None):
         if time is not None:
@@ -243,7 +242,7 @@ class WeatherProvider:
 
 
         # Get the current date
-        now = datetime.datetime.now()+datetime.timedelta(hours=12)
+        now = datetime.datetime.now()
 
         best_score = 0
         best_forecast = None
@@ -257,7 +256,7 @@ class WeatherProvider:
                 # Check if the forecast is for the current day
                 if dt.date() == now.date():
                     # Check if the forecast is within the recommended time window
-                    if dt.hour >= 10 and dt.hour <= 16:
+                    if dt.hour >= 10 and dt.hour <= 18:
                         # Calculate the score for the forecast
                         score = calculate_score(entry)
 

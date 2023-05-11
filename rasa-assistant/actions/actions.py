@@ -446,6 +446,7 @@ class QueryWeatherAction(Action):
 
                         event_date = str(todayDate + timedelta(days=days_ahead))
                     dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
             else:
                 if (tracker.get_slot("day")!= None):
                     day = str(tracker.get_slot("day")).split()
@@ -460,9 +461,12 @@ class QueryWeatherAction(Action):
                         return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
                     event_date = str(todayDate + timedelta(days=days_ahead))
                     dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
                 else:
                     event_date = str(todayDate)
+                    print(event_date, location)
                     dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
 
 
 class ConfirmWeatherAction(Action):
@@ -473,30 +477,26 @@ class ConfirmWeatherAction(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        print("começa")
         weatherProvider = weather.WeatherProvider()
         todayDate = datetime.today().date()
         
         expected_weather =  str(tracker.get_slot("weather"))
-        if not expected_weather:
-            print("não entedeu weather")
+        print(expected_weather)
+        if expected_weather == "None":
             # TODO Melhorar esta frase + Ver se estamos a tratar corretamente este erro
             dispatcher.utter_message("Desculpe mas não consegui entender o que pretendia. Pode repetir?")
             return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
         
         location = str(tracker.get_slot("location"))
-        if not location: 
+        if location == "None": 
             location = GLOBAL.CURRENT_LOCATION
                 
         if (tracker.get_slot("day_of_week")!= None):
             if (str(tracker.get_slot("day_of_week")).lower() == "hoje"):
-                print("hoje")
                 event_date = str(datetime.today().date())
-            elif (str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
-                print("amanhã")
+            elif (str(tracker.get_slot("day_of_week")).lower() == "amanha" or str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
                 event_date = str(datetime.today().date() + timedelta(days=1))
             else:
-                print("semana") 
                 assistday = str(tracker.get_slot("day_of_week")).lower()
                 match assistday:
                     case "segunda": 
@@ -524,8 +524,8 @@ class ConfirmWeatherAction(Action):
                     return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
                 event_date = str(todayDate + timedelta(days=days_ahead))
                 
-            print("chama função")
             dispatcher.utter_message(weatherProvider.confirm_forecast_for_day(expected_weather,event_date,location))
+            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
         else:
             if (tracker.get_slot("day")!= None):
                 day = str(tracker.get_slot("day")).split()
@@ -533,7 +533,7 @@ class ConfirmWeatherAction(Action):
                     day = day[1]
                 else:
                     day =day[0]
-                days_ahead = day - todayDate.day
+                days_ahead = int(day) - todayDate.day
                 if days_ahead <= 0:
                     # TODO Melhorar esta frase 
                     dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão avançada. Só tenho informação relativa aos próximos cinco dias.")
@@ -541,9 +541,11 @@ class ConfirmWeatherAction(Action):
                 event_date = str(todayDate + timedelta(days=days_ahead))
                 
                 dispatcher.utter_message(weatherProvider.confirm_forecast_for_day(expected_weather,event_date,location))
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
             else:
                 event_date = str(todayDate)
                 dispatcher.utter_message(weatherProvider.confirm_forecast_for_day(expected_weather,event_date,location))
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
 
 class CheckEventAction(Action):
     def name(self) -> Text:

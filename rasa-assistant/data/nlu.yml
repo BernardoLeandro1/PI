@@ -8,6 +8,7 @@ nlu:
     - Boa noite, Assistente
     - Olá Assistente
     - Olá assistente
+    - olá
 - intent: goodbye
   examples: |
     - Xau, Assistente
@@ -137,10 +138,16 @@ nlu:
     - Está frio [hoje](day_of_week)?
     - Está frio em [Aveiro](location)?
     - Vai estar calor [amanhã](day_of_week)?
+    - Está frio em [aveiro]{"entity": "location", "value": "Aveiro"}?
+    - como vai estar o tempo [hoje](day_of_week)?
+    - está frio [hoje](day_of_week)?
+    - como vai estar o tempo [amanhã](day_of_week)?
+    - como vai estar o tempo [amanha](day_of_week)?
 - intent: confirm_weather
   examples: |
     - Vai estar [sol](weather) na [sexta](day_of_week)?
     - Vai estar [vento](weather) no [Porto](location) na [sexta](day_of_week)?
+    - Vai estar [chuva](weather) [amanhã](day_of_week)?
     - Está [sol](weather)?
     - Vai estar [sol](weather) no [dia 12](day)?
     - Vai estar [neve](weather) no [dia 1](day)?
@@ -148,6 +155,14 @@ nlu:
     - Sabes se vai [chover](weather) [hoje](day_of_week)?
     - Sabes se vai estar [chuva](weather) [amanhã](day_of_week)?
     - Sabes se vai estar [sol](weather) em [Lisboa](location)?
+    - vai estar [sol](weather) [hoje](day_of_week)?
+    - vai [chover](weather) [hoje](day_of_week)?
+    - vai estar [sol](weather) [amanhã](day_of_week)?
+    - vai estar [chuva](weather) [hoje](day_of_week)?
+    - vai estar a [chover](weather) [dia 12](day)?
+    - vai [chover](weather) [amanhã]{"entity": "day_of_week", "value": "Amanh\u00e3"}?
+    - vai [chover](weather) [amanha](day_of_week)?
+    - vai [chover](weather) [amanhã](day_of_week)?
 - intent: ask_functions
   examples: |
     - Que funcionalidades estão disponiveis?
