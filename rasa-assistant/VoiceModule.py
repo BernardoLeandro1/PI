@@ -1,3 +1,4 @@
+import time
 import pyaudio
 from vosk import Model, KaldiRecognizer
 import pyttsx3 as tts
@@ -52,7 +53,6 @@ class GoogleInputVoiceModule():
             audio_generator = stream.generator()
             requests = (speech.StreamingRecognizeRequest(audio_content=content) for content in audio_generator)
             responses = self.client.streaming_recognize(self.streaming_config, requests)
-            
             input, confidence = stream.result(responses)
             #print("Listen: " + input)
             if confidence > 0.8:

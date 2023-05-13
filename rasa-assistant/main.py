@@ -57,6 +57,7 @@ class Assistant:
             self.speaker.say(bot_response)
 
             while user_input not in self.SLEEP:
+                
                 user_input = self.listener.listen()
                 if user_input is None:
                     continue
@@ -77,7 +78,7 @@ class Assistant:
                 response = i['text']
             return response
         except:
-            error = "Ocorreu um erro com o seu assistente. Por favor volte a tentar."
+            error = "Não entendi o que queria dizer. Pode repetir?"
             return error
 
 Assistant()
