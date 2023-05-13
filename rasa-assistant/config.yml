@@ -1,6 +1,6 @@
 recipe: default.v1
 assistant_id: 20230328-120901-adventurous-cylinder
-language: pt
+language: "pt"
 pipeline: null
 # # No configuration for the NLU pipeline was provided. The following default pipeline was used to train your model.
 # # If you'd like to customize it, uncomment and adjust the pipeline.

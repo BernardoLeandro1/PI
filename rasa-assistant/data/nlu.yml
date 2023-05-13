@@ -160,9 +160,16 @@ nlu:
     - vai estar [sol](weather) [amanhã](day_of_week)?
     - vai estar [chuva](weather) [hoje](day_of_week)?
     - vai estar a [chover](weather) [dia 12](day)?
-    - vai [chover](weather) [amanhã]{"entity": "day_of_week", "value": "Amanh\u00e3"}?
     - vai [chover](weather) [amanha](day_of_week)?
     - vai [chover](weather) [amanhã](day_of_week)?
+- intent: query_walk_recommendation
+  examples: |
+   - Qual é a melhor hora para caminhar [hoje](day_of_week)?
+   - Quero ir passear.
+   - Quero ir dar uma volta.
+   - Qual é a melhor altura para ir caminhar?  
+   - A que horas devo ir caminhar [amanhã](day_of_week)? 
+   - Apetece-me sair de casa. 
 - intent: ask_functions
   examples: |
     - Que funcionalidades estão disponiveis?

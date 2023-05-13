@@ -141,8 +141,12 @@ class WeatherProvider:
         hoursWithExpectedWeather = []
         for entry in forecastDate:
             if entry["weather"][0]["main"] == expectedWeather:
-                hoursWithExpectedWeather.append((datetime.datetime.strptime(entry["dt_txt"],'%Y-%m-%d %H:%M:%S')).hour)
-
+                h = (datetime.datetime.strptime(entry["dt_txt"],'%Y-%m-%d %H:%M:%S')).hour
+                if expectedWeather == "Clear" :
+                    if  h > 9 and h < 18:
+                        hoursWithExpectedWeather.append(h)
+                else:
+                    hoursWithExpectedWeather.append(h)
         if len(hoursWithExpectedWeather) == 0:
             returnPhrase = "Não, no dia " + str(datetime.datetime.strptime(date,'%Y-%m-%d').day) + " não vai estar " + weather + "."
         else:
@@ -219,7 +223,8 @@ class WeatherProvider:
                                 closest_delta = delta
                                 closest_forecast = entry
                     return closest_forecast
-    def get_walk_recommendation(forecast):
+    def get_walk_recommendation(self,city, date):
+        forecast = self.get_weather_forecast(city)
         # Define the thresholds for temperature, humidity, and wind speed
         temp_min = 18
         temp_max = 24
@@ -238,11 +243,12 @@ class WeatherProvider:
                 wind_score = max(0, min(1, (forecast["wind"]["speed"] - wind_min) / (wind_max - wind_min))) * 0.8
         
             score = 0.5 * temp_score + 0.3 * humidity_score + 0.2 * (1 - wind_score)
+            print(score)
             return score
 
 
         # Get the current date
-        now = datetime.datetime.now()
+        walk_date = datetime.datetime.strptime(date, '%Y-%m-%d')
 
         best_score = 0
         best_forecast = None
@@ -254,9 +260,9 @@ class WeatherProvider:
                 dt = datetime.datetime.fromtimestamp(entry["dt"])
 
                 # Check if the forecast is for the current day
-                if dt.date() == now.date():
+                if dt.date() == walk_date.date():
                     # Check if the forecast is within the recommended time window
-                    if dt.hour >= 10 and dt.hour <= 18:
+                    if dt.hour >= 10 and dt.hour <= 19:
                         # Calculate the score for the forecast
                         score = calculate_score(entry)
 
@@ -264,5 +270,9 @@ class WeatherProvider:
                         if score > best_score:
                             best_score = score
                             best_forecast = entry
-
-        return best_forecast
+        if best_forecast != None:       
+            bestHour = (datetime.datetime.strptime(best_forecast["dt_txt"],'%Y-%m-%d %H:%M:%S')).hour
+            returnPhrase = "Eu recomendaria sair por volta das " + str(bestHour) + " horas." 
+        else: 
+            returnPhrase = "Para a data pedida não há nenhuma hora em que eu recomende sair."
+        return returnPhrase

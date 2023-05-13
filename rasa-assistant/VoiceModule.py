@@ -5,10 +5,11 @@ from os import system
 import platform
 import json
 import GLOBAL
-from google.cloud import speech
+from google.cloud import speech, texttospeech
 from six.moves import queue
 import sys
 import re
+from playsound import playsound
 
 
 class VoskInputVoiceModule:
@@ -146,4 +147,20 @@ class OutputVoiceModule:
             self.speaker.runAndWait()
         else:
             system("say " + str(message))
+
+class GoogleOutputVoiceModule:
+    def __init__(self) -> None:
+        self.tts = texttospeech.TextToSpeechClient()
+        self.voice = texttospeech.VoiceSelectionParams(language_code="pt-PT", ssml_gender=texttospeech.SsmlVoiceGender.FEMALE)
+        self.audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.MP3)
+
+    def say(self, message):
+        synthesis_input = texttospeech.SynthesisInput(text=message)
+        response = self.tts.synthesize_speech(input=synthesis_input, voice=self.voice, audio_config=self.audio_config)
+        with open("output.mp3", "wb") as out:
+            out.write(response.audio_content)
+        playsound('output.mp3')
+                    
+
+
 

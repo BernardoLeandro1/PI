@@ -11,6 +11,7 @@ intents:
 - goodbye
 - greet
 - query_weather
+- query_walk_recommendation
 entities:
 - day_of_week
 - weather
@@ -103,7 +104,7 @@ responses:
   - text: Adeus!
   - text: Lembre-se, estou sempre à sua disposição!
   utter_info:
-  - text: Eu sou um assistente que consegue gerir a sua agenda e informar-la acerca da meteorologia.
+  - text: Eu sou um assistente que consegue gerir a sua agenda e informa-la acerca da meteorologia.
 actions:
 - action_get_weather
 - utter_greet
@@ -111,6 +112,7 @@ actions:
 - action_create_event
 - action_check_event
 - validate_check_event_data_form
+- action_query_walk
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

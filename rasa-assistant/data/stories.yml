@@ -66,6 +66,14 @@ stories:
   - intent: confirm_weather
   - action: action_confirm_weather
 
+- story: get walk recommendation
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: query_walk_recommendation
+  - action: action_query_walk
+
+
 # - story: interactive_story_1
 #   steps:
 #   - intent: greet

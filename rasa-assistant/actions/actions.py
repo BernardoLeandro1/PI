@@ -690,3 +690,26 @@ class CheckEventAction(Action):
         except HttpError as error:
             dispatcher.utter_message("Erro ao procurar eventos!")
     
+class GetWalkRecommendationAction(Action):
+
+    def name(self) -> Text:
+        return "action_query_walk"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        weatherProvider = weather.WeatherProvider()
+        todayDate = datetime.today().date()
+        location = GLOBAL.CURRENT_LOCATION
+        
+        if (tracker.get_slot("day_of_week")!= None):
+            if (str(tracker.get_slot("day_of_week")).lower() == "hoje"):
+                event_date = str(datetime.today().date())
+            elif (str(tracker.get_slot("day_of_week")).lower() == "amanha" or str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
+                event_date = str(datetime.today().date() + timedelta(days=1))
+            else:
+                dispatcher.utter_message("Desculpe mas só consigo dar recomendações para hoje ou amanhã.")
+                return [SlotSet("day_of_week", None)]
+        else:
+            event_date = str(todayDate)
+        
+        dispatcher.utter_message(weatherProvider.get_walk_recommendation(location,event_date))
+        return [SlotSet("day_of_week", None)]
