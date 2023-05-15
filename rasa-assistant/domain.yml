@@ -3,6 +3,7 @@ intents:
 - add_reminder
 - affirm
 - ask_functions
+- call_someone
 - cancel_reminder
 - check_event_data_form
 - confirm_weather
@@ -10,8 +11,11 @@ intents:
 - find_events
 - goodbye
 - greet
+- light_consume
+- light_switch
 - query_weather
 entities:
+- place
 - hour
 - event
 - day_of_week
@@ -22,6 +26,7 @@ entities:
 - month
 - location
 - weather
+- switch
 slots:
   event:
     type: text
@@ -83,6 +88,18 @@ slots:
     mappings:
     - type: from_entity
       entity: weather
+  place:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: place
+  switch:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: switch
 forms:
   check_event_data_form:
     required_slots:
@@ -107,13 +124,16 @@ responses:
   utter_default:
   - text: Desculpe, não percebi. Pode repetir?
 actions:
-- action_create_event
+- action_check_light_consume
 - utter_greet
+- action_create_event
 - action_check_event
 - validate_check_event_data_form
 - action_get_weather
 - action_confirm_weather
 - action_default_fallback
+- action_switch_lights
+- action_call_someone
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

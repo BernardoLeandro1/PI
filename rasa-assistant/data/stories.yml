@@ -66,6 +66,16 @@ stories:
   - intent: confirm_weather
   - action: action_confirm_weather
 
+- story: switch onoff lights
+  steps:
+  - intent: light_switch
+  - action: action_switch_lights
+
+
+- story: call contact
+  steps: 
+  - intent: call_someone
+  - action: action_call_someone
 # - story: interactive_story_1
 #   steps:
 #   - intent: greet
@@ -247,3 +257,15 @@ stories:
 #     - location: null
 #   - slot_was_set:
 #     - person: null
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: light_consume
+    entities:
+    - place: quarto
+  - slot_was_set:
+    - place: quarto
+  - action: action_check_light_consume
+  - slot_was_set:
+    - place: null

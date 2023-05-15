@@ -29,7 +29,8 @@ from __future__ import print_function
 
 import os.path
 import re
-#from word2numberi18n import w2n
+from actions import homecontrol
+from word2numberi18n import w2n
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -47,6 +48,9 @@ import GLOBAL
 from rasa_sdk.events import SessionStarted, ActionExecuted
 from rasa_sdk.types import DomainDict
 from rasa_sdk.events import SlotSet, UserUtteranceReverted
+from actions.lightsimulator import lightssss
+from actions.phone import Phone
+lightsimulator = lightssss()
 
     
 class ValidateCheckEventDataForm(FormValidationAction):
@@ -98,7 +102,7 @@ class ActionGreetUser(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         name = tracker.get_slot("name")
-       
+
         print("Confiança: ", tracker.latest_message["intent"].get("confidence"))
         
         if tracker.latest_message["intent"].get("confidence") < 0.8:
@@ -111,7 +115,7 @@ class ActionGreetUser(Action):
             message = "Hello, how can I assist you today? (python)?"
 
         dispatcher.utter_message(text=message)
-
+        
         return []
     
 class CreateEventAction(Action):
@@ -681,4 +685,56 @@ class CheckEventAction(Action):
 
         except HttpError as error:
             dispatcher.utter_message("Erro ao procurar eventos!")
+
+
+
     
+class SwitchLightsAction(Action):
+    def name(self) -> Text:
+        return "action_switch_lights"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
+        switcher = homecontrol.SwitchLights(lightsimulator)
+        message = switcher.switchlight(tracker.get_slot("switch"), tracker.get_slot("place"))
+        dispatcher.utter_message(message)
+        return [SlotSet("place", None), SlotSet("switch", None)]
+
+
+class CheckLightConsumeAction(Action):
+    def name(self) -> Text:
+        return "action_check_light_consume"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
+        switcher = homecontrol.SwitchLights(lightsimulator)
+        message = switcher.light_cost(tracker.get_slot("place"))
+        dispatcher.utter_message(message)
+        return [SlotSet("place", None)]
+    
+
+class CallSomeoneAction(Action):
+    def name(self) -> Text:
+        return "action_call_someone"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
+        telemovel = Phone()
+        message = telemovel.make_call(tracker.get_slot("person"))
+        dispatcher.utter_message(message)
+        return [SlotSet("person", None)]
