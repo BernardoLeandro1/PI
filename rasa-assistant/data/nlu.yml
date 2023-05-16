@@ -179,3 +179,10 @@ nlu:
     - Liga ao [Bernardo](person).
     - Faz uma chamada para o [Pedro](person).
     - Liga ao meu [Filho](person).
+- intent: add_contact
+  examples: |
+    - Adiciona aos contactos o [João](person) e o número [914443412](number)
+    - Quero adicionar um contacto! Nome [Pedro](person) e número [965552341](number).
+    - Adiciona um contacto por favor!
+    - Adiciona aos contactos o [Rui](person) com número [919922312](number)
+    - Adiciona o contacto [Jota](person), com número [919555423](number)

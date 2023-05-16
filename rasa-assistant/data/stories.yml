@@ -76,6 +76,11 @@ stories:
   steps: 
   - intent: call_someone
   - action: action_call_someone
+
+- story: add contact
+  steps: 
+  - intent: add_contact
+  - action: action_create_contact
 # - story: interactive_story_1
 #   steps:
 #   - intent: greet
@@ -257,15 +262,48 @@ stories:
 #     - location: null
 #   - slot_was_set:
 #     - person: null
-- story: interactive_story_1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: light_consume
-    entities:
-    - place: quarto
-  - slot_was_set:
-    - place: quarto
-  - action: action_check_light_consume
-  - slot_was_set:
-    - place: null
+# - story: interactive_story_1
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: light_consume
+#     entities:
+#     - place: quarto
+#   - slot_was_set:
+#     - place: quarto
+#   - action: action_check_light_consume
+#   - slot_was_set:
+#     - place: null
+
+# - story: interactive_story_1
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: add_contact
+#     entities:
+#     - day: '919922312'
+#   - slot_was_set:
+#     - day: '919922312'
+#   - intent: add_contact
+#     entities:
+#     - person: Rui
+#     - number: '919922312'
+#   - action: action_create_contact
+#   - slot_was_set:
+#     - person: null
+#   - slot_was_set:
+#     - number: null
+#   - intent: add_contact
+#     entities:
+#     - day: '919555423'
+#   - slot_was_set:
+#     - day: '919555423'
+#   - intent: add_contact
+#     entities:
+#     - person: Jota
+#     - number: '919555423'
+#   - action: action_create_contact
+#   - slot_was_set:
+#     - person: null
+#   - slot_was_set:
+#     - number: null

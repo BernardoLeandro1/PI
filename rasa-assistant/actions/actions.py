@@ -738,3 +738,19 @@ class CallSomeoneAction(Action):
         message = telemovel.make_call(tracker.get_slot("person"))
         dispatcher.utter_message(message)
         return [SlotSet("person", None)]
+
+class CreateContactAction(Action):
+    def name(self) -> Text:
+        return "action_create_contact"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
+        telemovel = Phone()
+        message = telemovel.add_contact(tracker.get_slot("person"), tracker.get_slot("number"))
+        dispatcher.utter_message(message)
+        return [SlotSet("person", None), SlotSet("number", None)]
