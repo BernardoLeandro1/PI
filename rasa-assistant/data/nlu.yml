@@ -162,6 +162,7 @@ nlu:
     - vai estar a [chover](weather) [dia 12](day)?
     - vai [chover](weather) [amanha](day_of_week)?
     - vai [chover](weather) [amanhã](day_of_week)?
+    - vai [chover](weather)?
 - intent: query_walk_recommendation
   examples: |
    - Qual é a melhor hora para caminhar [hoje](day_of_week)?
@@ -175,3 +176,4 @@ nlu:
     - Que funcionalidades estão disponiveis?
     - Que coisas é que sabes fazer?
     - Informa-me das funcionalidades disponiveis.
+    - O que é que eu posso fazer?
