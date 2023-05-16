@@ -422,11 +422,14 @@ class QueryWeatherAction(Action):
                      # TODO Melhorar esta frase 
                     dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
                     return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
-                
-                # TODO chamar função de fim de semana
-
+                saturday_date = str(todayDate + timedelta(days=days_ahead-1))
+                sunday_date = str(todayDate + timedelta(days=days_ahead))
+                dispatcher.utter_message(weatherProvider.get_forecast_for_weekend(saturday_date, sunday_date,location))
+            elif (tracker.get_slot("duration")!= None and tracker.get_slot("duration") != "fim de semana") :
+                dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+            
             if (tracker.get_slot("day_of_week")!= None):
-                    
                     if (str(tracker.get_slot("day_of_week")).lower() == "hoje"):
                         event_date = str(datetime.today().date())
                     elif (str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
@@ -449,22 +452,18 @@ class QueryWeatherAction(Action):
                             case "domingo":
                                 weekday = 6
                         
-                        #print("AAAAAAAAAAAAAAAAaa")
-                        #print(tracker.get_slot("day_of_week"))
-                        #print(d)
                         days_ahead = weekday - todayDate.weekday()
                         if days_ahead <= 0: # Target day already happened this week
                             days_ahead += 7
                         
                         if days_ahead > 5:
                             # TODO Melhorar esta frase 
-                            dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
+                            dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão avançada. Só tenho informação relativa aos próximos cinco dias.")
                             return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
 
                         event_date = str(todayDate + timedelta(days=days_ahead))
-                    # TODO chamar função
-
                     dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
             else:
                 if (tracker.get_slot("day")!= None):
                     day = str(tracker.get_slot("day")).split()
@@ -472,14 +471,19 @@ class QueryWeatherAction(Action):
                         day = day[1]
                     else:
                         day =day[0]
-                days_ahead = day - todayDate.day
-                if days_ahead <= 0:
-                    # TODO Melhorar esta frase 
-                    dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
+                    days_ahead = day - todayDate.day
+                    if days_ahead <= 0:
+                        # TODO Melhorar esta frase 
+                        dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão avançada. Só tenho informação relativa aos próximos cinco dias.")
+                        return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+                    event_date = str(todayDate + timedelta(days=days_ahead))
+                    dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
                     return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
-                event_date = str(todayDate + timedelta(days=days_ahead))
-                # TODO chamar função
-                dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+                else:
+                    event_date = str(todayDate)
+                    print(event_date, location)
+                    dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
 
 
 class ConfirmWeatherAction(Action):
@@ -499,42 +503,72 @@ class ConfirmWeatherAction(Action):
         weatherProvider = weather.WeatherProvider()
         todayDate = datetime.today().date()
         
-        weather =  str(tracker.get_slot("location"))
-        if not weather:
+        expected_weather =  str(tracker.get_slot("weather"))
+        print(expected_weather)
+        if expected_weather == "None":
             # TODO Melhorar esta frase + Ver se estamos a tratar corretamente este erro
             dispatcher.utter_message("Desculpe mas não consegui entender o que pretendia. Pode repetir?")
-            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None)]
+            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
         
         location = str(tracker.get_slot("location"))
-        if not location: 
+        if location == "None": 
             location = GLOBAL.CURRENT_LOCATION
-        
                 
         if (tracker.get_slot("day_of_week")!= None):
-                if (str(tracker.get_slot("day_of_week")).lower == "hoje"):
-                    event_date = str(datetime.today().date())
-                elif (str(tracker.get_slot("day_of_week")).lower == "amanhã"):
-                    event_date = str(datetime.today().date() + timedelta(days=1))
-                else:
-                    assistday = str(tracker.get_slot("day_of_week")).lower()
-                    match assistday:
-                        case "segunda": 
-                            weekday = 0
-                        case "terça":
-                            weekday = 1
-                        case "quarta":
-                            weekday = 2
-                        case "quinta":
-                            weekday = 3
-                        case "sexta":
-                            weekday = 4
-                        case "sabado":
-                            weekday = 5
-                        case "domingo":
-                            weekday = 6
+            if (str(tracker.get_slot("day_of_week")).lower() == "hoje"):
+                event_date = str(datetime.today().date())
+            elif (str(tracker.get_slot("day_of_week")).lower() == "amanha" or str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
+                event_date = str(datetime.today().date() + timedelta(days=1))
+            else:
+                assistday = str(tracker.get_slot("day_of_week")).lower()
+                match assistday:
+                    case "segunda": 
+                        weekday = 0
+                    case "terça":
+                        weekday = 1
+                    case "quarta":
+                        weekday = 2
+                    case "quinta":
+                        weekday = 3
+                    case "sexta":
+                        weekday = 4
+                    case "sabado":
+                        weekday = 5
+                    case "domingo":
+                        weekday = 6
                 
-                #print("AAAAAAAAAAAAAAAAaa")
-    
+                days_ahead = weekday - todayDate.weekday()
+                if days_ahead <= 0: # Target day already happened this week
+                    days_ahead += 7
+                
+                if days_ahead > 5:
+                    # TODO Melhorar esta frase 
+                    dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão avançada. Só tenho informação relativa aos próximos cinco dias.")
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+                event_date = str(todayDate + timedelta(days=days_ahead))
+                
+            dispatcher.utter_message(weatherProvider.confirm_forecast_for_day(expected_weather,event_date,location))
+            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
+        else:
+            if (tracker.get_slot("day")!= None):
+                day = str(tracker.get_slot("day")).split()
+                if(len(day)>1):
+                    day = day[1]
+                else:
+                    day =day[0]
+                days_ahead = int(day) - todayDate.day
+                if days_ahead <= 0:
+                    # TODO Melhorar esta frase 
+                    dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão avançada. Só tenho informação relativa aos próximos cinco dias.")
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+                event_date = str(todayDate + timedelta(days=days_ahead))
+                
+                dispatcher.utter_message(weatherProvider.confirm_forecast_for_day(expected_weather,event_date,location))
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
+            else:
+                event_date = str(todayDate)
+                dispatcher.utter_message(weatherProvider.confirm_forecast_for_day(expected_weather,event_date,location))
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
 
 class CheckEventAction(Action):
     def name(self) -> Text:
@@ -682,3 +716,26 @@ class CheckEventAction(Action):
         except HttpError as error:
             dispatcher.utter_message("Erro ao procurar eventos!")
     
+class GetWalkRecommendationAction(Action):
+
+    def name(self) -> Text:
+        return "action_query_walk"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        weatherProvider = weather.WeatherProvider()
+        todayDate = datetime.today().date()
+        location = GLOBAL.CURRENT_LOCATION
+        
+        if (tracker.get_slot("day_of_week")!= None):
+            if (str(tracker.get_slot("day_of_week")).lower() == "hoje"):
+                event_date = str(datetime.today().date())
+            elif (str(tracker.get_slot("day_of_week")).lower() == "amanha" or str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
+                event_date = str(datetime.today().date() + timedelta(days=1))
+            else:
+                dispatcher.utter_message("Desculpe mas só consigo dar recomendações para hoje ou amanhã.")
+                return [SlotSet("day_of_week", None)]
+        else:
+            event_date = str(todayDate)
+        
+        dispatcher.utter_message(weatherProvider.get_walk_recommendation(location,event_date))
+        return [SlotSet("day_of_week", None)]

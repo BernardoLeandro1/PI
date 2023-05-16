@@ -11,17 +11,18 @@ intents:
 - goodbye
 - greet
 - query_weather
+- query_walk_recommendation
 entities:
+- day_of_week
+- weather
+- location
+- day
 - hour
 - event
-- day_of_week
 - occurrence
 - duration
 - person
-- day
 - month
-- location
-- weather
 slots:
   event:
     type: text
@@ -107,13 +108,16 @@ responses:
   utter_default:
   - text: Desculpe, não percebi. Pode repetir?
 actions:
-- action_create_event
+- action_get_weather
 - utter_greet
+- action_confirm_weather
+- action_create_event
 - action_check_event
 - validate_check_event_data_form
 - action_get_weather
 - action_confirm_weather
 - action_default_fallback
+- action_query_walk
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
