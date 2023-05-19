@@ -1,30 +1,4 @@
-# This files contains your custom actions which can be used to run
-# custom Python code.
-#
-# See this guide on how to implement these action:
-# https://rasa.com/docs/rasa/custom-actions
 
-
-# This is a simple example for a custom action which utters "Hello World!"
-
-# from typing import Any, Text, Dict, List
-#
-# from rasa_sdk import Action, Tracker
-# from rasa_sdk.executor import CollectingDispatcher
-#
-#
-# class ActionHelloWorld(Action):
-#
-#     def name(self) -> Text:
-#         return "action_hello_world"
-#
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#
-#         dispatcher.utter_message(text="Hello World!")
-#
-#         return []
 from __future__ import print_function
 
 import os.path
@@ -47,7 +21,9 @@ import GLOBAL
 from rasa_sdk.events import SessionStarted, ActionExecuted
 from rasa_sdk.types import DomainDict
 from rasa_sdk.events import SlotSet, UserUtteranceReverted
-
+from actions.foodInfo import FoodInfoProvider
+import cv2
+import webbrowser
     
 class ValidateCheckEventDataForm(FormValidationAction):
     def name(self) -> Text:
@@ -739,3 +715,61 @@ class GetWalkRecommendationAction(Action):
         
         dispatcher.utter_message(weatherProvider.get_walk_recommendation(location,event_date))
         return [SlotSet("day_of_week", None)]
+    
+class GetNutriScoreAction(Action):
+    def name(self) -> Text:
+        return "action_query_food_nutrition_data"
+    
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
+        
+        foodInfoProvider = FoodInfoProvider()
+
+        grade = foodInfoProvider.get_product_nutriscore()   
+        if grade != None:
+            match grade:
+                case "a":
+                    return_message = "Este alimento tem nota A, o que signifca que tem um ótimo valor nutricional."
+                case "b":
+                    return_message = "Este alimento tem nota B, o que signifca que tem um bom valor nutricional."
+                case "c":
+                    return_message = "Este alimento tem nota C, o que signifca que tem um valor nutricional intermédio."
+                case "d":
+                    return_message = "Este alimento tem nota D, o que signifca que tem um fraco valor nutricional."
+                case "e":
+                    return_message = "Este alimento tem nota E, o que signifca que tem um péssimo valor nutricional."
+
+            dispatcher.utter_message(return_message)
+        else:
+            dispatcher.utter_message("Desculpe, não tenho informações sobre esse produto ou não consegui ler bem o código de barras.")
+        return 
+           
+class GetRecipeAction(Action):
+    def name(self) -> Text:
+        return "action_ask_recipe"
+    
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
+        foodInfoProvider = FoodInfoProvider()
+
+        if (tracker.get_slot("recipe")!= None):
+            recipe = str(tracker.get_slot("recipe"))
+            url_recipe = foodInfoProvider.getRecipe(recipe)
+            if url_recipe != None:
+                dispatcher.utter_message("Aqui está uma receita de " + recipe + ".")
+                webbrowser.open(url_recipe,new = 2)
+            else:
+                dispatcher.utter_message("Desculpe, não consegui encontrar nenhuma receita de " + recipe)
+
+        else:
+            dispatcher.utter_message("Desculpe, não consegui entender o que pretendia. Pode repetir, por favor?")
+        
+        return [SlotSet("recipe", None)]

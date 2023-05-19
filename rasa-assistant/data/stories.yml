@@ -73,6 +73,19 @@ stories:
   - intent: query_walk_recommendation
   - action: action_query_walk
 
+- story: get nutrition facts about a product
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: query_food_nutrition_data
+  - action: action_query_food_nutrition_data
+
+- story: get recipe
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_recipe
+  - action: action_ask_recipe
 
 # - story: interactive_story_1
 #   steps:
@@ -257,135 +270,135 @@ stories:
 #     - person: null
 
 
-- story: interactive_story_1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: confirm_weather
-    entities:
-    - weather: chover
-    - day_of_week: Amanhã
-  - slot_was_set:
-    - day_of_week: Amanhã
-  - slot_was_set:
-    - weather: chover
-  - intent: confirm_weather
-    entities:
-    - weather: chover
-    - day_of_week: Amanhã
-  - action: action_confirm_weather
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - location: null
-  - slot_was_set:
-    - weather: null
-  - intent: confirm_weather
-    entities:
-    - weather: chover
-    - day_of_week: amanha
-  - slot_was_set:
-    - day_of_week: amanha
-  - slot_was_set:
-    - weather: chover
-  - action: action_confirm_weather
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - location: null
-  - slot_was_set:
-    - weather: null
-  - intent: confirm_weather
-    entities:
-    - weather: chover
-    - day_of_week: Amanhã
-  - slot_was_set:
-    - day_of_week: Amanhã
-  - slot_was_set:
-    - weather: chover
-  - intent: confirm_weather
-    entities:
-    - weather: chover
-    - day_of_week: amanhã
-  - action: action_confirm_weather
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - location: null
-  - slot_was_set:
-    - weather: null
-  - intent: query_weather
-    entities:
-    - location: Aveiro
-  - slot_was_set:
-    - location: Aveiro
-  - action: action_get_weather
-  - intent: query_weather
-    entities:
-    - day_of_week: hoje
-  - slot_was_set:
-    - day_of_week: hoje
-  - action: action_get_weather
-  - intent: query_weather
-    entities:
-    - day_of_week: hoje
-  - slot_was_set:
-    - day_of_week: hoje
-  - action: action_get_weather
-  - intent: query_weather
-    entities:
-    - day_of_week: hoje
-  - slot_was_set:
-    - day_of_week: hoje
-  - action: action_get_weather
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - location: null
-  - slot_was_set:
-    - duration: null
-  - intent: query_weather
-    entities:
-    - day_of_week: hoje
-  - slot_was_set:
-    - day_of_week: hoje
-  - action: action_get_weather
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - location: null
-  - slot_was_set:
-    - duration: null
-  - intent: query_weather
-    entities:
-    - day_of_week: Amanhã
-  - slot_was_set:
-    - day_of_week: Amanhã
-  - intent: query_weather
-    entities:
-    - day_of_week: amanhã
-  - action: action_get_weather
-  - slot_was_set:
-    - day_of_week: null
-  - slot_was_set:
-    - day: null
-  - slot_was_set:
-    - location: null
-  - slot_was_set:
-    - duration: null
-  - intent: query_weather
-    entities:
-    - day_of_week: amanha
-  - slot_was_set:
-    - day_of_week: amanha
-  - action: action_get_weather
+# - story: interactive_story_1
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: confirm_weather
+#     entities:
+#     - weather: chover
+#     - day_of_week: Amanhã
+#   - slot_was_set:
+#     - day_of_week: Amanhã
+#   - slot_was_set:
+#     - weather: chover
+#   - intent: confirm_weather
+#     entities:
+#     - weather: chover
+#     - day_of_week: Amanhã
+#   - action: action_confirm_weather
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - location: null
+#   - slot_was_set:
+#     - weather: null
+#   - intent: confirm_weather
+#     entities:
+#     - weather: chover
+#     - day_of_week: amanha
+#   - slot_was_set:
+#     - day_of_week: amanha
+#   - slot_was_set:
+#     - weather: chover
+#   - action: action_confirm_weather
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - location: null
+#   - slot_was_set:
+#     - weather: null
+#   - intent: confirm_weather
+#     entities:
+#     - weather: chover
+#     - day_of_week: Amanhã
+#   - slot_was_set:
+#     - day_of_week: Amanhã
+#   - slot_was_set:
+#     - weather: chover
+#   - intent: confirm_weather
+#     entities:
+#     - weather: chover
+#     - day_of_week: amanhã
+#   - action: action_confirm_weather
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - location: null
+#   - slot_was_set:
+#     - weather: null
+#   - intent: query_weather
+#     entities:
+#     - location: Aveiro
+#   - slot_was_set:
+#     - location: Aveiro
+#   - action: action_get_weather
+#   - intent: query_weather
+#     entities:
+#     - day_of_week: hoje
+#   - slot_was_set:
+#     - day_of_week: hoje
+#   - action: action_get_weather
+#   - intent: query_weather
+#     entities:
+#     - day_of_week: hoje
+#   - slot_was_set:
+#     - day_of_week: hoje
+#   - action: action_get_weather
+#   - intent: query_weather
+#     entities:
+#     - day_of_week: hoje
+#   - slot_was_set:
+#     - day_of_week: hoje
+#   - action: action_get_weather
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - location: null
+#   - slot_was_set:
+#     - duration: null
+#   - intent: query_weather
+#     entities:
+#     - day_of_week: hoje
+#   - slot_was_set:
+#     - day_of_week: hoje
+#   - action: action_get_weather
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - location: null
+#   - slot_was_set:
+#     - duration: null
+#   - intent: query_weather
+#     entities:
+#     - day_of_week: Amanhã
+#   - slot_was_set:
+#     - day_of_week: Amanhã
+#   - intent: query_weather
+#     entities:
+#     - day_of_week: amanhã
+#   - action: action_get_weather
+#   - slot_was_set:
+#     - day_of_week: null
+#   - slot_was_set:
+#     - day: null
+#   - slot_was_set:
+#     - location: null
+#   - slot_was_set:
+#     - duration: null
+#   - intent: query_weather
+#     entities:
+#     - day_of_week: amanha
+#   - slot_was_set:
+#     - day_of_week: amanha
+#   - action: action_get_weather

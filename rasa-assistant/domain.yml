@@ -1,17 +1,20 @@
 version: '3.1'
 intents:
-- add_reminder
-- affirm
-- ask_functions
-- cancel_reminder
-- check_event_data_form
-- confirm_weather
-- deny
-- find_events
-- goodbye
-- greet
-- query_weather
-- query_walk_recommendation
+  - add_reminder
+  - affirm
+  - ask_functions
+  - cancel_reminder
+  - check_event_data_form
+  - confirm_weather
+  - deny
+  - find_events
+  - goodbye
+  - greet
+  - query_weather
+  - query_walk_recommendation
+  - query_food_nutrition_data
+  - ask_recipe
+
 entities:
 - day_of_week
 - weather
@@ -23,6 +26,7 @@ entities:
 - duration
 - person
 - month
+- recipe
 slots:
   event:
     type: text
@@ -84,6 +88,12 @@ slots:
     mappings:
     - type: from_entity
       entity: weather
+  recipe:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: recipe
 forms:
   check_event_data_form:
     required_slots:
@@ -108,16 +118,16 @@ responses:
   utter_default:
   - text: Desculpe, não percebi. Pode repetir?
 actions:
-- action_get_weather
 - utter_greet
 - action_confirm_weather
 - action_create_event
 - action_check_event
 - validate_check_event_data_form
 - action_get_weather
-- action_confirm_weather
 - action_default_fallback
 - action_query_walk
+- action_query_food_nutrition_data
+- action_ask_recipe
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

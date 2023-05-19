@@ -177,3 +177,22 @@ nlu:
     - Que coisas é que sabes fazer?
     - Informa-me das funcionalidades disponiveis.
     - O que é que eu posso fazer?
+
+- intent: query_food_nutrition_data
+  examples: |
+    - Este produto é saudável?
+    - Este produto é bom?
+    - Posso comer isto?
+    - Posso comer este produto?
+    - Devo comer este produto? 
+    - Devo comer isto?
+    - Qual é o valor nutricional deste produto? 
+
+- intent: ask_recipe
+  examples: |
+    - Como é que se faz [pão-de-ló](recipe)?
+    - Diz-me a receita para fazer [arroz doce](recipe).
+    - Ajuda-me a preparar um [bolo de mármore](recipe).
+    - Quero fazer um [arroz de atum](recipe)
+    - Dá-me uma receita para fazer [lasanha](recipe).
+    - Gostava de fazer uma [carbonara](recipe). Podes-me dar a receita?
