@@ -8,6 +8,7 @@ nlu:
     - Boa noite, Assistente
     - Olá Assistente
     - Olá assistente
+    - olá
 - intent: goodbye
   examples: |
     - Xau, Assistente
@@ -131,29 +132,52 @@ nlu:
     - Podes-me dizer como vai estar o tempo no [dia 15](day)?
     - Podes-me dizer como vai estar o tempo no [sábado](day_of_week)?
     - Qual é a previsão do tempo para o [fim de semana](duration)?
+    - Como vai estar o tempo no [fim de semana](duration)?
     - Como é que está o tempo na [quarta](day_of_week)?
     - Qual é a temperatura no [domingo](day_of_week)?
     - Como é que está o tempo lá fora [hoje](day_of_week)?
+    - Está frio [hoje](day_of_week)?
+    - Está frio em [Aveiro](location)?
+    - Vai estar calor [amanhã](day_of_week)?
+    - Está frio em [aveiro]{"entity": "location", "value": "Aveiro"}?
+    - como vai estar o tempo [hoje](day_of_week)?
+    - está frio [hoje](day_of_week)?
+    - como vai estar o tempo [amanhã](day_of_week)?
+    - como vai estar o tempo [amanha](day_of_week)?
 - intent: confirm_weather
   examples: |
-    - Vai estar [frio](weather) [amanhã](day_of_week)?
-    - Vai [chover](weather) na [próxima semana](duration)?
     - Vai estar [sol](weather) na [sexta](day_of_week)?
     - Vai estar [vento](weather) no [Porto](location) na [sexta](day_of_week)?
+    - Vai estar [chuva](weather) [amanhã](day_of_week)?
     - Está [sol](weather)?
-    - Está [frio](weather) [hoje](day_of_week)?
-    - Está [vento](weather)?
-    - Está [frio](weather) em [Aveiro](location)?
     - Vai estar [sol](weather) no [dia 12](day)?
+    - Vai estar [neve](weather) no [dia 1](day)?
     - Vai fazer [sol](weather) no [dia 13](day)?
     - Sabes se vai [chover](weather) [hoje](day_of_week)?
-    - Sabes se vai estar [vento](weather) [amanhã](day_of_week)?
+    - Sabes se vai estar [chuva](weather) [amanhã](day_of_week)?
     - Sabes se vai estar [sol](weather) em [Lisboa](location)?
+    - vai estar [sol](weather) [hoje](day_of_week)?
+    - vai [chover](weather) [hoje](day_of_week)?
+    - vai estar [sol](weather) [amanhã](day_of_week)?
+    - vai estar [chuva](weather) [hoje](day_of_week)?
+    - vai estar a [chover](weather) [dia 12](day)?
+    - vai [chover](weather) [amanha](day_of_week)?
+    - vai [chover](weather) [amanhã](day_of_week)?
+    - vai [chover](weather)?
+- intent: query_walk_recommendation
+  examples: |
+   - Qual é a melhor hora para caminhar [hoje](day_of_week)?
+   - Quero ir passear.
+   - Quero ir dar uma volta.
+   - Qual é a melhor altura para ir caminhar?  
+   - A que horas devo ir caminhar [amanhã](day_of_week)? 
+   - Apetece-me sair de casa. 
 - intent: ask_functions
   examples: |
     - Que funcionalidades estão disponiveis?
     - Que coisas é que sabes fazer?
     - Informa-me das funcionalidades disponiveis.
+    - O que é que eu posso fazer?
 - intent: light_switch
   examples: |
     - [Liga](switch) a luz da [sala](place), por favor
@@ -186,3 +210,22 @@ nlu:
     - Quero adicionar um contacto! Nome [Pedro](person) e número [965552341](number).
     - Adiciona aos contactos o [Rui](person) com número [919922312](number)
     - Adiciona o contacto [Jota](person), com número [919555423](number)
+
+- intent: query_food_nutrition_data
+  examples: |
+    - Este produto é saudável?
+    - Este produto é bom?
+    - Posso comer isto?
+    - Posso comer este produto?
+    - Devo comer este produto? 
+    - Devo comer isto?
+    - Qual é o valor nutricional deste produto? 
+
+- intent: ask_recipe
+  examples: |
+    - Como é que se faz [pão-de-ló](recipe)?
+    - Diz-me a receita para fazer [arroz doce](recipe).
+    - Ajuda-me a preparar um [bolo de mármore](recipe).
+    - Quero fazer um [arroz de atum](recipe)
+    - Dá-me uma receita para fazer [lasanha](recipe).
+    - Gostava de fazer uma [carbonara](recipe). Podes-me dar a receita?

@@ -81,6 +81,28 @@ stories:
   steps: 
   - intent: add_contact
   - action: action_create_contact
+  
+- story: get walk recommendation
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: query_walk_recommendation
+  - action: action_query_walk
+
+- story: get nutrition facts about a product
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: query_food_nutrition_data
+  - action: action_query_food_nutrition_data
+
+- story: get recipe
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_recipe
+  - action: action_ask_recipe
+
 # - story: interactive_story_1
 #   steps:
 #   - intent: greet

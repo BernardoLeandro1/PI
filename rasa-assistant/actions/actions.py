@@ -1,30 +1,4 @@
-# This files contains your custom actions which can be used to run
-# custom Python code.
-#
-# See this guide on how to implement these action:
-# https://rasa.com/docs/rasa/custom-actions
 
-
-# This is a simple example for a custom action which utters "Hello World!"
-
-# from typing import Any, Text, Dict, List
-#
-# from rasa_sdk import Action, Tracker
-# from rasa_sdk.executor import CollectingDispatcher
-#
-#
-# class ActionHelloWorld(Action):
-#
-#     def name(self) -> Text:
-#         return "action_hello_world"
-#
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#
-#         dispatcher.utter_message(text="Hello World!")
-#
-#         return []
 from __future__ import print_function
 
 import os.path
@@ -48,10 +22,12 @@ import GLOBAL
 from rasa_sdk.events import SessionStarted, ActionExecuted
 from rasa_sdk.types import DomainDict
 from rasa_sdk.events import SlotSet, UserUtteranceReverted
+from actions.foodInfo import FoodInfoProvider
+import cv2
+import webbrowser
 from actions.lightsimulator import lightssss
 from actions.phone import Phone
 lightsimulator = lightssss()
-
     
 class ValidateCheckEventDataForm(FormValidationAction):
     def name(self) -> Text:
@@ -429,11 +405,14 @@ class QueryWeatherAction(Action):
                      # TODO Melhorar esta frase 
                     dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
                     return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
-                
-                # TODO chamar função de fim de semana
-
+                saturday_date = str(todayDate + timedelta(days=days_ahead-1))
+                sunday_date = str(todayDate + timedelta(days=days_ahead))
+                dispatcher.utter_message(weatherProvider.get_forecast_for_weekend(saturday_date, sunday_date,location))
+            elif (tracker.get_slot("duration")!= None and tracker.get_slot("duration") != "fim de semana") :
+                dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+            
             if (tracker.get_slot("day_of_week")!= None):
-                    
                     if (str(tracker.get_slot("day_of_week")).lower() == "hoje"):
                         event_date = str(datetime.today().date())
                     elif (str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
@@ -456,22 +435,18 @@ class QueryWeatherAction(Action):
                             case "domingo":
                                 weekday = 6
                         
-                        #print("AAAAAAAAAAAAAAAAaa")
-                        #print(tracker.get_slot("day_of_week"))
-                        #print(d)
                         days_ahead = weekday - todayDate.weekday()
                         if days_ahead <= 0: # Target day already happened this week
                             days_ahead += 7
                         
                         if days_ahead > 5:
                             # TODO Melhorar esta frase 
-                            dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
+                            dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão avançada. Só tenho informação relativa aos próximos cinco dias.")
                             return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
 
                         event_date = str(todayDate + timedelta(days=days_ahead))
-                    # TODO chamar função
-
                     dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
             else:
                 if (tracker.get_slot("day")!= None):
                     day = str(tracker.get_slot("day")).split()
@@ -479,14 +454,19 @@ class QueryWeatherAction(Action):
                         day = day[1]
                     else:
                         day =day[0]
-                days_ahead = day - todayDate.day
-                if days_ahead <= 0:
-                    # TODO Melhorar esta frase 
-                    dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão à frente. Só tenho informação relativa aos próximos cinco dias.")
+                    days_ahead = day - todayDate.day
+                    if days_ahead <= 0:
+                        # TODO Melhorar esta frase 
+                        dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão avançada. Só tenho informação relativa aos próximos cinco dias.")
+                        return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+                    event_date = str(todayDate + timedelta(days=days_ahead))
+                    dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
                     return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
-                event_date = str(todayDate + timedelta(days=days_ahead))
-                # TODO chamar função
-                dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+                else:
+                    event_date = str(todayDate)
+                    print(event_date, location)
+                    dispatcher.utter_message(weatherProvider.get_forecast_for_day(event_date,location))
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
 
 
 class ConfirmWeatherAction(Action):
@@ -506,42 +486,72 @@ class ConfirmWeatherAction(Action):
         weatherProvider = weather.WeatherProvider()
         todayDate = datetime.today().date()
         
-        weather =  str(tracker.get_slot("location"))
-        if not weather:
+        expected_weather =  str(tracker.get_slot("weather"))
+        print(expected_weather)
+        if expected_weather == "None":
             # TODO Melhorar esta frase + Ver se estamos a tratar corretamente este erro
             dispatcher.utter_message("Desculpe mas não consegui entender o que pretendia. Pode repetir?")
-            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None)]
+            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
         
         location = str(tracker.get_slot("location"))
-        if not location: 
+        if location == "None": 
             location = GLOBAL.CURRENT_LOCATION
-        
                 
         if (tracker.get_slot("day_of_week")!= None):
-                if (str(tracker.get_slot("day_of_week")).lower == "hoje"):
-                    event_date = str(datetime.today().date())
-                elif (str(tracker.get_slot("day_of_week")).lower == "amanhã"):
-                    event_date = str(datetime.today().date() + timedelta(days=1))
-                else:
-                    assistday = str(tracker.get_slot("day_of_week")).lower()
-                    match assistday:
-                        case "segunda": 
-                            weekday = 0
-                        case "terça":
-                            weekday = 1
-                        case "quarta":
-                            weekday = 2
-                        case "quinta":
-                            weekday = 3
-                        case "sexta":
-                            weekday = 4
-                        case "sabado":
-                            weekday = 5
-                        case "domingo":
-                            weekday = 6
+            if (str(tracker.get_slot("day_of_week")).lower() == "hoje"):
+                event_date = str(datetime.today().date())
+            elif (str(tracker.get_slot("day_of_week")).lower() == "amanha" or str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
+                event_date = str(datetime.today().date() + timedelta(days=1))
+            else:
+                assistday = str(tracker.get_slot("day_of_week")).lower()
+                match assistday:
+                    case "segunda": 
+                        weekday = 0
+                    case "terça":
+                        weekday = 1
+                    case "quarta":
+                        weekday = 2
+                    case "quinta":
+                        weekday = 3
+                    case "sexta":
+                        weekday = 4
+                    case "sabado":
+                        weekday = 5
+                    case "domingo":
+                        weekday = 6
                 
-                #print("AAAAAAAAAAAAAAAAaa")
-    
+                days_ahead = weekday - todayDate.weekday()
+                if days_ahead <= 0: # Target day already happened this week
+                    days_ahead += 7
+                
+                if days_ahead > 5:
+                    # TODO Melhorar esta frase 
+                    dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão avançada. Só tenho informação relativa aos próximos cinco dias.")
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+                event_date = str(todayDate + timedelta(days=days_ahead))
+                
+            dispatcher.utter_message(weatherProvider.confirm_forecast_for_day(expected_weather,event_date,location))
+            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
+        else:
+            if (tracker.get_slot("day")!= None):
+                day = str(tracker.get_slot("day")).split()
+                if(len(day)>1):
+                    day = day[1]
+                else:
+                    day =day[0]
+                days_ahead = int(day) - todayDate.day
+                if days_ahead <= 0:
+                    # TODO Melhorar esta frase 
+                    dispatcher.utter_message("Desculpe mas não consegui encontrar informação para uma data tão avançada. Só tenho informação relativa aos próximos cinco dias.")
+                    return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None), SlotSet("duration", None)]
+                event_date = str(todayDate + timedelta(days=days_ahead))
+                
+                dispatcher.utter_message(weatherProvider.confirm_forecast_for_day(expected_weather,event_date,location))
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
+            else:
+                event_date = str(todayDate)
+                dispatcher.utter_message(weatherProvider.confirm_forecast_for_day(expected_weather,event_date,location))
+                return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("location", None),  SlotSet("weather", None)]
 
 class CheckEventAction(Action):
     def name(self) -> Text:
@@ -688,7 +698,7 @@ class CheckEventAction(Action):
 
         except HttpError as error:
             dispatcher.utter_message("Erro ao procurar eventos!")
-
+        
 
 
     
@@ -757,3 +767,85 @@ class CreateContactAction(Action):
         message = telemovel.add_contact(tracker.get_slot("person"), tracker.get_slot("number"))
         dispatcher.utter_message(message)
         return [SlotSet("person", None), SlotSet("number", None)]
+    
+class GetWalkRecommendationAction(Action):
+
+    def name(self) -> Text:
+        return "action_query_walk"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        weatherProvider = weather.WeatherProvider()
+        todayDate = datetime.today().date()
+        location = GLOBAL.CURRENT_LOCATION
+        
+        if (tracker.get_slot("day_of_week")!= None):
+            if (str(tracker.get_slot("day_of_week")).lower() == "hoje"):
+                event_date = str(datetime.today().date())
+            elif (str(tracker.get_slot("day_of_week")).lower() == "amanha" or str(tracker.get_slot("day_of_week")).lower() == "amanhã"):
+                event_date = str(datetime.today().date() + timedelta(days=1))
+            else:
+                dispatcher.utter_message("Desculpe mas só consigo dar recomendações para hoje ou amanhã.")
+                return [SlotSet("day_of_week", None)]
+        else:
+            event_date = str(todayDate)
+        
+        dispatcher.utter_message(weatherProvider.get_walk_recommendation(location,event_date))
+        return [SlotSet("day_of_week", None)]
+    
+class GetNutriScoreAction(Action):
+    def name(self) -> Text:
+        return "action_query_food_nutrition_data"
+    
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
+        
+        foodInfoProvider = FoodInfoProvider()
+
+        grade = foodInfoProvider.get_product_nutriscore()   
+        if grade != None:
+            match grade:
+                case "a":
+                    return_message = "Este alimento tem nota A, o que signifca que tem um ótimo valor nutricional."
+                case "b":
+                    return_message = "Este alimento tem nota B, o que signifca que tem um bom valor nutricional."
+                case "c":
+                    return_message = "Este alimento tem nota C, o que signifca que tem um valor nutricional intermédio."
+                case "d":
+                    return_message = "Este alimento tem nota D, o que signifca que tem um fraco valor nutricional."
+                case "e":
+                    return_message = "Este alimento tem nota E, o que signifca que tem um péssimo valor nutricional."
+
+            dispatcher.utter_message(return_message)
+        else:
+            dispatcher.utter_message("Desculpe, não tenho informações sobre esse produto ou não consegui ler bem o código de barras.")
+        return 
+           
+class GetRecipeAction(Action):
+    def name(self) -> Text:
+        return "action_ask_recipe"
+    
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
+        if tracker.latest_message["intent"].get("confidence") < 0.8:
+            dispatcher.utter_message(response="utter_default")
+            return [UserUtteranceReverted()]
+        foodInfoProvider = FoodInfoProvider()
+
+        if (tracker.get_slot("recipe")!= None):
+            recipe = str(tracker.get_slot("recipe"))
+            url_recipe = foodInfoProvider.getRecipe(recipe)
+            if url_recipe != None:
+                dispatcher.utter_message("Aqui está uma receita de " + recipe + ".")
+                webbrowser.open(url_recipe,new = 2)
+            else:
+                dispatcher.utter_message("Desculpe, não consegui encontrar nenhuma receita de " + recipe)
+
+        else:
+            dispatcher.utter_message("Desculpe, não consegui entender o que pretendia. Pode repetir, por favor?")
+
+        return [SlotSet("recipe", None)]

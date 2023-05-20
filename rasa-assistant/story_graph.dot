@@ -7,6 +7,10 @@ digraph  {
 4 [class="intent dashed active", label="  ?  ", shape=rect];
 5 [class="intent active", fillcolor=lightblue, label="/greet", shape=rect, style=filled];
 6 [class="intent active", fillcolor=lightblue, label="/add_reminder", shape=rect, style=filled];
+3 [class=active, fontsize=12, label=action_ask_recipe];
+4 [class="intent dashed active", label="  ?  ", shape=rect];
+5 [class="intent active", fillcolor=lightblue, label="/greet", shape=rect, style=filled];
+6 [class="intent active", fillcolor=lightblue, label="/ask_recipe", shape=rect, style=filled];
 0 -> "-1"  [class="", key=NONE, label=""];
 0 -> 1  [class=active, key=NONE, label=""];
 1 -> 5  [class=active, key=0];

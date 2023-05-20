@@ -1,6 +1,6 @@
 import requests
 import sys
-from VoiceModule import VoskInputVoiceModule, OutputVoiceModule, GoogleInputVoiceModule
+from VoiceModule import VoskInputVoiceModule, OutputVoiceModule, GoogleInputVoiceModule, GoogleOutputVoiceModule
 import tkinter as tk
 import threading
 
@@ -28,10 +28,8 @@ class Assistant:
             "Adeus!",
         ]
         
-        #self.listener = VoskInputVoiceModule()
-        self.listener = GoogleInputVoiceModule()
-        self.speaker = OutputVoiceModule()     
-        
+        self.listener = GoogleInputVoiceModule()   
+        self.speaker = GoogleOutputVoiceModule()
         # GUI
         window = tk.Tk()
         window.title("CasaViva+")
@@ -59,6 +57,7 @@ class Assistant:
             self.speaker.say(bot_response)
 
             while user_input not in self.SLEEP:
+                
                 user_input = self.listener.listen()
                 if user_input is None:
                     continue
@@ -79,7 +78,7 @@ class Assistant:
                 response = i['text']
             return response
         except:
-            error = "Ocorreu um erro com o seu assistente. Por favor volte a tentar."
+            error = "Não entendi o que queria dizer. Pode repetir?"
             return error
 
 Assistant()
