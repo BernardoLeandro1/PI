@@ -67,6 +67,11 @@ class ValidateCheckEventDataForm(FormValidationAction):
             dispatcher.utter_message(text=f"Não percebi a atividade que queria que marcasse, pode repetir?.")
             return {"event": None} 
         else:
+            try: 
+                event_start_time = datetime.strptime(slot_value, "%H:%M").time()
+            except:
+                dispatcher.utter_message(text=f"Não percebi a que horas queria realizar a atividade, pode repetir?.")
+                return {"hour": None}
             dispatcher.utter_message("Quer que marque {}, às {}?".format(tracker.get_slot("event"), tracker.get_slot("hour")))
             return {"event": tracker.get_slot("event"), "hour": slot_value}
 
@@ -634,6 +639,9 @@ class CheckEventAction(Action):
             event_date = ano + "-" + mes + "-" + dia
             event_date = str(datetime.strptime(event_date, '%Y-%m-%d')).split(" ")[0]
 
+        startTime = "00:00:00"
+        endTime = "23:59:59"
+
         if(tracker.get_slot("duration")!=None):
             a = str(tracker.get_slot("duration"))
             if a.__contains__("próxima"):
@@ -646,13 +654,15 @@ class CheckEventAction(Action):
             elif a.__contains__("esta"):
                 event_date = str(datetime.today().date())
                 d = datetime.today().date()
+                
                 days_ahead = 5 - d.weekday()
                 if days_ahead <= 0: # Target day already happened this week
                     days_ahead += 7
                 event_end_date = str(d + timedelta(days=days_ahead))
+                startTime = str(datetime.today().time()).split(".")[0]
+                print(startTime)
 
-        startTime = "00:00:00"
-        endTime = "23:59:59"
+        
         print(tracker.get_slot("hour"))
         if (tracker.get_slot("hour"))!=None:
             a = str(tracker.get_slot("hour"))

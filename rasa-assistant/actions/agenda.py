@@ -12,23 +12,23 @@ from oauth2client import file, client, tools
 
 class GoogleCalendar:
     def __init__(self, credentials_path):        
-        SCOPES = 'https://www.googleapis.com/auth/calendar'
+        SCOPES = ['https://www.googleapis.com/auth/calendar']
         creds= None
-        #if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        if os.path.exists('token.json'):
+            creds = Credentials.from_authorized_user_file('token.json', SCOPES)
         # If there are no (valid) credentials available, let the user log in.
-        if creds.expired:
-            creds.refresh(Request())
-        # if not creds or not creds.valid:
-        #     if creds and creds.expired and creds.refresh_token:
-        #         creds.refresh(Request())
-        #     else:
-        #         flow = InstalledAppFlow.from_client_secrets_file(
-        #             credentials_path, SCOPES)
-        #         creds = flow.run_local_server(port=0)
-        #     # Save the credentials for the next run
-        #     with open('token.json', 'w') as token:
-        #         token.write(creds.to_json())
+        # if creds.expired:
+        #     creds.refresh(Request())
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    credentials_path, SCOPES)
+                creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open('token.json', 'w') as token:
+                token.write(creds.to_json())
         self.service = build('calendar', 'v3', credentials=creds)
     
 
@@ -113,7 +113,6 @@ class GoogleCalendar:
 
     def find_event(self, summary=None, start_date=None, start_time=None, end_date = None, end_time = None):
         pagetoken = None
-        print(start_date)
         while True:
             events_result = self.service.events().list(calendarId='primary', orderBy= 'startTime', singleEvents=True).execute()
             items = events_result['items']
@@ -121,16 +120,15 @@ class GoogleCalendar:
             if end_date != None:
                 for event in items:
                     a = str(event['start']['dateTime']).split("T")
-                    if(a[0]>start_date and a[0]< end_date) or a[0]==start_date or a[0]==end_date:
-                        print(event['summary'])
+                    h = a[1].split("+")[0]
+                    if((a[0]>start_date and a[0]< end_date) or a[0]==start_date or a[0]==end_date) and datetime.strptime(h, '%H:%M:%S') > datetime.strptime(start_time, '%H:%M:%S'):
                         b.append(event)
             else: 
                 for event in items:
                     a = str(event['start']['dateTime']).split("T")
                     h = a[1].split("+")[0]
                     if(a[0]==start_date and datetime.strptime(h, '%H:%M:%S') > datetime.strptime(start_time, '%H:%M:%S') and datetime.strptime(h, '%H:%M:%S') < datetime.strptime(end_time, '%H:%M:%S')):
-                        print(a[1])
-                        print(event['summary'])
+
                         b.append(event)
                 
             # pagetoken = events_result.get('nextPageToken')
