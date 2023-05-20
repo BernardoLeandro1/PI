@@ -84,6 +84,7 @@ nlu:
     - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer cardio](event) às [18:30](hour)!
     - Quero marcar uma [reunião](event) para as [3:30 da tarde](hour) no [dia 20](day) de [maio](month)
     - Marca uma [reunião](event) para [amanhã](day_of_week) às [16:30](hour)
+    - Lembra-me de [tomar um brufen](event) durante [uma semana](duration) às [23:00](hour)
 - intent: find_events
   examples: |
     - Tenho alguma coisa marcada para [amanhã](day_of_week)?
@@ -183,6 +184,5 @@ nlu:
   examples: |
     - Adiciona aos contactos o [João](person) e o número [914443412](number)
     - Quero adicionar um contacto! Nome [Pedro](person) e número [965552341](number).
-    - Adiciona um contacto por favor!
     - Adiciona aos contactos o [Rui](person) com número [919922312](number)
     - Adiciona o contacto [Jota](person), com número [919555423](number)

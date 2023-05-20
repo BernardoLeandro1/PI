@@ -81,43 +81,43 @@ class lightssss:
     def turn_on(self, light):
         light = str(light)
         if light.__contains__("sala"):
-            if self.sala_light.color != "yellow":
+            if self.sala_light.pencolor() != "yellow":
                 self.sala_light.color("yellow")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("quarto"):
-            if self.quarto_light.color != "yellow":
+            if self.quarto_light.pencolor() != "yellow":
                 self.quarto_light.color("yellow")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("casa de banho") or light.__contains__("quarto de banho"):
-            if self.wc_light.color != "yellow":
+            if self.wc_light.pencolor() != "yellow":
                 self.wc_light.color("yellow")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("cozinha"):
-            if self.cozinha_light.color != "yellow":
+            if self.cozinha_light.pencolor() != "yellow":
                 self.cozinha_light.color("yellow")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("dispensa"):
-            if self.dispensa_light.color != "yellow":
+            if self.dispensa_light.pencolor() != "yellow":
                 self.dispensa_light.color("yellow")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("entrada"):
-            if self.entrada_light.color != "yellow":
+            if self.entrada_light.pencolor() != "yellow":
                 self.entrada_light.color("yellow")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("espelho"):
-            if self.espelho_light.color != "yellow":
+            if self.espelho_light.pencolor() != "yellow":
                 self.espelho_light.color("yellow")
                 return "OK"
             else: 
@@ -126,43 +126,43 @@ class lightssss:
     def turn_off(self, light):
         light = str(light)
         if light.__contains__("sala"):
-            if self.sala_light.color != "grey":
+            if self.sala_light.pencolor() != "grey":
                 self.sala_light.color("grey")
                 return "OK"
-            else: 
+            else:
                 return "Done"
         elif light.__contains__("quarto"):
-            if self.quarto_light.color != "grey":
+            if self.quarto_light.pencolor() != "grey":
                 self.quarto_light.color("grey")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("casa de banho") or light.__contains__("quarto de banho"):
-            if self.wc_light.color != "grey":
+            if self.wc_light.pencolor() != "grey":
                 self.wc_light.color("grey")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("cozinha"):
-            if self.cozinha_light.color != "grey":
+            if self.cozinha_light.pencolor() != "grey":
                 self.cozinha_light.color("grey")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("dispensa"):
-            if self.dispensa_light.color != "grey":
+            if self.dispensa_light.pencolor() != "grey":
                 self.dispensa_light.color("grey")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("entrada"):
-            if self.entrada_light.color != "grey":
+            if self.entrada_light.pencolor() != "grey":
                 self.entrada_light.color("grey")
                 return "OK"
             else: 
                 return "Done"
         elif light.__contains__("espelho"):
-            if self.espelho_light.color != "grey":
+            if self.espelho_light.pencolor() != "grey":
                 self.espelho_light.color("grey")
                 return "OK"
             else: 

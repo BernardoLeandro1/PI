@@ -132,8 +132,10 @@ class CreateEventAction(Action):
             dispatcher.utter_message(response="utter_default")
             return [UserUtteranceReverted()]
      
-        #print(domain)       
-
+        #print(domain)
+        print("DIA")
+        print(tracker.get_slot("day_of_week"))
+        print("DIA")
         calendar = agenda.GoogleCalendar("actions/credentials.json")
         d = str(tracker.get_slot("day")).split()
         if(len(d)>1):
@@ -265,7 +267,7 @@ class CreateEventAction(Action):
                             weekday = 3
                         elif assistday.__contains__("sexta"):
                             weekday = 4
-                        elif assistday.__contains__("sabado"):
+                        elif assistday.__contains__("sabado") or assistday.__contains__("sábado"):
                             weekday = 5
                         elif assistday.__contains__("domingo"):
                              weekday = 6
@@ -357,6 +359,7 @@ class CreateEventAction(Action):
                     event_end_datetime = str(datetime.strptime(event_start_datetime, '%Y-%m-%dT%H:%M:%S') + timedelta(minutes=15))
                     event_end_datetime = event_end_datetime.replace(" ", "T")
                 elif x[1].__contains__("semana"):
+                    occur = "DAILY"
                     if (x[0].__contains__("uma")):
                         x[0] = "um"
                     elif (x[0].__contains__("duas")):
