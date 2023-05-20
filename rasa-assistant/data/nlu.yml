@@ -85,6 +85,7 @@ nlu:
     - [Todos os dias](occurrence), durante [uma semana](duration), lembra-me de [fazer cardio](event) às [18:30](hour)!
     - Quero marcar uma [reunião](event) para as [3:30 da tarde](hour) no [dia 20](day) de [maio](month)
     - Marca uma [reunião](event) para [amanhã](day_of_week) às [16:30](hour)
+    - Lembra-me de [tomar um brufen](event) durante [uma semana](duration) às [23:00](hour)
 - intent: find_events
   examples: |
     - Tenho alguma coisa marcada para [amanhã](day_of_week)?
@@ -177,6 +178,38 @@ nlu:
     - Que coisas é que sabes fazer?
     - Informa-me das funcionalidades disponiveis.
     - O que é que eu posso fazer?
+- intent: light_switch
+  examples: |
+    - [Liga](switch) a luz da [sala](place), por favor
+    - Podes [ligar](switch) a luz da [cozinha](place)?
+    - Podes [desligar](switch) a luz do [quarto](place)?
+    - [Acende-me](switch) a luz da [entrada](place)
+    - [Apaga](switch) a luz do espelho(place)
+    - Podes [acender](switch) a luz da [casa de banho](place)?
+    - Podes [apagar](switch) a luz da [dispensa](place)?
+    - Podes [desligar](switch) a luz do [quarto e da casa de banho](place)?
+- intent: light_consume
+  examples: |
+    - Podes me dizer quanto está a consumir a luz da [sala](place)?
+    - Diz me qual é o consumo da luz da [cozinha](place).
+    - Qual é o consumo da luz do [espelho](place)?
+    - Quanto gasta a luz da [dispensa](place)?
+    - Diz me quanto gasta a luz do [quarto](place), por favor.
+    - Diz me qual é o consumo da luz do [quarto](place)
+    - Qual é o consumo total da [casa](place)?
+    - Quanto consome a [casa](place)?
+- intent: call_someone
+  examples: |
+    - Por favor liga ao [João](person).
+    - Liga ao [Bernardo](person).
+    - Faz uma chamada para o [Pedro](person).
+    - Liga ao meu [Filho](person).
+- intent: add_contact
+  examples: |
+    - Adiciona aos contactos o [João](person) e o número [914443412](number)
+    - Quero adicionar um contacto! Nome [Pedro](person) e número [965552341](number).
+    - Adiciona aos contactos o [Rui](person) com número [919922312](number)
+    - Adiciona o contacto [Jota](person), com número [919555423](number)
 
 - intent: query_food_nutrition_data
   examples: |
