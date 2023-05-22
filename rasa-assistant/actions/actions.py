@@ -91,10 +91,10 @@ class ActionGreetUser(Action):
             return [UserUtteranceReverted()]
 
         if name:
-            message = f"Hello {name}, how can I assist you today (python)?"
+            message = f"Olá {name}, como posso ajudar? Pode perguntar caso não saiba as funcionalidades disponíveis."
         else:
-            message = "Hello, how can I assist you today? (python)?"
-
+            message = "Olá utilizador, eu sou o seu novo assistente, como o posso tratar?"
+        print(name)
         dispatcher.utter_message(text=message)
         
         return []

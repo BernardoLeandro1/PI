@@ -1,10 +1,20 @@
 version: "3.1"
 
 stories:
-- story: add reminder path
+
+- story: introduction
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_greet_user
+  - slot_was_set:
+    - name: None
+  - intent: new_user
+  - action: action_greet_user
+
+
+
+- story: add reminder path
+  steps:
   - intent: add_reminder
   - action: check_event_data_form
   - active_loop: check_event_data_form
@@ -35,7 +45,7 @@ stories:
 - story: check if events path
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_greet_user
   - intent: find_events
   - action: action_check_event
 
@@ -47,7 +57,7 @@ stories:
 - story: ask info
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_greet_user
   - intent: ask_functions
   - action: utter_info
 
@@ -55,14 +65,14 @@ stories:
 - story: ask weather
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_greet_user
   - intent: query_weather
   - action: action_get_weather
 
 - story: confirm weather
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_greet_user
   - intent: confirm_weather
   - action: action_confirm_weather
 
@@ -85,21 +95,21 @@ stories:
 - story: get walk recommendation
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_greet_user
   - intent: query_walk_recommendation
   - action: action_query_walk
 
 - story: get nutrition facts about a product
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_greet_user
   - intent: query_food_nutrition_data
   - action: action_query_food_nutrition_data
 
 - story: get recipe
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_greet_user
   - intent: ask_recipe
   - action: action_ask_recipe
 
