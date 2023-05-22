@@ -11,6 +11,8 @@ class FoodInfoProvider:
        
         if data["status"] == 1:
             nutriscore = data["product"]["nutriscore_data"]["grade"]
+            print("test ex_date")
+            print(data["product"])
         else:
             nutriscore = None
         return nutriscore

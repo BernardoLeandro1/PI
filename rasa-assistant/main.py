@@ -3,7 +3,7 @@ import sys
 from VoiceModule import VoskInputVoiceModule, OutputVoiceModule, GoogleInputVoiceModule, GoogleOutputVoiceModule
 import tkinter as tk
 import threading
-
+from flask import Flask;
 class Assistant:
 
     def __init__(self) -> None:
@@ -33,13 +33,15 @@ class Assistant:
         # GUI
         window = tk.Tk()
         window.title("CasaViva+")
-        window.geometry('200x150+50+50')
+        window.geometry('900x550+50+50')
         text = tk.Label(text ="🤖",justify="center", font=("Arial", 125))
+        self.text2 = tk.Label(text ="",justify="center", font=("Arial", 14))
         text.pack()
+        self.text2.pack()
         
         threading.Thread(target=self.run).start()
         window.mainloop()
-    
+        #self.run()
     def run(self):
         print( "Assistente a funcionar... \n")
         while True:
@@ -48,12 +50,13 @@ class Assistant:
 
             while user_input not in self.WAKE_UP:
                 user_input = self.listener.listen()
-                
+            self.text2["text"] = "D. Maria: " +user_input
             # debug    
             print("D. Maria: " + user_input) 
             bot_response = self.interact(user_input)
             #debug
             print("Assistente: " + bot_response)
+            self.text2["text"] = self.text2["text"] + "\n CASAVIVA+: " + bot_response
             self.speaker.say(bot_response)
 
             while user_input not in self.SLEEP:
@@ -61,14 +64,17 @@ class Assistant:
                 user_input = self.listener.listen()
                 if user_input is None:
                     continue
+                self.text2["text"] = self.text2["text"] + "\n D. Maria: " + user_input
                 # debug    
                 print("D. Maria: " + user_input) 
                 bot_response = self.interact(user_input)
+                self.text2["text"] = self.text2["text"] + "\n CASAVIVA+: " + bot_response
                 #debug
                 print("Assistente: " + bot_response)
                 self.speaker.say(bot_response)
                 
                 if bot_response in self.GOODBYE:
+                    self.text2["text"] = ""
                     break
     
     def interact(self, message):
@@ -80,5 +86,6 @@ class Assistant:
         except:
             error = "Não entendi o que queria dizer. Pode repetir?"
             return error
+
 
 Assistant()
