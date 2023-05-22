@@ -33,6 +33,14 @@ nlu:
     - Acho que não
     - Não gosto assim
     - Nem por isso
+- intent: new_user
+  examples: |
+    - Sou o [Bernardo](name)
+    - Sou a [D. Maria](name)
+    - O meu nome é [Dário](name)
+    - Eu sou a [Gertrudes](name)
+    - O meu nome é [Josefina](name)
+    - Olá, eu sou o [Mário](name)
 - intent: add_reminder
   examples: |
     - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17:00](hour) durante [30 minutos](duration)!

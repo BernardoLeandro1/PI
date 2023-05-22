@@ -18,6 +18,7 @@ intents:
 - query_walk_recommendation
 - query_food_nutrition_data
 - ask_recipe
+- new_user
 
 entities:
 - event
@@ -34,6 +35,8 @@ entities:
 - weather
 - switch
 - recipe
+- name
+- logged_in
 
 slots:
   event:
@@ -120,6 +123,18 @@ slots:
     mappings:
     - type: from_entity
       entity: place
+  name:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: name
+  logged_in:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: logged_in
 forms:
   check_event_data_form:
     required_slots:
@@ -145,6 +160,7 @@ responses:
   - text: Desculpe, não percebi. Pode repetir?
 actions:
 - utter_greet
+- action_greet_user
 - action_create_contact
 - action_check_light_consume
 - action_confirm_weather
