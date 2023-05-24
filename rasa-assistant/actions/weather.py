@@ -272,7 +272,7 @@ class WeatherProvider:
                             best_forecast = entry
         if best_forecast != None:       
             bestHour = (datetime.datetime.strptime(best_forecast["dt_txt"],'%Y-%m-%d %H:%M:%S')).hour
-            returnPhrase = "Eu recomendaria sair por volta das " + str(bestHour) + " horas." 
+            returnPhrase = "Eu recomendaria sair entre as " + str(bestHour) + " e as " + str(bestHour + 3) +" horas." 
         else: 
             returnPhrase = "Para a data pedida não há nenhuma hora em que eu recomende sair."
         return returnPhrase

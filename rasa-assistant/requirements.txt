@@ -1,0 +1,8 @@
+rasa
+word2number-i18n 
+pyaudio
+pyttsx3
+google-cloud-speech
+google-cloud-texttospeech
+playsound
+opencv-contrib-python

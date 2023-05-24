@@ -186,6 +186,9 @@ nlu:
     - Que coisas é que sabes fazer?
     - Informa-me das funcionalidades disponiveis.
     - O que é que eu posso fazer?
+    - O que dá para fazer?
+    - Diz-me as funcionalidades.
+    - Diz-me o que consegues fazer.
 - intent: light_switch
   examples: |
     - [Liga](switch) a luz da [sala](place), por favor

@@ -708,9 +708,6 @@ class CheckEventAction(Action):
 
         except HttpError as error:
             dispatcher.utter_message("Erro ao procurar eventos!")
-        
-
-
     
 class SwitchLightsAction(Action):
     def name(self) -> Text:
