@@ -819,15 +819,15 @@ class GetNutriScoreAction(Action):
         if grade != None:
             match grade:
                 case "a":
-                    return_message = "Este alimento tem nota A, o que signifca que tem um ótimo valor nutricional."
+                    return_message = "Este alimento tem nota Á, o que significa que tem um ótimo valor nutricional."
                 case "b":
-                    return_message = "Este alimento tem nota B, o que signifca que tem um bom valor nutricional."
+                    return_message = "Este alimento tem nota B, o que significa que tem um bom valor nutricional."
                 case "c":
-                    return_message = "Este alimento tem nota C, o que signifca que tem um valor nutricional intermédio."
+                    return_message = "Este alimento tem nota C, o que significa que tem um valor nutricional intermédio."
                 case "d":
-                    return_message = "Este alimento tem nota D, o que signifca que tem um fraco valor nutricional."
+                    return_message = "Este alimento tem nota D, o que significa que tem um fraco valor nutricional."
                 case "e":
-                    return_message = "Este alimento tem nota E, o que signifca que tem um péssimo valor nutricional."
+                    return_message = "Este alimento tem nota É, o que significa que tem um péssimo valor nutricional."
 
             dispatcher.utter_message(return_message)
         else:

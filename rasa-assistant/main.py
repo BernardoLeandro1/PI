@@ -1,3 +1,5 @@
+from datetime import datetime
+import textwrap
 import requests
 import sys
 from VoiceModule import VoskInputVoiceModule, OutputVoiceModule, GoogleInputVoiceModule, GoogleOutputVoiceModule
@@ -26,6 +28,8 @@ class Assistant:
             ]
         self.GOODBYE = [
             "Adeus!",
+            "adeus",
+            "Adeus",
         ]
         
         self.listener = GoogleInputVoiceModule()   
@@ -33,12 +37,29 @@ class Assistant:
         # GUI
         window = tk.Tk()
         window.title("CasaViva+")
-        window.geometry('900x550+50+50')
-        text = tk.Label(text ="🤖",justify="center", font=("Arial", 125))
-        self.text2 = tk.Label(text ="",justify="center", font=("Arial", 14))
-        text.pack()
-        self.text2.pack()
-        
+        window.geometry('500x550+50+50')
+        window.resizable(width=False, height=False)
+        self.text = tk.Label(text ="CasaViva+",justify="center", font=("Lato", 70), fg='#000')
+        self.text.pack()
+        #self.text2 = tk.Label(text ="",justify="center", font=("Arial", 14))
+        #self.text2.pack()
+        self.now = datetime.now()
+        self.current_time = self.now.strftime("%D - %H:%M \n")
+        # Create Chat window
+        self.ChatLog = tk.Text(window, bd=0, height="8", width="90", font="Lato", wrap="word")
+        self.ChatLog.tag_config("right", justify="right")
+        self.ChatLog.tag_config("left", justify="left")
+        self.ChatLog.tag_config("small", font=("Lato", 10)) # CONFIG HORAS
+        self.ChatLog.tag_config("colour", foreground="#333333") #CONFIG MENSAGENS BOT 
+        self.ChatLog.tag_config("colourUser", foreground="#000000") #CONFIG MENSAGENS USER
+        self.ChatLog.tag_config("colourBot", foreground="#11ee00") #CONFIG MENSAGENS USER
+        self.ChatLog.tag_config("medium", font=("Lato", 16)) 
+        # Bind scrollbar to Chat window
+        scrollbar = tk.Scrollbar(window, command=self.ChatLog.yview, cursor="double_arrow")
+        self.ChatLog['yscrollcommand'] = scrollbar.set
+        scrollbar.place(x=460, y=85, height=450)
+        self.ChatLog.place(x=40, y=80, height=460, width=420)
+
         threading.Thread(target=self.run).start()
         window.mainloop()
         #self.run()
@@ -50,13 +71,27 @@ class Assistant:
 
             while user_input not in self.WAKE_UP:
                 user_input = self.listener.listen()
-            self.text2["text"] = "D. Maria: " +user_input
-            # debug    
+            self.text["fg"] = "#11ee00"
+            #self.text2["text"] = "Utilizador: " +user_input
+            self.ChatLog.config(state=tk.NORMAL)
+            self.ChatLog.insert(tk.END, self.current_time, ("small","right","colour"))
+            self.ChatLog.insert(tk.END, user_input.capitalize() + '\n\n',("right","colourUser","medium"))
+            self.ChatLog.config(foreground="#000", font=("Lato", 16))
             print("D. Maria: " + user_input) 
+            
             bot_response = self.interact(user_input)
-            #debug
+            
+            # GUI
             print("Assistente: " + bot_response)
-            self.text2["text"] = self.text2["text"] + "\n CASAVIVA+: " + bot_response
+            #self.text2["text"] = self.text2["text"] + "\n CASAVIVA+: " + bot_response
+            self.ChatLog.config(state=tk.NORMAL)
+            self.ChatLog.insert(tk.END, self.current_time, ("small","colour"))
+            self.ChatLog.insert(tk.END,textwrap.fill(bot_response, 30))
+            self.ChatLog.insert(tk.END,'\n')
+            self.ChatLog.config(foreground="#11ee00", font=("Lato", 16))
+            self.ChatLog.config(state=tk.DISABLED)
+            
+            #speak
             self.speaker.say(bot_response)
 
             while user_input not in self.SLEEP:
@@ -64,17 +99,31 @@ class Assistant:
                 user_input = self.listener.listen()
                 if user_input is None:
                     continue
-                self.text2["text"] = self.text2["text"] + "\n D. Maria: " + user_input
-                # debug    
+                #self.text2["text"] = self.text2["text"] + "\n Utilizador: " + user_input
+                # GUI
+                self.ChatLog.config(state=tk.NORMAL)
+                self.ChatLog.config(foreground="#000", font=("Lato", 16))
+                self.ChatLog.insert(tk.END, self.current_time, ("small","right","colour"))
+                self.ChatLog.insert(tk.END, user_input.capitalize() + '\n\n',("right","colourUser","medium"))
                 print("D. Maria: " + user_input) 
+
                 bot_response = self.interact(user_input)
-                self.text2["text"] = self.text2["text"] + "\n CASAVIVA+: " + bot_response
-                #debug
+                
+                #self.text2["text"] = self.text2["text"] + "\n CASAVIVA+: " + bot_response
+                #GUI
+                self.ChatLog.config(state=tk.NORMAL)
+                self.ChatLog.insert(tk.END, self.current_time, ("small","colour"))
+                self.ChatLog.insert(tk.END,textwrap.fill(bot_response, 30))
+                self.ChatLog.insert(tk.END,'\n')
+                self.ChatLog.config(foreground="#11ee00", font=("Lato", 16))
+                self.ChatLog.config(state=tk.DISABLED)
                 print("Assistente: " + bot_response)
+
                 self.speaker.say(bot_response)
                 
                 if bot_response in self.GOODBYE:
-                    self.text2["text"] = ""
+                    self.text["fg"] = "#000"
+                    #self.text2["text"] = ""
                     break
     
     def interact(self, message):
