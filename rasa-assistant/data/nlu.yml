@@ -111,6 +111,8 @@ nlu:
     - Tenho algo marcado para [quarta](day_of_week)?
     - Tenho algo marcado para [sexta](day_of_week)?
     - O que é que tenho marcado para [esta semana](duration)?
+    - Que eventos tenho [esta semana](duration)?
+    - Que eventos tenho na [próxima semana](duration)?
     - Que eventos tenho no dia [8 de maio](day)?
     - Que eventos tenho no dia [8 de maio](day), [depois das 08:00](hour)?
     - Que eventos tenho no dia [8 de maio](day), [antes das 12:00](hour)?

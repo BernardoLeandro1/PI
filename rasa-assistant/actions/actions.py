@@ -641,7 +641,6 @@ class CheckEventAction(Action):
 
         startTime = "00:00:00"
         endTime = "23:59:59"
-
         if(tracker.get_slot("duration")!=None):
             a = str(tracker.get_slot("duration"))
             if a.__contains__("próxima"):
@@ -654,16 +653,13 @@ class CheckEventAction(Action):
             elif a.__contains__("esta"):
                 event_date = str(datetime.today().date())
                 d = datetime.today().date()
-                
                 days_ahead = 5 - d.weekday()
                 if days_ahead <= 0: # Target day already happened this week
                     days_ahead += 7
                 event_end_date = str(d + timedelta(days=days_ahead))
                 startTime = str(datetime.today().time()).split(".")[0]
                 print(startTime)
-
         
-        print(tracker.get_slot("hour"))
         if (tracker.get_slot("hour"))!=None:
             a = str(tracker.get_slot("hour"))
             if a.__contains__("depois"):
@@ -673,9 +669,16 @@ class CheckEventAction(Action):
             elif(a.__contains__("entre")):
                 startTime = a.split(" ")[2] + ":00"
                 endTime = a.split(" ")[5] + ":00"
-        print(startTime)
+        
+        print(event_date)
+        print(event_end_date)
+        if (event_date != event_end_date and event_end_date!= None):
+            timeframe = "week"
+        else:
+            timeframe = "day"
+
         try:
-            events = calendar.find_event(start_date = event_date, start_time = startTime, end_date = event_end_date, end_time = endTime)
+            events = calendar.find_event(timeframe = timeframe, start_date = event_date, start_time = startTime, end_date = event_end_date, end_time = endTime)
             if len(events)<1:
                 dispatcher.utter_message("Não tem nada marcado")
                 return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None)]
@@ -704,7 +707,7 @@ class CheckEventAction(Action):
                     dispatcher.utter_message("Tem {} às {} de {}".format(event['summary'], horas[0], tracker.get_slot("day")))
                 else:
                     dispatcher.utter_message("Tem {} às {} de {}".format(event['summary'], horas[0], weekday))
-            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None)]
+            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None), SlotSet("duration", None)]
 
         except HttpError as error:
             dispatcher.utter_message("Erro ao procurar eventos!")

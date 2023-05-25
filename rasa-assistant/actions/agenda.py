@@ -8,7 +8,8 @@ from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from httplib2 import Http
 from oauth2client import file, client, tools
-
+import webbrowser
+import pyautogui
 
 class GoogleCalendar:
     def __init__(self, credentials_path):        
@@ -111,7 +112,10 @@ class GoogleCalendar:
             print(f'An error occurred: {error}')
             return None
 
-    def find_event(self, summary=None, start_date=None, start_time=None, end_date = None, end_time = None):
+    def find_event(self, timeframe=None, start_date=None, start_time=None, end_date = None, end_time = None):
+        print(timeframe)
+        print(end_date)
+        date = str(start_date).replace("-", "/")
         pagetoken = None
         while True:
             events_result = self.service.events().list(calendarId='primary', orderBy= 'startTime', singleEvents=True).execute()
@@ -121,7 +125,7 @@ class GoogleCalendar:
                 for event in items:
                     a = str(event['start']['dateTime']).split("T")
                     h = a[1].split("+")[0]
-                    if((a[0]>start_date and a[0]< end_date) or a[0]==start_date or a[0]==end_date) and datetime.strptime(h, '%H:%M:%S') > datetime.strptime(start_time, '%H:%M:%S'):
+                    if((a[0]>start_date and a[0]< end_date) or (a[0]==start_date and datetime.strptime(h, '%H:%M:%S') > datetime.strptime(start_time, '%H:%M:%S')) or a[0]==end_date):
                         b.append(event)
             else: 
                 for event in items:
@@ -130,10 +134,11 @@ class GoogleCalendar:
                     if(a[0]==start_date and datetime.strptime(h, '%H:%M:%S') > datetime.strptime(start_time, '%H:%M:%S') and datetime.strptime(h, '%H:%M:%S') < datetime.strptime(end_time, '%H:%M:%S')):
 
                         b.append(event)
-                
+            
             # pagetoken = events_result.get('nextPageToken')
             # if not pagetoken:
             #     break
+            webbrowser.open("https://calendar.google.com/calendar/u/0/r/" + timeframe + "/" + date , new = 2)
             return b
 
             #     if (not summary or summary in event['summary']) and (not start_time or start_time == event['start'].get('dateTime', None)):
