@@ -113,6 +113,11 @@ stories:
   - intent: ask_recipe
   - action: action_ask_recipe
 
+- story: about funcs
+  steps:
+  - intent: ask_about_functionalities
+  - action: action_about_functionalities
+
 # - story: interactive_story_1
 #   steps:
 #   - intent: greet

@@ -856,3 +856,43 @@ class GetRecipeAction(Action):
             dispatcher.utter_message("Desculpe, não consegui entender o que pretendia. Pode repetir, por favor?")
 
         return [SlotSet("recipe", None)]
+
+class AboutFunctionalitiesAction(Action):
+    def name(self) -> Text:
+        return "action_about_functionalities"
+    
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        cmd = str(tracker.latest_message['text'])
+        if cmd.__contains__("agenda"):
+            dispatcher.utter_message("Para utilizar a agenda, pode pedir para marcar um evento, dizendo, por exemplo, Lembra-me que tenho um almoço com o meu filho, no dia 29 de maio às 12:30, ou pode pedir para lhe lembrar que eventos tem num determinado espaço de tempo, perguntando, por exemplo, Que eventos tenho esta semana")
+        elif cmd.__contains__("telefone"):
+            dispatcher.utter_message("Para utilizar o telefone, pode me pedir para ligar a alguém, dizendo, Liga ao Pedro, ou pode me pedir para guardar um contacto, dizendo, Quero adicionar um contacto! Nome Pedro e número 965552341")
+        elif cmd.__contains__("luzes"):
+            dispatcher.utter_message("Para utlizar as luzes, pode me pedir para as ligar ou desligar e pode me pedir o consumo sobre uma luz em específico")
+        elif cmd.__contains__("meteorologia") or cmd.__contains__("tempo"):
+            dispatcher.utter_message("Para saber sobre o tempo, pode me perguntar que tempo vai estar num certo dia, por exemplo, Que tempo vai estar amanhã, ou pode me perguntar qual é a melhor hora para sair num certo dia")
+        elif cmd.__contains__("nutricional"):
+            dispatcher.utter_message("Para saber o valor nutricional de um alimento, basta perguntar, por exemplo, Este alimento é saudável, apontando o código de barras desse alimento para a câmara")
+        elif cmd.__contains__("receitas"):
+            dispatcher.utter_message("Para me pedir uma receita, basta dizer, por ecemplo, Como é que se faz pão-de-ló")
+        else:
+            dispatcher.utter_message("A funcionalidade que mencionou ainda não está implementada")
+
+
+class ActionDefaultFallback(Action):
+    """Executes the fallback action and goes back to the previous state
+    of the dialogue"""
+
+    def name(self) -> Text:
+        return "action_default_fallback"
+
+    async def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message("Desculpe, não percebi, pode repetir?")
+
+        # Revert user message which led to fallback.
+        return [UserUtteranceReverted()]

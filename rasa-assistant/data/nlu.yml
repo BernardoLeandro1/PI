@@ -41,6 +41,8 @@ nlu:
     - Eu sou a [Gertrudes](name)
     - O meu nome é [Josefina](name)
     - Olá, eu sou o [Mário](name)
+    - [Sandra](name)
+    - [André](name)
 - intent: add_reminder
   examples: |
     - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17:00](hour) durante [30 minutos](duration)!
@@ -199,7 +201,6 @@ nlu:
     - Podes [acender](switch) a luz da [casa de banho](place)?
     - Podes [apagar](switch) a luz da [dispensa](place)?
     - Podes [desligar](switch) a luz do [quarto e da casa de banho](place)?
-    - [LIga]{"entity": "switch", "value": "Liga"} a luz do [quarto](place)
     - [Liga](switch) a luz da [sala](place)
     - [Liga](switch) a luz do [quarto](place)
     - [Desliga](switch) a luz do [quarto](place)
@@ -250,3 +251,19 @@ nlu:
 - synonym: Liga
   examples: |
     - LIga
+- intent: ask_about_functionalities
+  examples: |
+    - Quais as funcionalidades da agenda?
+    - Como posso usar a agenda?
+    - O que é que a agenda faz?
+    - Diz me mais sobre a agenda
+    - Como é que posso saber o tempo?
+    - O que me podes dizer sobre a meteorologia?
+    - Como posso usar o telefone?
+    - Diz me mais sobre o telefone
+    - Diz me mais sobre as luzes
+    - Como posso usar as luzes?
+    - Como posso saber o valor nutricional dos alimentos?
+    - Diz me mais sobre o valor nutricional
+    - Como posso sabre sobre receitas?
+    - Diz me mais sobre as receitas

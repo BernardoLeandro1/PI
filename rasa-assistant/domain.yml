@@ -19,6 +19,7 @@ intents:
 - query_food_nutrition_data
 - query_walk_recommendation
 - query_weather
+- ask_about_functionalities
 entities:
 - recipe
 - place
@@ -172,6 +173,8 @@ actions:
 - action_call_someone
 - action_query_walk
 - action_query_food_nutrition_data
+- action_about_functionalities
+
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
