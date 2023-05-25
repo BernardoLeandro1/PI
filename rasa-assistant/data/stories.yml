@@ -279,6 +279,11 @@ stories:
 #   - slot_was_set:
 #     - duration: null
 #   - slot_was_set:
+#     - ot_was_set:
+#     - event: null
+#   - slot_was_set:
+#     - duration: null
+#   - slot_was_set:
 #     - hour: null
 #   - slot_was_set:
 #     - occurrence: null

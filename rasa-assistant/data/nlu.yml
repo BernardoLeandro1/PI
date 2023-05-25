@@ -174,12 +174,12 @@ nlu:
     - vai [chover](weather)?
 - intent: query_walk_recommendation
   examples: |
-   - Qual é a melhor hora para caminhar [hoje](day_of_week)?
-   - Quero ir passear.
-   - Quero ir dar uma volta.
-   - Qual é a melhor altura para ir caminhar?  
-   - A que horas devo ir caminhar [amanhã](day_of_week)? 
-   - Apetece-me sair de casa. 
+    - Qual é a melhor hora para caminhar [hoje](day_of_week)?
+    - Quero ir passear.
+    - Quero ir dar uma volta.
+    - Qual é a melhor altura para ir caminhar?
+    - A que horas devo ir caminhar [amanhã](day_of_week)?
+    - Apetece-me sair de casa.
 - intent: ask_functions
   examples: |
     - Que funcionalidades estão disponiveis?
@@ -199,6 +199,10 @@ nlu:
     - Podes [acender](switch) a luz da [casa de banho](place)?
     - Podes [apagar](switch) a luz da [dispensa](place)?
     - Podes [desligar](switch) a luz do [quarto e da casa de banho](place)?
+    - [LIga]{"entity": "switch", "value": "Liga"} a luz do [quarto](place)
+    - [Liga](switch) a luz da [sala](place)
+    - [Liga](switch) a luz do [quarto](place)
+    - [Desliga](switch) a luz do [quarto](place)
 - intent: light_consume
   examples: |
     - Podes me dizer quanto está a consumir a luz da [sala](place)?
@@ -221,17 +225,15 @@ nlu:
     - Quero adicionar um contacto! Nome [Pedro](person) e número [965552341](number).
     - Adiciona aos contactos o [Rui](person) com número [919922312](number)
     - Adiciona o contacto [Jota](person), com número [919555423](number)
-
 - intent: query_food_nutrition_data
   examples: |
     - Este produto é saudável?
     - Este produto é bom?
     - Posso comer isto?
     - Posso comer este produto?
-    - Devo comer este produto? 
+    - Devo comer este produto?
     - Devo comer isto?
-    - Qual é o valor nutricional deste produto? 
-
+    - Qual é o valor nutricional deste produto?
 - intent: ask_recipe
   examples: |
     - Como é que se faz [pão-de-ló](recipe)?
@@ -240,3 +242,11 @@ nlu:
     - Quero fazer um [arroz de atum](recipe)
     - Dá-me uma receita para fazer [lasanha](recipe).
     - Gostava de fazer uma [carbonara](recipe). Podes-me dar a receita?
+    - Como é que se faz [caril de frango](recipe)?
+    - Como é que se faz [carbonara](recipe)?
+- synonym: Aveiro
+  examples: |
+    - aveiro
+- synonym: Liga
+  examples: |
+    - LIga

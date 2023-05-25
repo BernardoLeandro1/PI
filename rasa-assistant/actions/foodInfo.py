@@ -29,6 +29,7 @@ class FoodInfoProvider:
             cv2.imshow("produto", img)
             if cv2.waitKey(1) == ord('q'):
                 break
+        cv2.destroyAllWindows()
         return a
     def getRecipe(self,recipe):
         recipe = recipe.replace(" ", "+")

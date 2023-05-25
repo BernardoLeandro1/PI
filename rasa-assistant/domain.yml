@@ -4,6 +4,7 @@ intents:
 - add_reminder
 - affirm
 - ask_functions
+- ask_recipe
 - call_someone
 - cancel_reminder
 - check_event_data_form
@@ -14,30 +15,27 @@ intents:
 - greet
 - light_consume
 - light_switch
-- query_weather
-- query_walk_recommendation
-- query_food_nutrition_data
-- ask_recipe
 - new_user
-
+- query_food_nutrition_data
+- query_walk_recommendation
+- query_weather
 entities:
+- recipe
+- place
+- switch
 - event
 - hour
 - duration
 - person
 - number
-- place
 - day_of_week
 - occurrence
 - day
 - month
 - location
 - weather
-- switch
-- recipe
 - name
 - logged_in
-
 slots:
   event:
     type: text
@@ -159,6 +157,8 @@ responses:
   utter_default:
   - text: Desculpe, não percebi. Pode repetir?
 actions:
+- action_ask_recipe
+- action_switch_lights
 - utter_greet
 - action_greet_user
 - action_create_contact
@@ -169,11 +169,9 @@ actions:
 - validate_check_event_data_form
 - action_get_weather
 - action_default_fallback
-- action_switch_lights
 - action_call_someone
 - action_query_walk
 - action_query_food_nutrition_data
-- action_ask_recipe
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
