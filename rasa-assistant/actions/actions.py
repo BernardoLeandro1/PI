@@ -691,6 +691,7 @@ class CheckEventAction(Action):
                 dispatcher.utter_message("Não tem nada marcado")
                 return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None)]
             print()
+            message = ""
             for event in events:
                 print(event["summary"])
                 horas = str(event['start']['dateTime']).split("T")
@@ -714,13 +715,16 @@ class CheckEventAction(Action):
                         weekday = "domingo"
                 print(tracker.get_slot("day"))
                 if(tracker.get_slot("day")!= None):
-                    dispatcher.utter_message("Tem {} às {} de {}".format(event['summary'], horas[0], tracker.get_slot("day")))
+                    message = message + ("Tem {} às {} de {}, ".format(event['summary'], horas[0], tracker.get_slot("day")))
+                    #dispatcher.utter_message("Tem {} às {} de {}".format(event['summary'], horas[0], tracker.get_slot("day")))
                 else:
-                    dispatcher.utter_message("Tem {} às {} de {}".format(event['summary'], horas[0], weekday))
-            return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None), SlotSet("duration", None)]
-
+                    message = message + ("Tem {} às {} de {}, ".format(event['summary'], horas[0], weekday))
+                    #dispatcher.utter_message("Tem {} às {} de {}".format(event['summary'], horas[0], weekday))
+                
         except HttpError as error:
             dispatcher.utter_message("Erro ao procurar eventos!")
+        dispatcher.utter_message(message)
+        return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None), SlotSet("duration", None)]
     
 class SwitchLightsAction(Action):
     def name(self) -> Text:

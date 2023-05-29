@@ -5,7 +5,7 @@ import sys
 from VoiceModule import VoskInputVoiceModule, OutputVoiceModule, GoogleInputVoiceModule, GoogleOutputVoiceModule
 import tkinter as tk
 import threading
-from flask import Flask;
+#from flask import Flask;
 class Assistant:
 
     def __init__(self) -> None:

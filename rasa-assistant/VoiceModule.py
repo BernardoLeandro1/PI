@@ -1,6 +1,6 @@
 import time
 import pyaudio
-from vosk import Model, KaldiRecognizer
+#from vosk import Model, KaldiRecognizer
 import pyttsx3 as tts
 from os import system
 import platform
@@ -16,10 +16,10 @@ from playsound import playsound
 class VoskInputVoiceModule:
     def __init__(self) -> None:
         # VOSK
-        self.model = Model("vosk-model-small-pt-0.3")
+        #self.model = Model("vosk-model-small-pt-0.3")
         #self.model = Model("vosk-model-complete")   # este modelo é muito grande para colocar no git
-        self.recognizer = KaldiRecognizer(self.model, 16000)
-        self.recognizer.SetMaxAlternatives(1)
+        #self.recognizer = KaldiRecognizer(self.model, 16000)
+        #self.recognizer.SetMaxAlternatives(1)
         self.mic = pyaudio.PyAudio()
         self.stream = self.mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
         self.stream.start_stream()
