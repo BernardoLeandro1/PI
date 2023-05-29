@@ -40,6 +40,7 @@ class SwitchLights:
                         message = "A luz que pediu foi acesa"
         except:
             print("Faking it")
+            """
             if onoff == 1:
                 response = self.wn.turn_on(place)
             else:
@@ -56,7 +57,7 @@ class SwitchLights:
                 message = "A luz que pediu já está apagada!"
             else: 
                 message = "De momento, não consigo realizar o que pediu. Tente mais tarde!"
-        
+            """
         return message
     
     def light_cost(self, place):

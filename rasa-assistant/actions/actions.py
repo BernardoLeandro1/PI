@@ -27,7 +27,7 @@ import cv2
 import webbrowser
 from actions.lightsimulator import lightssss
 from actions.phone import Phone
-lightsimulator = lightssss()
+#lightsimulator = lightssss()
     
 class ValidateCheckEventDataForm(FormValidationAction):
     def name(self) -> Text:
@@ -375,7 +375,15 @@ class CreateEventAction(Action):
                 data = aux3.split("-")
                 dia = data[2] + "-" + data[1] + "-" + data[0]
                 hora = aux2[1] + ":" + str(event["start"]).split(":")[2] + ":" + str(event["start"]).split(":")[3].split("+")[0]
-                dispatcher.utter_message("Evento criado: {} às {} do dia {}".format(event["summary"], hora, dia))
+                if until != None:
+                    data = until.split("T")[0]
+                    nova_data = data[6:8] +"-"+ data[4:6] +"-"+ data[0:4]
+                    nova_data = datetime.strptime(nova_data, '%d-%m-%Y')
+                    nova_data = str(nova_data).split(" ")[0]
+                    print(nova_data)
+                    dispatcher.utter_message("Evento criado do dia {} ao dia {}".format(dia, nova_data))
+                else:
+                    dispatcher.utter_message("Evento criado: {} às {} do dia {}".format(event["summary"], hora, dia))
             except HttpError as error:
                 dispatcher.utter_message("Erro ao criar o evento: {}".format(str(error)))
 
@@ -684,6 +692,7 @@ class CheckEventAction(Action):
                 return [SlotSet("day_of_week", None), SlotSet("day", None), SlotSet("hour", None)]
             print()
             for event in events:
+                print(event["summary"])
                 horas = str(event['start']['dateTime']).split("T")
                 dia = horas[0]
                 horas = horas[1].split("+")
@@ -703,6 +712,7 @@ class CheckEventAction(Action):
                         weekday = "sabado"
                     case "Sunday":
                         weekday = "domingo"
+                print(tracker.get_slot("day"))
                 if(tracker.get_slot("day")!= None):
                     dispatcher.utter_message("Tem {} às {} de {}".format(event['summary'], horas[0], tracker.get_slot("day")))
                 else:
@@ -715,19 +725,21 @@ class CheckEventAction(Action):
 class SwitchLightsAction(Action):
     def name(self) -> Text:
         return "action_switch_lights"
-    
+   
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+       
         print("Confiança: ", tracker.latest_message["intent"].get("confidence"))          
         if tracker.latest_message["intent"].get("confidence") < 0.8:
             dispatcher.utter_message(response="utter_default")
             return [UserUtteranceReverted()]
+        """
         switcher = homecontrol.SwitchLights(lightsimulator)
         message = switcher.switchlight(tracker.get_slot("switch"), tracker.get_slot("place"))
         dispatcher.utter_message(message)
         return [SlotSet("place", None), SlotSet("switch", None)]
-
+         """
 
 class CheckLightConsumeAction(Action):
     def name(self) -> Text:
@@ -740,11 +752,12 @@ class CheckLightConsumeAction(Action):
         if tracker.latest_message["intent"].get("confidence") < 0.8:
             dispatcher.utter_message(response="utter_default")
             return [UserUtteranceReverted()]
+        """
         switcher = homecontrol.SwitchLights(lightsimulator)
         message = switcher.light_cost(tracker.get_slot("place"))
         dispatcher.utter_message(message)
         return [SlotSet("place", None)]
-    
+    """
 
 class CallSomeoneAction(Action):
     def name(self) -> Text:

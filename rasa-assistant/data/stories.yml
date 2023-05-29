@@ -349,3 +349,16 @@ stories:
 #     - person: null
 #   - slot_was_set:
 #     - number: null
+
+# - story: interactive_story_1
+#   steps:
+#   - intent: greet
+#   - action: action_greet_user
+#   - intent: ask_recipe
+#     entities:
+#     - recipe: salada russa
+#   - slot_was_set:
+#     - recipe: salada russa
+#   - action: action_ask_recipe
+#   - slot_was_set:
+#     - recipe: null

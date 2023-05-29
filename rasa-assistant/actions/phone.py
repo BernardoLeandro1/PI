@@ -15,7 +15,8 @@ class Phone:
     
     def make_call(self, contact):
         number = 0
-        if contact in self.contacts:
+        print(contact, str(contact).capitalize())
+        if str(contact).capitalize() in self.contacts:
             number = self.contacts[contact]
         if number == 0:
             return "Contacto não encontrado"

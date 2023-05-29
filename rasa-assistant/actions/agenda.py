@@ -9,7 +9,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from httplib2 import Http
 from oauth2client import file, client, tools
 import webbrowser
-import pyautogui
 
 class GoogleCalendar:
     def __init__(self, credentials_path):        
@@ -115,6 +114,7 @@ class GoogleCalendar:
     def find_event(self, timeframe=None, start_date=None, start_time=None, end_date = None, end_time = None):
         print(timeframe)
         print(end_date)
+        print(start_date)
         date = str(start_date).replace("-", "/")
         pagetoken = None
         while True:
@@ -127,6 +127,7 @@ class GoogleCalendar:
                     h = a[1].split("+")[0]
                     if((a[0]>start_date and a[0]< end_date) or (a[0]==start_date and datetime.strptime(h, '%H:%M:%S') > datetime.strptime(start_time, '%H:%M:%S')) or a[0]==end_date):
                         b.append(event)
+                        print(event)
             else: 
                 for event in items:
                     a = str(event['start']['dateTime']).split("T")

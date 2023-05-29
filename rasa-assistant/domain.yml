@@ -3,6 +3,7 @@ intents:
 - add_contact
 - add_reminder
 - affirm
+- ask_about_functionalities
 - ask_functions
 - ask_recipe
 - call_someone
@@ -19,7 +20,6 @@ intents:
 - query_food_nutrition_data
 - query_walk_recommendation
 - query_weather
-- ask_about_functionalities
 entities:
 - recipe
 - place
@@ -154,14 +154,14 @@ responses:
   - text: Adeus!
   - text: Lembre-se, estou sempre à sua disposição!
   utter_info:
-  - text: Eu sou um assistente que consegue gerir a sua agenda, informá-la acerca da meteorologia, controlar as luzes e fazer chamadas e adicionar contactos.
+  - text: Eu sou um assistente que a pode ajudar a gerir a sua agenda, informá-la da meteorologia, controlar as luzes, fazer chamadas, sugerir receitas e informá-la acerca dos alimentos que consome.
   utter_default:
   - text: Desculpe, não percebi. Pode repetir?
 actions:
+- action_greet_user
 - action_ask_recipe
 - action_switch_lights
 - utter_greet
-- action_greet_user
 - action_create_contact
 - action_check_light_consume
 - action_confirm_weather
@@ -174,7 +174,6 @@ actions:
 - action_query_walk
 - action_query_food_nutrition_data
 - action_about_functionalities
-
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

@@ -9,6 +9,7 @@ nlu:
     - Olá Assistente
     - Olá assistente
     - olá
+    - olá assistente
 - intent: goodbye
   examples: |
     - Xau, Assistente
@@ -184,6 +185,7 @@ nlu:
     - Qual é a melhor altura para ir caminhar?
     - A que horas devo ir caminhar [amanhã](day_of_week)?
     - Apetece-me sair de casa.
+    - Qual é a melhor hora para ir às compras?
 - intent: ask_functions
   examples: |
     - Que funcionalidades estão disponiveis?
@@ -247,12 +249,8 @@ nlu:
     - Gostava de fazer uma [carbonara](recipe). Podes-me dar a receita?
     - Como é que se faz [caril de frango](recipe)?
     - Como é que se faz [carbonara](recipe)?
-- synonym: Aveiro
-  examples: |
-    - aveiro
-- synonym: Liga
-  examples: |
-    - LIga
+    - Como é que se faz [salada russa](recipe)?
+    - como é que se faz [salada russa](recipe)?
 - intent: ask_about_functionalities
   examples: |
     - Quais as funcionalidades da agenda?
@@ -269,3 +267,9 @@ nlu:
     - Diz me mais sobre o valor nutricional
     - Como posso sabre sobre receitas?
     - Diz me mais sobre as receitas
+- synonym: Aveiro
+  examples: |
+    - aveiro
+- synonym: Liga
+  examples: |
+    - LIga
