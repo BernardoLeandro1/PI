@@ -10,12 +10,12 @@ Ao terminarmos a implementação da primeira versão do assistente, realizámos 
 #### Authors
  Nome | Email | Nmec |
 | :---: | :---: | :---: |
-| Bernardo Leandro |email@ua.pt  | 98652 |
-| Carlos Sena  | email@ua.pt | 81377 |
+| Bernardo Leandro |bernardoleandro1@ua.pt  | 98652 |
+| Carlos Sena  | m.sena@ua.pt | 81377 |
 | Diogo Silva  | diogomfsilva980@ua.pt | 98644 |
-| Luís Martins  | email@ua.pt | 98521 |
-| Manuel Diaz  | email@ua.pt | 103645 |
-| Pedro Coelho  | email@ua.pt | 104247 |
+| Luís Martins  | luisccmartins88@ua.pt | 98521 |
+| Manuel Diaz  | manu.guerra.diaz@ua.pt | 103645 |
+| Pedro Coelho  | plbc@ua.pt | 104247 |
 
 #### Como correr:
 **1** - ```python3 -m venv venv```
