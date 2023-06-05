@@ -28,7 +28,6 @@ rules:
     - requested_slot: null
   - intent: affirm
   - action: action_create_event
-
 # - rule: Add_reminder to calendar
 #   steps:
 #   - intent: add_reminder

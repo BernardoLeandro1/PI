@@ -17,10 +17,13 @@ intents:
 - light_consume
 - light_switch
 - new_user
+- piada
 - query_food_nutrition_data
 - query_walk_recommendation
 - query_weather
+- ronny
 entities:
+- name
 - recipe
 - place
 - switch
@@ -35,7 +38,6 @@ entities:
 - month
 - location
 - weather
-- name
 - logged_in
 slots:
   event:
@@ -124,7 +126,7 @@ slots:
       entity: place
   name:
     type: text
-    influence_conversation: true
+    influence_conversation: false
     mappings:
     - type: from_entity
       entity: name
@@ -157,7 +159,17 @@ responses:
   - text: Eu sou um assistente que a pode ajudar a gerir a sua agenda, informá-la da meteorologia, controlar as luzes, fazer chamadas, sugerir receitas e informá-la acerca dos alimentos que consome.
   utter_default:
   - text: Desculpe, não percebi. Pode repetir?
+  utter_sui:
+  - text: SUUUIIIIIIIIIIIIIIIII.
+  utter_joke:
+  - text: Qual é o contrário de paixão? Mãe teto.
+  - text: Por que é que o polícia não usa sabão? Porque prefere deter gente.
+  - text: Por que é que o panado se divorciou? Porque a mulher não servia panada.
+  - text: Qual é a diferença entre o cavalo e o palhaço? Um gosta de palha crua e o outro de palhaçada.
+  - text: Qual é a diferença entre um padre e um Mercedes? O padre reza e o Mercedes Benz
 actions:
+- utter_sui
+- utter_joke
 - action_greet_user
 - action_ask_recipe
 - action_switch_lights

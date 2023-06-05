@@ -6,8 +6,9 @@ stories:
   steps:
   - intent: greet
   - action: action_greet_user
-  - slot_was_set:
-    - name: None
+
+- story: get_name
+  steps:
   - intent: new_user
   - action: action_greet_user
 
@@ -118,6 +119,15 @@ stories:
   - intent: ask_about_functionalities
   - action: action_about_functionalities
 
+- story: say sui
+  steps:
+  - intent: ronny
+  - action: utter_sui
+
+- story: tell a joke
+  steps:
+  - intent: piada
+  - action: utter_joke
 # - story: interactive_story_1
 #   steps:
 #   - intent: greet

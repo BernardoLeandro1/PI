@@ -83,7 +83,7 @@ class ActionGreetUser(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         name = tracker.get_slot("name")
-
+        print(name)
         print("Confiança: ", tracker.latest_message["intent"].get("confidence"))
         
         if tracker.latest_message["intent"].get("confidence") < 0.8:

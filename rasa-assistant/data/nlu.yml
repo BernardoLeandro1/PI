@@ -10,6 +10,7 @@ nlu:
     - Olá assistente
     - olá
     - olá assistente
+    - olá assistnete
 - intent: goodbye
   examples: |
     - Xau, Assistente
@@ -44,6 +45,7 @@ nlu:
     - Olá, eu sou o [Mário](name)
     - [Sandra](name)
     - [André](name)
+    - Sou o [Rodrigo](name)
 - intent: add_reminder
   examples: |
     - Quero que me lembres de [fazer yoga](event) [todos os dias](occurrence) às [17:00](hour) durante [30 minutos](duration)!
@@ -267,6 +269,22 @@ nlu:
     - Diz me mais sobre o valor nutricional
     - Como posso sabre sobre receitas?
     - Diz me mais sobre as receitas
+- intent: ronny
+  examples: |
+    - Ronaldo
+    - CR7
+    - Cristiano Ronaldo
+    - ronny
+    - ronaldo
+    - cr7
+- intent: piada
+  examples: |
+    - Diz me uma piada
+    - Conta me uma piada
+    - És engraçado?
+    - Diz-me uma piada
+    - Conta-me uma piada
+
 - synonym: Aveiro
   examples: |
     - aveiro
